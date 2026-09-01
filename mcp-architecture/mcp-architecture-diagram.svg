@@ -1,0 +1,193 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Helvetica, Arial, sans-serif">
+  <rect width="1280" height="720" fill="#fff"/>
+
+  <!-- Title -->
+  <text x="640" y="32" font-size="18" font-weight="700" fill="#151515" text-anchor="middle">MCP Hub-Spoke Architecture on Red Hat OpenShift AI 3.5</text>
+  <text x="640" y="50" font-size="10" fill="#ee0000" text-anchor="middle" font-weight="600">ArgoCD / OpenShift GitOps</text>
+
+  <!-- ==================== HUB CLUSTER ==================== -->
+  <rect x="100" y="60" width="820" height="580" rx="8" fill="none" stroke="#cc0000" stroke-width="2"/>
+  <rect x="100" y="60" width="820" height="24" rx="8" fill="#cc0000"/>
+  <text x="510" y="77" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">HUB CLUSTER</text>
+
+  <!-- mcp-system namespace -->
+  <rect x="120" y="95" width="370" height="310" rx="6" fill="#fafafa" stroke="#d2d2d2"/>
+  <text x="130" y="112" font-size="9" font-weight="700" fill="#ee0000">mcp-system</text>
+  <text x="200" y="112" font-size="8" fill="#6a6e73">Namespace</text>
+
+  <!-- MCP Gateway label -->
+  <text x="130" y="130" font-size="10" font-weight="700" fill="#151515">MCP Gateway</text>
+
+  <!-- Route -->
+  <rect x="140" y="138" width="150" height="34" rx="4" fill="#fff" stroke="#cc0000" stroke-width="1.2"/>
+  <circle cx="155" cy="155" r="8" fill="#ee0000"/>
+  <text x="170" y="152" font-size="9" font-weight="700" fill="#151515">Route</text>
+  <text x="170" y="164" font-size="7.5" fill="#6a6e73">(edge TLS)</text>
+
+  <!-- Envoy Proxy -->
+  <rect x="140" y="184" width="150" height="48" rx="4" fill="#fff" stroke="#cc0000" stroke-width="1.2"/>
+  <circle cx="155" cy="200" r="8" fill="#ee0000"/>
+  <text x="170" y="198" font-size="9" font-weight="700" fill="#151515">Envoy Proxy</text>
+  <text x="170" y="210" font-size="7.5" fill="#6a6e73">WASM Auth + RateLimit</text>
+  <text x="170" y="222" font-size="7.5" fill="#6a6e73">ext_proc filter</text>
+
+  <!-- Security Layer box -->
+  <rect x="140" y="244" width="330" height="148" rx="4" fill="#fff" stroke="#e0e0e0"/>
+  <text x="150" y="260" font-size="9" font-weight="700" fill="#6a6e73">Security Layer</text>
+
+  <rect x="155" y="268" width="145" height="24" rx="3" fill="#fef3f3" stroke="#ee0000" stroke-width=".7"/>
+  <circle cx="168" cy="280" r="6" fill="#ee0000"/>
+  <text x="180" y="284" font-size="8" font-weight="600" fill="#151515">AuthPolicy (401/403)</text>
+
+  <rect x="155" y="298" width="145" height="24" rx="3" fill="#fef3f3" stroke="#ee0000" stroke-width=".7"/>
+  <circle cx="168" cy="310" r="6" fill="#ee0000"/>
+  <text x="180" y="314" font-size="8" font-weight="600" fill="#151515">RateLimitPolicy (30/10s)</text>
+
+  <rect x="310" y="268" width="145" height="24" rx="3" fill="#fef3f3" stroke="#ee0000" stroke-width=".7"/>
+  <circle cx="323" cy="280" r="6" fill="#ee0000"/>
+  <text x="335" y="284" font-size="8" font-weight="600" fill="#151515">Authorino (TLS gRPC)</text>
+
+  <rect x="310" y="298" width="145" height="24" rx="3" fill="#fef3f3" stroke="#ee0000" stroke-width=".7"/>
+  <circle cx="323" cy="310" r="6" fill="#ee0000"/>
+  <text x="335" y="314" font-size="8" font-weight="600" fill="#151515">Limitador</text>
+
+  <!-- ==================== openshift-operators ==================== -->
+  <rect x="510" y="95" width="220" height="110" rx="6" fill="#fafafa" stroke="#d2d2d2"/>
+  <text x="520" y="112" font-size="9" font-weight="700" fill="#ee0000">openshift-operators</text>
+  <text x="628" y="112" font-size="8" fill="#6a6e73">Namespace</text>
+
+  <rect x="530" y="120" width="180" height="26" rx="4" fill="#fff" stroke="#cc0000" stroke-width="1.2"/>
+  <circle cx="543" cy="133" r="7" fill="#ee0000"/>
+  <text x="556" y="137" font-size="9" font-weight="700" fill="#151515">MCPRouter (ext_proc)</text>
+
+  <rect x="530" y="152" width="180" height="38" rx="4" fill="#fff" stroke="#cc0000" stroke-width="1.2"/>
+  <circle cx="543" cy="168" r="7" fill="#ee0000"/>
+  <text x="556" y="167" font-size="9" font-weight="700" fill="#151515">MCPBroker</text>
+  <text x="556" y="180" font-size="7.5" fill="#6a6e73">init + discovery only</text>
+
+  <!-- ==================== ocp-mcp-server ==================== -->
+  <rect x="510" y="220" width="390" height="185" rx="6" fill="#fafafa" stroke="#d2d2d2"/>
+  <text x="520" y="237" font-size="9" font-weight="700" fill="#ee0000">ocp-mcp-server</text>
+  <text x="610" y="237" font-size="8" fill="#6a6e73">Namespace</text>
+
+  <rect x="530" y="246" width="350" height="44" rx="4" fill="#fff" stroke="#cc0000" stroke-width="1.2"/>
+  <circle cx="543" cy="268" r="10" fill="#ee0000"/>
+  <text x="558" y="265" font-size="12" font-weight="700" fill="#151515">MCP Server v0.3</text>
+
+  <!-- Toolsets -->
+  <text x="530" y="310" font-size="8" font-weight="700" fill="#6a6e73">Toolsets</text>
+  <rect x="530" y="316" width="52" height="20" rx="3" fill="#fef3f3" stroke="#ee0000" stroke-width=".5"/>
+  <text x="540" y="330" font-size="8" font-weight="600" fill="#ee0000">core</text>
+  <rect x="588" y="316" width="56" height="20" rx="3" fill="#fef3f3" stroke="#ee0000" stroke-width=".5"/>
+  <text x="598" y="330" font-size="8" font-weight="600" fill="#ee0000">config</text>
+  <rect x="650" y="316" width="48" height="20" rx="3" fill="#fef3f3" stroke="#ee0000" stroke-width=".5"/>
+  <text x="660" y="330" font-size="8" font-weight="600" fill="#ee0000">helm</text>
+  <rect x="530" y="342" width="62" height="20" rx="3" fill="#fef3f3" stroke="#ee0000" stroke-width=".5"/>
+  <text x="538" y="356" font-size="8" font-weight="600" fill="#ee0000">metrics</text>
+  <rect x="598" y="342" width="62" height="20" rx="3" fill="#fef3f3" stroke="#ee0000" stroke-width=".5"/>
+  <text x="608" y="356" font-size="8" font-weight="600" fill="#ee0000">netedge</text>
+
+  <!-- Hub API arrow label -->
+  <text x="750" y="260" font-size="8" font-weight="600" fill="#333">’ Hub K8s API</text>
+  <text x="750" y="272" font-size="7.5" fill="#6a6e73">(default context)</text>
+
+  <!-- ==================== keycloak ==================== -->
+  <rect x="120" y="420" width="200" height="65" rx="6" fill="#fafafa" stroke="#d2d2d2"/>
+  <text x="130" y="437" font-size="9" font-weight="700" fill="#ee0000">keycloak</text>
+  <text x="175" y="437" font-size="8" fill="#6a6e73">Namespace</text>
+  <circle cx="143" cy="458" r="8" fill="#ee0000"/>
+  <text x="158" y="456" font-size="9" font-weight="700" fill="#151515">Keycloak (RHBK 26.6)</text>
+  <text x="158" y="470" font-size="7.5" fill="#6a6e73">Realm: openshift &middot; OIDC</text>
+
+  <!-- ==================== rhacm-system ==================== -->
+  <rect x="340" y="420" width="200" height="65" rx="6" fill="#fafafa" stroke="#d2d2d2"/>
+  <text x="350" y="437" font-size="9" font-weight="700" fill="#ee0000">rhacm-system</text>
+  <text x="410" y="437" font-size="8" fill="#6a6e73">Namespace</text>
+  <circle cx="363" cy="458" r="8" fill="#ee0000"/>
+  <text x="378" y="456" font-size="9" font-weight="700" fill="#151515">RHACM v2.17</text>
+  <text x="378" y="470" font-size="7.5" fill="#6a6e73">Hub &middot; manages spokes</text>
+
+  <!-- ==================== SPOKE CLUSTER ==================== -->
+  <rect x="960" y="60" width="300" height="330" rx="8" fill="none" stroke="#6a6e73" stroke-width="1.5"/>
+  <rect x="960" y="60" width="300" height="24" rx="8" fill="#6a6e73"/>
+  <text x="1110" y="77" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">SPOKE CLUSTER</text>
+
+  <rect x="980" y="95" width="260" height="44" rx="4" fill="#fff" stroke="#d2d2d2"/>
+  <text x="1010" y="115" font-size="10" font-weight="700" fill="#151515">K8s API Server</text>
+  <text x="1010" y="130" font-size="8" fill="#6a6e73">OCP 4.22</text>
+
+  <rect x="980" y="150" width="260" height="44" rx="4" fill="#fff" stroke="#d2d2d2"/>
+  <text x="1010" y="170" font-size="10" font-weight="700" fill="#151515">Klusterlet Agent</text>
+  <text x="1010" y="185" font-size="8" fill="#6a6e73">RHACM managed</text>
+
+  <rect x="980" y="205" width="260" height="44" rx="4" fill="#fff" stroke="#d2d2d2"/>
+  <circle cx="1000" cy="227" r="7" fill="#ee0000"/>
+  <text x="1015" y="225" font-size="10" font-weight="700" fill="#151515">mcp-hub-reader SA</text>
+  <text x="1015" y="240" font-size="8" fill="#6a6e73">cluster-reader ClusterRoleBinding</text>
+
+  <!-- ==================== AI Agent ==================== -->
+  <rect x="10" y="135" width="70" height="60" rx="8" fill="#151515"/>
+  <text x="24" y="162" font-size="11" font-weight="700" fill="#fff">AI</text>
+  <text x="24" y="178" font-size="11" font-weight="700" fill="#fff">Agent</text>
+
+  <!-- ==================== FLOW ARROWS ==================== -->
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="aR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6Z" fill="#ee0000"/></marker>
+    <marker id="aB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6Z" fill="#333"/></marker>
+    <marker id="aG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6Z" fill="#6a6e73"/></marker>
+  </defs>
+
+  <!-- 1: Agent ’ Route -->
+  <line x1="80" y1="155" x2="138" y2="155" stroke="#ee0000" stroke-width="2" marker-end="url(#aR)"/>
+  <circle cx="92" cy="147" r="8" fill="#ee0000"/><text x="88" y="151" font-size="8" font-weight="700" fill="#fff">1</text>
+  <text x="88" y="140" font-size="7" fill="#6a6e73">Agent ’ Route</text>
+
+  <!-- 2: Route ’ Envoy -->
+  <line x1="215" y1="172" x2="215" y2="182" stroke="#333" stroke-width="1.5" marker-end="url(#aB)"/>
+  <circle cx="228" cy="178" r="8" fill="#ee0000"/><text x="224" y="182" font-size="8" font-weight="700" fill="#fff">2</text>
+
+  <!-- 3: Envoy ’ Authorino (WASM) -->
+  <line x1="215" y1="232" x2="215" y2="244" stroke="#ee0000" stroke-width="1.5" marker-end="url(#aR)"/>
+  <circle cx="228" cy="238" r="8" fill="#ee0000"/><text x="224" y="242" font-size="8" font-weight="700" fill="#fff">3</text>
+
+  <!-- 4a: Envoy ’ MCPRouter/Broker (init only, dashed) -->
+  <line x1="290" y1="208" x2="528" y2="168" stroke="#6a6e73" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#aG)"/>
+  <circle cx="400" cy="183" r="8" fill="#6a6e73"/><text x="394" y="187" font-size="7" font-weight="700" fill="#fff">4a</text>
+  <text x="350" y="200" font-size="7" fill="#6a6e73">init/discovery</text>
+
+  <!-- 4b: Envoy ’ MCP Server (tools/call, solid red) -->
+  <line x1="290" y1="215" x2="528" y2="265" stroke="#ee0000" stroke-width="2.5" marker-end="url(#aR)"/>
+  <circle cx="400" cy="237" r="8" fill="#ee0000"/><text x="393" y="241" font-size="7" font-weight="700" fill="#fff">4b</text>
+  <text x="355" y="255" font-size="7.5" font-weight="700" fill="#ee0000">tools/call (direct)</text>
+
+  <!-- 5: MCP Server ’ Spoke -->
+  <line x1="900" y1="268" x2="978" y2="117" stroke="#333" stroke-width="1.8" marker-end="url(#aB)"/>
+  <circle cx="940" cy="190" r="8" fill="#333"/><text x="937" y="194" font-size="8" font-weight="700" fill="#fff">5</text>
+  <text x="920" y="215" font-size="7.5" font-weight="600" fill="#333">spoke via</text>
+  <text x="920" y="226" font-size="7.5" font-weight="600" fill="#333">kubeconfig</text>
+
+  <!-- RHACM ’ Spoke (dashed) -->
+  <line x1="540" y1="452" x2="978" y2="172" stroke="#6a6e73" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#aG)"/>
+  <text x="750" y="320" font-size="7" fill="#6a6e73">RHACM manages</text>
+
+  <!-- Keycloak ’ Envoy (dashed for JWT validation) -->
+  <line x1="220" y1="420" x2="220" y2="338" stroke="#6a6e73" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="225" y="380" font-size="7" fill="#6a6e73">JWT validation</text>
+
+  <!-- ==================== LEGEND ==================== -->
+  <rect x="120" y="500" width="780" height="55" rx="4" fill="#fafafa" stroke="#e0e0e0"/>
+  <text x="130" y="516" font-size="9" font-weight="700" fill="#151515">Flow Legend</text>
+
+  <line x1="130" y1="530" x2="170" y2="530" stroke="#ee0000" stroke-width="2.5"/>
+  <text x="175" y="534" font-size="8" fill="#151515">tools/call ’ direct to MCP Server (MCPRouter sets routing headers)</text>
+
+  <line x1="130" y1="545" x2="170" y2="545" stroke="#6a6e73" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="175" y="549" font-size="8" fill="#151515">initialize / tools/list ’ through MCPBroker (session + discovery)</text>
+
+  <line x1="530" y1="530" x2="570" y2="530" stroke="#6a6e73" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="575" y="534" font-size="8" fill="#151515">control plane (RHACM, Keycloak JWT)</text>
+
+  <!-- Footer -->
+  <text x="130" y="600" font-size="8" fill="#6a6e73">Confidential: Red Hat associate and NDA partner use only. No further distribution.</text>
+</svg>
