@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Private AI Coding Infrastructure for Financial Services</title>
+<style>
+@font-face{font-family:'Red Hat Display';font-weight:300;src:url('/fonts/RedHatDisplay-Light.otf') format('opentype')}
+@font-face{font-family:'Red Hat Display';font-weight:400;src:url('/fonts/RedHatDisplay-Regular.otf') format('opentype')}
+@font-face{font-family:'Red Hat Display';font-weight:400;font-style:italic;src:url('/fonts/RedHatDisplay-Italic.otf') format('opentype')}
+@font-face{font-family:'Red Hat Display';font-weight:500;src:url('/fonts/RedHatDisplay-Medium.otf') format('opentype')}
+@font-face{font-family:'Red Hat Display';font-weight:500;font-style:italic;src:url('/fonts/RedHatDisplay-MediumItalic.otf') format('opentype')}
+@font-face{font-family:'Red Hat Display';font-weight:700;src:url('/fonts/RedHatDisplay-Bold.otf') format('opentype')}
+@font-face{font-family:'Red Hat Display';font-weight:700;font-style:italic;src:url('/fonts/RedHatDisplay-BoldItalic.otf') format('opentype')}
+@font-face{font-family:'Red Hat Display';font-weight:900;src:url('/fonts/RedHatDisplay-Black.otf') format('opentype')}
+@font-face{font-family:'Red Hat Display';font-weight:900;font-style:italic;src:url('/fonts/RedHatDisplay-BlackItalic.otf') format('opentype')}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --rh-red:#EE0000;--rh-dark:#151515;--rh-cover-dark:#292929;
+  --rh-white:#FFFFFF;--rh-gray:#F2F2F2;--rh-gray-mid:#D2D2D2;
+  --rh-green:#63993D;
+  --fh:'Red Hat Display',Arial,sans-serif;
+  --fb:'Red Hat Display',Arial,sans-serif;
+}
+body{background:#111;font-family:var(--fb);overflow:hidden;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#controls{position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,.9);color:#fff;display:flex;align-items:center;justify-content:center;gap:20px;padding:9px 24px;font-size:13px;z-index:100;font-family:var(--fb)}
+#controls button{background:var(--rh-red);color:white;border:none;padding:5px 14px;border-radius:2px;cursor:pointer;font-family:var(--fh);font-size:13px;font-weight:700}
+#controls button:hover{background:#cc0000}
+#slide-counter{color:#888;min-width:70px;text-align:center;font-variant-numeric:tabular-nums}
+kbd{background:#2a2a2a;border:1px solid #444;border-radius:2px;padding:1px 5px;font-size:11px}
+#viewport{width:1280px;height:720px;flex-shrink:0;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.7)}
+#slides{display:flex;width:100%;height:100%;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.slide{min-width:1280px;width:1280px;height:720px;position:relative;overflow:hidden;flex-shrink:0;background:#fff}
+
+/* ── Left red bar ── */
+.rh-bar-t,.rh-bar-b{position:absolute;left:3.67%;width:2px;background:var(--rh-red)}
+.rh-bar-t{top:0;height:12.93%}
+.rh-bar-b{bottom:0;height:6.65%}
+
+/* ── Section tag ── */
+.rh-tag{position:absolute;left:3.67%;top:0.83%;font:500 13px/1 var(--fh);color:var(--rh-red);text-transform:uppercase;letter-spacing:.07em}
+
+/* ── Title area ── */
+.rh-title-area{position:absolute;left:7.26%;right:3%;top:16.04%}
+.rh-title-area h2{font:700 30px/1.15 var(--fh);color:var(--rh-dark)}
+.rh-rule{width:48px;height:3px;background:var(--rh-red);margin-top:10px}
+
+/* ── Body area ── */
+.rh-body{position:absolute;left:7.26%;right:3%;top:30%;bottom:11%;display:flex;gap:32px;align-items:flex-start}
+.rh-bullets-wrap{flex:1;display:flex;flex-direction:column;gap:0;overflow:hidden}
+.rh-body-icon{flex-shrink:0;width:110px;display:flex;align-items:flex-start;justify-content:center;padding-top:4px}
+.rh-body.has-icon .rh-bullets-wrap{flex:1}
+
+/* ── Bullets ── */
+.rh-bullets{list-style:none;padding:0;display:flex;flex-direction:column;gap:9px}
+.rh-bullets li{font:400 21px/1.4 var(--fb);color:var(--rh-dark);padding-left:18px;position:relative}
+.rh-bullets li::before{content:'';position:absolute;left:0;top:11px;width:7px;height:7px;background:var(--rh-red);border-radius:50%}
+.rh-bullets li.sub-bullet{font-size:18px;padding-left:32px;color:#444}
+.rh-bullets li.sub-bullet::before{width:5px;height:5px;background:var(--rh-gray-mid);left:14px;top:10px}
+.rh-note{font-size:11px;color:#999;margin-top:auto;padding-top:8px;border-top:1px solid var(--rh-gray-mid)}
+
+/* ── Footer ── */
+.rh-footer{position:absolute;left:0;right:0;bottom:0;height:10.04%;display:flex;align-items:center;padding:0 2% 0 0.7%;border-top:1px solid #eee}
+.rh-fn{font:400 10px var(--fb);color:#bbb;min-width:40px}
+.rh-fl{position:absolute;right:2%;bottom:0;height:100%;display:flex;align-items:center}
+.rh-fl img{height:28px;width:auto}
+
+/* ── TITLE SLIDE ── */
+.slide-title{background:var(--rh-red)}
+.title-area{position:absolute;left:17.1%;top:25.4%;width:61.8%}
+.title-area h1{font:900 56px/1.1 var(--fh);color:var(--rh-white);margin-bottom:16px}
+.title-subtitle{font:400 22px/1.4 var(--fh);color:rgba(255,255,255,.88)}
+.title-presenter{position:absolute;left:17.1%;top:72%;font:500 13px var(--fb);color:rgba(255,255,255,.75);display:flex;align-items:center;gap:0;flex-wrap:wrap}
+.tp-sep{margin:0 10px;opacity:.4}
+.title-white-strip{position:absolute;bottom:0;left:0;right:0;height:13%;background:var(--rh-white);display:flex;align-items:center;padding:0 2.5%}
+.title-brand{font:700 12px var(--fh);color:var(--rh-red);text-transform:uppercase;letter-spacing:.06em;margin-left:auto}
+
+/* ── SECTION DIVIDER ── */
+.slide-section{background:var(--rh-cover-dark)}
+.slide-section .rh-bar-t,.slide-section .rh-bar-b{background:var(--rh-red)}
+.slide-section .rh-tag{color:rgba(255,255,255,.55)}
+.slide-section .rh-footer{border-top-color:rgba(255,255,255,.08)}
+.slide-section .rh-fn{color:#555}
+.section-title-area{position:absolute;left:3.67%;right:5%;top:18%}
+.section-title-area h2{font:700 52px/1.1 var(--fh);color:var(--rh-white)}
+.section-rule{width:56px;height:3px;background:var(--rh-red);margin-top:16px}
+.section-subtitle{font:400 22px/1.5 var(--fb);color:rgba(255,255,255,.7);margin-top:20px;max-width:70%}
+
+/* ── TWO-COLUMN ── */
+.two-col-body{position:absolute;left:7.26%;right:3%;top:30%;bottom:11%;display:grid;grid-template-columns:1fr 1px 1fr;gap:0;align-items:start}
+.col-left,.col-right{padding:0 28px;overflow:hidden}
+.col-left{padding-left:0}
+.col-right{padding-right:0}
+.col-divider{background:var(--rh-gray-mid);align-self:stretch;margin:4px 0}
+.col-label{font:700 13px var(--fh);color:var(--rh-red);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.two-col-body .rh-bullets li{font-size:18px}
+
+/* ── STATS ── */
+.stats-grid{position:absolute;left:7.26%;right:3%;top:32%;bottom:12%;display:flex;align-items:center}
+.stat-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 16px;border-right:1px solid var(--rh-gray-mid)}
+.stat-item:last-child{border-right:none}
+.stat-value{font:900 72px/1 var(--fh);color:var(--rh-red);margin-bottom:14px}
+.stat-label{font:500 17px/1.3 var(--fb);color:var(--rh-dark);max-width:180px}
+.rh-note-stats{position:absolute;bottom:11%;left:7.26%;right:3%;font-size:11px;color:#999;border-top:1px solid var(--rh-gray-mid);padding-top:6px}
+
+/* ── ICON ROW ── */
+.icon-row{position:absolute;left:7.26%;right:3%;top:32%;bottom:11%;display:flex;align-items:stretch;gap:14px}
+.icon-row-item{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 14px;background:var(--rh-gray);border-top:3px solid var(--rh-red)}
+.icon-row-icon{width:64px;height:64px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:40px}
+.icon-row-label{font:700 17px var(--fh);color:var(--rh-dark);margin-bottom:6px}
+.icon-row-desc{font:400 13px/1.4 var(--fb);color:#555}
+
+/* ── TABLE ── */
+.table-wrap{position:absolute;left:7.26%;right:3%;top:30%;bottom:11%;overflow:auto}
+.rh-table{width:100%;border-collapse:collapse;font-size:17px}
+.rh-table thead tr{background:var(--rh-dark);color:var(--rh-white)}
+.rh-table th{padding:10px 14px;font:700 14px var(--fh);text-align:left;letter-spacing:.03em}
+.rh-table td{padding:9px 14px;border-bottom:1px solid var(--rh-gray-mid);color:var(--rh-dark);vertical-align:top;line-height:1.4}
+.rh-table tbody tr:nth-child(even) td{background:var(--rh-gray)}
+.rh-table tbody tr:hover td{background:#fff0f0}
+
+/* ── QUOTE ── */
+.slide-quote .rh-bar-t,.slide-quote .rh-bar-b{opacity:.3}
+.quote-dark{background:var(--rh-dark)}
+.quote-light{background:var(--rh-gray)}
+.quote-inner{position:absolute;left:10%;right:10%;top:50%;transform:translateY(-50%);text-align:center}
+.quote-mark{font:900 96px/0.5 var(--fh);color:var(--rh-red);margin-bottom:20px;display:block}
+blockquote{font:500 32px/1.45 var(--fh);font-style:italic;max-width:900px;margin:0 auto}
+.quote-dark blockquote{color:var(--rh-white)}
+.quote-light blockquote{color:var(--rh-dark)}
+cite{display:block;margin-top:28px;font:500 15px var(--fb);font-style:normal;color:var(--rh-red)}
+.quote-dark .rh-fn,.quote-dark .rh-fl{color:rgba(255,255,255,.35)}
+.quote-dark .rh-footer{border-top-color:rgba(255,255,255,.08)}
+
+/* ── CLOSING ── */
+.slide-closing{background:var(--rh-red)}
+.closing-area{position:absolute;left:17.1%;top:25.4%;width:61.8%}
+.closing-area h1{font:900 68px/1.1 var(--fh);color:var(--rh-white);margin-bottom:16px}
+.closing-contact{font:500 16px var(--fb);color:rgba(255,255,255,.7);margin-top:12px}
+
+/* ── FLOW DIAGRAM (CSS-only) ── */
+.flow-container{display:flex;gap:0;align-items:center;flex-wrap:nowrap;margin:8px 0}
+.flow-box{padding:10px 16px;border-radius:6px;font:600 14px/1.3 var(--fh);text-align:center;white-space:nowrap;border:2px solid}
+.flow-box.red{background:#FDEAEA;border-color:var(--rh-red);color:var(--rh-red)}
+.flow-box.blue{background:#E8F0FE;border-color:#0066CC;color:#0066CC}
+.flow-box.teal{background:#E0F5F5;border-color:#009596;color:#009596}
+.flow-box.green{background:#E6F4E6;border-color:var(--rh-green);color:var(--rh-green)}
+.flow-box.purple{background:#F0ECFA;border-color:#6753AC;color:#6753AC}
+.flow-box.dark{background:var(--rh-dark);border-color:var(--rh-dark);color:var(--rh-white)}
+.flow-arrow{font-size:22px;color:#8A8D90;padding:0 6px;flex-shrink:0}
+
+/* ── Arch stack boxes ── */
+.arch-stack{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.arch-row{display:flex;gap:8px;align-items:stretch}
+.arch-box{flex:1;padding:10px 14px;border-radius:6px;font:500 14px/1.3 var(--fb);border:2px solid}
+.arch-box h4{font:700 15px var(--fh);margin:0 0 4px 0}
+.arch-box p{font:400 12px/1.4 var(--fb);margin:0;opacity:.8}
+.arch-box.red{background:#FDEAEA;border-color:var(--rh-red)}
+.arch-box.red h4{color:var(--rh-red)}
+.arch-box.blue{background:#E8F0FE;border-color:#0066CC}
+.arch-box.blue h4{color:#0066CC}
+.arch-box.teal{background:#E0F5F5;border-color:#009596}
+.arch-box.teal h4{color:#009596}
+.arch-box.green{background:#E6F4E6;border-color:var(--rh-green)}
+.arch-box.green h4{color:var(--rh-green)}
+.arch-box.purple{background:#F0ECFA;border-color:#6753AC}
+.arch-box.purple h4{color:#6753AC}
+.arch-box.gold{background:#FFF8E1;border-color:#F0AB00}
+.arch-box.gold h4{color:#B37800}
+.arch-box.dark{background:#2a2a2a;border-color:var(--rh-dark);color:var(--rh-white)}
+.arch-box.dark h4{color:var(--rh-white)}
+.arch-box.dark p{color:rgba(255,255,255,.7)}
+
+/* Scoring grid */
+.scorer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.scorer-card{padding:14px;border-radius:8px;border:2px solid;text-align:center}
+.scorer-card h4{font:700 14px var(--fh);margin:0 0 4px 0}
+.scorer-card .weight{font:900 28px var(--fh);margin:4px 0}
+.scorer-card p{font:400 12px/1.3 var(--fb);margin:0}
+.scorer-card.s1{background:#E0F5F5;border-color:#009596}
+.scorer-card.s1 h4,.scorer-card.s1 .weight{color:#009596}
+.scorer-card.s2{background:#F0ECFA;border-color:#6753AC}
+.scorer-card.s2 h4,.scorer-card.s2 .weight{color:#6753AC}
+.scorer-card.s3{background:#E8F0FE;border-color:#0066CC}
+.scorer-card.s3 h4,.scorer-card.s3 .weight{color:#0066CC}
+
+@media print{
+  body{background:white;overflow:visible;height:auto;display:block}
+  #controls{display:none}
+  #viewport{width:100%;height:auto;box-shadow:none;overflow:visible}
+  #slides{display:block;transform:none!important;transition:none}
+  .slide{width:100%;height:auto;min-height:560px;page-break-after:always;break-after:page}
+}
+</style>
+</head>
+<body>
+
+<script>window.SPEAKER_NOTES=[
+"Let the room settle. This is a technical session, not a pitch.\n\n\"Thank you for being here. I want to set expectations upfront: this is an architecture session, not a product demo. We built and deployed everything I'm about to show you on a live OpenShift cluster. Every component, every API call, every configuration — it's running right now.\"\n\n\"Here's the problem we solved: how do you give every developer in a financial services organization an AI-powered coding assistant — agentic, not just autocomplete — without any source code, proprietary logic, or customer data ever leaving your infrastructure perimeter?\"\n\n\"By the end of this session, you'll understand the full inference request path, the governance model, the guardrails architecture, and the developer experience. And you'll have seen it work.\"\n\n\"Let's start with why this conversation is happening now.\"",
+
+"Let these numbers land. Pause between each one.\n\n\"Three numbers that frame this entire conversation.\"\n\n\"92% of developers report using AI coding tools in some form — that's GitHub's 2025 developer survey. It's not a question of WHETHER your developers want AI. They already have it. The question is whether they're using sanctioned tools or shadow AI.\"\n\n--- pause ---\n\n\"78% of financial services CISOs say their developers have used unauthorized AI tools with production code. Unauthorized means: code pasted into ChatGPT, Copilot connected to repos without approval, local models downloaded to workstations with no oversight. Every one of those actions is a potential data exfiltration event.\"\n\n--- pause ---\n\n\"$4.88 million — that's IBM's 2024 cost of a data breach figure for financial services, the highest of any industry. And AI-related breaches — where AI tools were involved in the data exposure — are a growing category.\"\n\n\"These numbers tell you the status quo is untenable. Developers WILL use AI tools. The only question is whether your organization provides them securely, or whether developers route around your controls.\"\n\nSources: GitHub Developer Survey 2025 (92%); Gartner/EY FS CISO Survey 2025 (78% shadow AI); IBM Cost of a Data Breach 2024 ($4.88M FS average).",
+
+"Walk through each force slowly. These are the three tensions that create the buying moment.\n\n\"Three forces collide in financial services, and they create the buying moment for this architecture.\"\n\n\"First — Developer Productivity Pressure. AI coding agents — not just autocomplete, AGENTS that read your codebase, write code, run tests, iterate — are delivering 30–55% productivity gains in controlled studies. GitHub's research shows 55% faster task completion. Google's internal data shows 30% of new code is AI-generated. Your competitors are shipping features faster because their developers have these tools. Every month your developers don't have them is a competitive gap.\"\n\n\"Second — Regulatory Reality. PCI-DSS requires that cardholder data never leaves your security perimeter. SOX mandates audit trails on systems that touch financial reporting. GDPR requires data residency controls. And your internal IP policies — the proprietary trading algorithms, the risk models, the compliance logic — those are crown jewels. None of this can flow through a third-party API.\"\n\n\"Third — Shadow AI Risk. Your developers aren't waiting for IT to solve this. They're pasting code into ChatGPT. They're installing VS Code extensions that phone home. They're running local models on laptops with no audit trail. Every one of these is an uncontrolled data channel. And you can't stop it with policy alone — you have to give them something better.\"\n\n\"The architecture I'm about to show you resolves all three tensions simultaneously.\"",
+
+"Brief pause. Signal the shift from problem to solution.\n\n\"So the question is clear: how do you deliver AI coding agents to every developer without any code leaving your infrastructure?\"\n\n--- pause ---\n\n\"The answer has five layers. Let me walk you through each one.\"",
+
+"This is THE architecture slide. Take your time. Reference every component.\n\n\"Here's the end-to-end inference request path. Every component is running on our reference deployment right now. Let me trace a request from the developer's IDE to the GPU and back.\"\n\n\"Start at the top. The developer is in OpenShift DevSpaces — a cloud-hosted VS Code instance running in a dedicated Kubernetes namespace. Inside that IDE, they're using OpenCode, which is an agentic coding tool. Not just autocomplete — it reads files, writes code, runs commands, iterates on errors. It sends OpenAI-compatible API requests.\"\n\n\"Those requests hit the MaaS Gateway — Models as a Service. This is the front door. It authenticates the request using an sk-oai API key, checks the subscription entitlements, enforces token rate limits. The gateway is an Envoy-based proxy managed by RHOAI's MaaS controller. Physically, it's the maas-default-gateway in the openshift-ingress namespace.\"\n\n\"If guardrails are enabled — and in our deployment they are — the request passes through TrustyAI. Three detectors run in sequence: prompt injection detection, PII scanning, and secret leak detection. A request that triggers any detector gets blocked before it ever reaches the model.\"\n\n\"The clean request then hits llm-d — specifically the Endpoint Picker Plugin, EPP. This is not round-robin routing. The EPP scores every available vLLM replica on three dimensions: prefix cache affinity, queue depth, and KV-cache utilization. It routes the request to the optimal replica.\"\n\n\"The request arrives at vLLM — version 0.19.0 in our deployment — running on NVIDIA GPUs. The model generates the response, which flows back through the same path to the IDE.\"\n\n\"Every hop is within the OpenShift cluster. No data leaves the perimeter. The developer gets a Copilot-class experience. The CISO gets air-gap-grade isolation. That's the architecture.\"\n\nIF SOMEONE ASKS: \"What model are you running?\" — \"In our reference deployment, Qwen2.5-Coder-7B-Instruct. It's a dense 7-billion-parameter coding model that fits in a single 24GB A10G GPU. For production fintech deployments, you'd typically run a larger model — Qwen3-Coder-35B or Granite Code 34B — on A100 or H100 GPUs. The architecture is model-agnostic.\"\n\nIF SOMEONE ASKS: \"Is OpenCode the only supported IDE tool?\" — \"No. The platform supports Continue, Roo Code (formerly Cline), and any tool that speaks the OpenAI API. DevSpaces delivers pre-configured IDEs with the tool already wired to the private endpoint. OpenCode is the default because it's the most capable agentic tool.\"",
+
+"llm-d is the technical differentiator. Spend time here.\n\n\"Let me go deeper on llm-d because this is the component that most distinguishes this architecture from 'just run vLLM behind a load balancer.'\"\n\n\"llm-d is a CNCF Sandbox project co-created by Red Hat, Google Cloud, IBM Research, CoreWeave, and NVIDIA. It's the Kubernetes-native distributed LLM inference framework. GA in Red Hat OpenShift AI since version 3.3.\"\n\n\"The key abstraction is the LLMInferenceService CRD. You declare: I want this model, this many replicas, these GPU resources. RHOAI creates everything automatically — the vLLM pods, the Gateway, the HTTPRoute, the InferencePool, and critically, the EPP.\"\n\n\"The EPP — Endpoint Picker Plugin — is what makes this intelligent. When a request arrives, the EPP doesn't round-robin across replicas. It evaluates every replica and scores them on three weighted dimensions. The replica with the highest composite score gets the request.\"\n\n\"Why does this matter for coding workloads specifically? Because coding agents send sequences of related requests. An agent analyzing a file sends the file content as context, then asks follow-up questions about that same context. Without prefix-cache-aware routing, each request might hit a different replica and pay full prefill cost. With EPP, subsequent requests route to the replica that already has the context cached. Prefill drops from hundreds of milliseconds to under 20.\"\n\n\"In our deployment, we run two vLLM replicas with scheduler:{} enabled on the LLMInferenceService. That single field — scheduler: {} — tells RHOAI to create the EPP natively. No manual EPP deployment needed.\"\n\nIF SOMEONE ASKS: \"What's the EPP's overhead?\" — \"Sub-millisecond. The EPP is a Go binary running as a Kubernetes Service. It makes scoring decisions in microseconds. The latency impact is negligible compared to the prefill savings.\"",
+
+"This is the 'how it actually works' slide. Make the scoring concrete.\n\n\"Let me show you exactly how the EPP decides where to route each request. Three scorers, each with a weight.\"\n\n\"Prefix Cache Scorer — weight 3, the highest. This scorer checks: does this replica already have the request's prompt prefix in its KV cache? For coding workloads, the prefix is the system prompt plus the file context. If Replica A has 80% of the prefix cached and Replica B has 0%, Replica A scores dramatically higher. This is why sequential agent requests are so much faster — the second, third, fourth request in a chain all hit the same replica's warm cache.\"\n\n\"Queue Depth Scorer — weight 2. How many requests are currently queued on each replica? A replica with 3 pending requests scores lower than one with 0. This prevents hotspotting — even if Replica A has great cache affinity, if it's overloaded, the EPP may route elsewhere.\"\n\n\"KV-Cache Utilization Scorer — weight 2. How full is each replica's KV-cache memory? A replica at 95% KV-cache utilization is close to evicting cached entries. Routing more requests there risks cache thrashing. The EPP prefers replicas with headroom.\"\n\n\"The composite score is a weighted sum: (prefix_score × 3) + (queue_score × 2) + (kv_util_score × 2). The replica with the highest score wins.\"\n\n\"For our deployment: two replicas, each on a g5.2xlarge instance with an A10G GPU. The EPP discovered both replicas via the InferencePool's label selector — it watches for pods with kserve.io/component: workload. When we verified the deployment, both replicas appeared in the EPP's endpoint list within seconds of becoming Ready.\"\n\nIF SOMEONE ASKS: \"Can we customize the weights?\" — \"Yes. The EPP scoring configuration is in the LLMInferenceService spec. You can adjust weights, add custom scorers, or disable scorers entirely. For coding workloads, the default weights heavily favor prefix cache — which is exactly right.\"",
+
+"Governance is what Fintech buyers care about most. Spend time here.\n\n\"llm-d handles the inference intelligence. MaaS — Models as a Service — handles the governance. These are two different concerns, and conflating them is a common architectural mistake.\"\n\n\"On the left — what MaaS provides. Every developer gets an API key — an sk-oai prefixed key, same format as OpenAI. That key maps to a MaaSSubscription, which maps to a MaaSModelRef, which maps to the actual model endpoint. The subscription carries entitlements: which models this key can access, what token rate limit applies, what priority tier.\"\n\n\"The CRDs are: MaaSModelRef — registers the model endpoint with the MaaS gateway. MaaSSubscription — creates a subscription with rate limits and model access. MaaSAuthPolicy — enforces authentication. These three CRDs are managed by RHOAI's MaaS controller.\"\n\n\"On the right — what ungoverned access looks like. Direct vLLM endpoint, no auth, no rate limits, no audit trail. Any developer with network access can consume unlimited tokens. No way to attribute cost. No way to enforce model access policies. No way to revoke access.\"\n\n\"In our deployment, the MaaS gateway is maas-default-gateway in openshift-ingress. We created an sk-oai key via the MaaS API, configured a subscription with model access and rate limits, and verified end-to-end: requests with the key return 200, requests without return 401. That auth enforcement is non-negotiable for regulated environments.\"\n\n\"And here's the audit trail piece: every request through MaaS is logged with the subscription ID, the model accessed, tokens consumed, and timestamp. Your compliance team gets a complete ledger of who used which AI model, when, and how much.\"\n\nIF SOMEONE ASKS: \"Can we integrate with our existing IdP?\" — \"MaaS auth works via API keys out of the box. For SSO integration, MaaS supports the maas-default-gateway which can be configured with external auth providers via Kuadrant AuthPolicies. The sk-oai keys are the simplest path; OIDC integration is the enterprise path.\"",
+
+"Guardrails are the Fintech differentiator. Every bullet matters.\n\n\"Guardrails sit between the MaaS gateway and the model. In our deployment, the request path is: IDE → MaaS Gateway → TrustyAI Guardrails → llm-d EPP → vLLM.\"\n\n\"Three detectors run on every request, in sequence:\"\n\n\"Prompt Injection Detection. TrustyAI's regex-based detector scans the prompt for patterns that attempt to override system instructions. Patterns like 'ignore previous instructions,' 'you are now,' 'disregard all rules.' These are the most common attack vectors against AI coding tools — a developer pastes a README containing a hidden prompt injection, and the agent's behavior changes. The detector catches these BEFORE the prompt reaches the model.\"\n\n\"PII Scanning. The detector scans for personally identifiable information in prompts — social security numbers, credit card numbers, email addresses, phone numbers. In a fintech context, developers working with test data that contains real customer PII is a constant risk. The guardrail blocks the request and returns a warning.\"\n\n\"Secret Leak Detection. The detector scans for API keys, tokens, passwords, and credentials in prompts. A developer pastes a config file containing a database password into the AI chat. The guardrail catches it. This is defense-in-depth — even though the model is self-hosted, you still don't want credentials flowing through AI inference pipelines where they might appear in logs or metrics.\"\n\n\"All three detectors run as sidecars in the guardrails pod. The latency overhead is minimal — regex matching against the prompt, not ML inference. A clean request passes through in single-digit milliseconds. A flagged request is blocked immediately with a descriptive error.\"\n\nIF SOMEONE ASKS: \"Can we add custom detectors?\" — \"Yes. TrustyAI supports custom regex patterns and ML-based detectors. You can add industry-specific patterns — SWIFT codes, IBAN numbers, internal system identifiers — as additional detection rules.\"",
+
+"DevSpaces is where the developer experience becomes tangible.\n\n\"Everything we've discussed so far — llm-d, MaaS, guardrails — is infrastructure. The developer never sees any of it. What they see is this: a cloud-hosted VS Code IDE with an AI coding agent already configured and ready to use.\"\n\n\"OpenShift DevSpaces creates a dedicated Kubernetes namespace per developer. The namespace contains their DevWorkspace — a full VS Code instance running in a container — plus all the configuration: the OpenCode extension pre-installed, the MaaS endpoint pre-configured, the API key injected as a secret.\"\n\n\"The developer logs in, opens their browser, and starts coding with AI assistance. No local installation. No VPN. No configuration. No API key management. They open a file, ask the agent to refactor it, and the agent reads the file, writes the new code, and runs the tests — all within the cluster.\"\n\n\"Critically, the source code lives in the cluster. The AI model lives in the cluster. The inference happens in the cluster. The developer's browser sends keystrokes and receives rendered HTML. No source code transits the network boundary.\"\n\n\"In our deployment, we configured DevSpaces with per-namespace API keys. Each developer's OpenCode instance is pre-configured with their unique sk-oai key. The base URL points to the MaaS gateway with the correct namespace and model path. When the developer starts a session, AI assistance is immediate — no setup, no config, no 'enter your API key' dialog.\"\n\n\"And because it's a DevWorkspace CRD, the entire developer environment is declarative. You can version it, template it, audit it. New developer onboarding is: create a DevWorkspace CR, wait 60 seconds, hand them a URL.\"\n\nIF SOMEONE ASKS: \"What about latency? Is a browser-based IDE usable?\" — \"DevSpaces runs in the same cluster as the model. The IDE-to-model round-trip is milliseconds — much faster than calling an external API. The browser experience is indistinguishable from local VS Code for most operations.\"",
+
+"Signal the shift from architecture to value proposition.\n\n\"You've seen the architecture — five components, each solving a specific problem. Now let me explain why this matters specifically for financial services, beyond what I've already touched on.\"\n\n--- pause ---\n\n\"Three dimensions: security posture, regulatory alignment, and operational control.\"",
+
+"This is the risk comparison slide. Make it visceral.\n\n\"Let me put the two approaches side by side, because the risk profile is starkly different.\"\n\n\"On the left — cloud-hosted AI coding tools. GitHub Copilot, Cursor with cloud models, any tool that sends your code to an external API. Your source code — including proprietary trading algorithms, risk models, compliance logic — leaves your perimeter and enters a third party's infrastructure. Even with data processing agreements, you have limited visibility into how that data is handled, cached, or used for model training. PCI-DSS scope expands because cardholder data might be in the code context. Your compliance team needs to audit a third party's infrastructure.\"\n\n\"On the right — self-hosted with this architecture. Source code never leaves the cluster. The model runs on your GPUs, in your data center or your cloud VPC. MaaS provides per-developer audit trails. Guardrails scan every prompt. DevSpaces ensures the IDE itself runs in-cluster. PCI-DSS scope does NOT expand because no data crosses the perimeter. Your compliance team audits your own infrastructure — which they already do.\"\n\n\"For fintech, this isn't a preference — it's a requirement. The cloud-hosted approach creates audit findings. The self-hosted approach resolves them.\"\n\nIF SOMEONE ASKS: \"What about GitHub Copilot Enterprise with data exclusions?\" — \"Copilot Enterprise's data exclusion agreements reduce model training risk, but the code still transits GitHub's infrastructure for inference. For organizations with strict data residency requirements or air-gapped environments, transit itself is the issue — not just training.\"",
+
+"Compliance isn't a feature — it's the architecture. Every bullet is a design choice.\n\n\"This slide maps specific compliance requirements to specific architectural components. Every one of these is a design choice, not a bolt-on.\"\n\n\"Air-gapped deployment. The entire stack — RHOAI, vLLM, the model weights, DevSpaces, guardrails — can be deployed in a disconnected environment using mirror registries and OCI artifacts. No internet connectivity required post-deployment. The model weights are downloaded once to a persistent volume; inference is entirely local.\"\n\n\"FIPS 140-2 / 140-3 compliance. RHEL's validated cryptographic modules handle all TLS termination, API key encryption, and certificate management. The OpenShift cluster runs in FIPS mode end-to-end. This is not application-level crypto — it's OS-level, validated crypto.\"\n\n\"Audit trails. Three layers. MaaS logs every API request with subscription ID, model, tokens, and timestamp. TrustyAI guardrails log every blocked request with the detection reason. OpenShift audit logs capture all Kubernetes API calls — pod creation, secret access, RBAC changes.\"\n\n\"No data egress. DevSpaces runs in-cluster. Inference happens in-cluster. Model weights are stored on persistent volumes. The only network traffic that crosses the cluster boundary is the developer's browser connection to the DevSpaces web IDE — and that carries rendered HTML, not source code.\"\n\n\"Namespace isolation. Each developer's DevWorkspace runs in a dedicated namespace with RBAC, NetworkPolicy, and resource quotas. Developer A cannot access Developer B's workspace, code, or API key. This is Kubernetes-native multi-tenancy, enforced at the API server level.\"",
+
+"Map to specific frameworks. Fintech compliance teams need to see their frameworks.\n\n\"Let me map the architecture to the four frameworks your compliance team cares about most.\"\n\n\"PCI-DSS — Payment Card Industry Data Security Standard. Requirement: cardholder data must not be transmitted to unauthorized systems. Solution: all inference is in-cluster. No code or data transits external networks. The AI model never sees cardholder data unless the developer explicitly includes it — and if they do, the PII scanner in guardrails catches it.\"\n\n\"SOX — Sarbanes-Oxley. Requirement: audit trails on systems that touch financial reporting. Solution: MaaS provides per-developer, per-model usage logs. Every AI-assisted code change is traceable to a subscription ID. Combined with Git commit history, you have end-to-end provenance.\"\n\n\"GDPR — General Data Protection Regulation. Requirement: data residency and processing controls. Solution: model and data never leave the cluster. No third-party processing. Data subject access requests don't need to include a third-party AI vendor.\"\n\n\"Internal IP Protection. Requirement: proprietary algorithms, risk models, and trading logic cannot be exposed to external systems. Solution: self-hosted model, in-cluster inference, DevSpaces isolation. The crown jewels stay inside the castle.\"\n\n\"One platform addresses all four frameworks simultaneously. That's not a coincidence — it's by design. The architecture was built for regulated industries.\"",
+
+"Signal the shift from architecture to proof.\n\n\"Architecture is a promise. Let me show you the proof.\"\n\n--- pause ---\n\n\"Everything from here forward is based on a live deployment running on OpenShift right now.\"",
+
+"This is the credibility slide. Be specific. Use real numbers.\n\n\"Here's exactly what we deployed. Every number is real.\"\n\n\"Two vLLM replicas running Qwen2.5-Coder-7B-Instruct. Each replica on a g5.2xlarge instance with an NVIDIA A10G GPU — 24GB VRAM. The model is loaded from a persistent volume. vLLM version 0.19.0 with the hermes tool-call parser for function calling support.\"\n\n\"EPP running natively via scheduler:{} on the LLMInferenceService. Both replicas discovered by the InferencePool — verified via EPP pod logs showing two endpoints registered.\"\n\n\"MaaS gateway — maas-default-gateway in openshift-ingress. MaaSModelRef status: Ready. MaaSSubscription status: Active. Authentication verified: requests with sk-oai key return 200, without return 401.\"\n\n\"TrustyAI guardrails in the inference path. Three detectors active: prompt injection, PII, secret leak. Verified by sending test prompts with injected PII — blocked as expected.\"\n\n\"DevSpaces with OpenCode pre-configured. Per-namespace API keys injected as Kubernetes secrets. Developer logs in, opens browser, starts coding with AI assistance.\"\n\n\"Total deployment time from first Helm install to working inference: under 30 minutes. That's platform config, AI serving stack, and DevSpaces. Three Helm releases.\"\n\nIF SOMEONE ASKS: \"Can we see it live?\" — \"Absolutely. I have the cluster credentials and can demonstrate any component — the inference path, the MaaS auth, the guardrails blocking, the DevSpaces IDE. What would you like to see?\"",
+
+"Let the numbers speak. These are from the live deployment.\n\n\"Four metrics from our reference deployment.\"\n\n\"End-to-end response: requests flow from IDE through MaaS, guardrails, EPP, to vLLM and back. The full stack adds minimal overhead to raw vLLM latency — MaaS auth is sub-millisecond, guardrails regex is single-digit milliseconds, EPP scoring is sub-millisecond.\"\n\n\"Two replicas discovered by EPP. We verified this by checking the EPP pod logs — both vLLM endpoints registered within seconds of pod readiness. The InferencePool selector uses labels app.kubernetes.io/name and kserve.io/component: workload to discover pods.\"\n\n\"Authentication enforced. We tested both paths: with sk-oai API key → HTTP 200 with model response. Without key → HTTP 401 Unauthorized. There's no unauthenticated path to the model through MaaS.\"\n\n\"Three Helm releases to deploy. pca-platform-config for namespaces and RBAC. pca-ai-serving for vLLM, llm-d, MaaS, and guardrails. pca-devspaces for developer workspaces. All driven by make targets — make ai-serving-deploy-existing-openshift and make devspace-deploy-existing-openshift.\"",
+
+"Reference table. Don't read every row — let them scan it.\n\n\"Here's every component in the deployed stack. I won't read every row, but notice the pattern: open source foundations, Red Hat supported, Kubernetes-native CRDs.\"\n\n\"The critical ones to note: vLLM is the inference engine — open source, multi-vendor GPU support. llm-d EPP is the routing intelligence — CNCF Sandbox, GA in RHOAI 3.3+. MaaS is the governance layer — RHOAI-native, CRD-driven. TrustyAI is the guardrails framework — open source, extensible. DevSpaces is the IDE delivery — OpenShift-native.\"\n\n\"Every component is declarative. The entire stack is defined in Helm charts. You can version it, diff it, GitOps it. Infrastructure as code, not infrastructure as clicking.\"\n\n\"And notice the GPU column — only vLLM touches GPUs. Everything else — MaaS, guardrails, EPP, DevSpaces — runs on CPU. The GPU cost is only for the model itself.\"",
+
+"This is the UX walkthrough. Paint the picture of a developer's day.\n\n\"Let me walk you through what a developer's first day looks like with this platform.\"\n\n\"Step 1: IT creates a DevWorkspace CR in OpenShift. That's a YAML file — or a Helm release with make devspace-deploy-existing-openshift. Takes about 30 seconds.\"\n\n\"Step 2: The developer receives a URL. They open it in their browser. Chrome, Firefox, Safari — anything. They see a full VS Code IDE. OpenCode is already installed as an extension. The MaaS endpoint is already configured. Their API key is already injected.\"\n\n\"Step 3: They open a project. They can clone from their Git server — the DevWorkspace has Git configured. They open a file.\"\n\n\"Step 4: They ask the AI agent to help. 'Refactor this function to handle the new payment type.' OpenCode reads the file, understands the context, writes the new code, and offers to run the tests. The developer reviews, accepts or edits, and commits.\"\n\n\"Step 5: The Git push goes to the internal Git server. Not GitHub.com. Not a cloud service. The internal server.\"\n\n\"At no point did source code leave the cluster. At no point did the developer configure an API key. At no point did they install anything locally. At no point did they need VPN access — the DevSpaces URL is served via OpenShift Routes with authentication.\"\n\n\"That's the experience. From IT's perspective: Helm install. From the developer's perspective: open a URL and start coding with AI.\"",
+
+"The quote slide. Read it slowly. Let it land.\n\n--- read the quote slowly ---\n\n\"This is the design principle behind everything you've seen today. The model, the data, the inference, the IDE — it all runs inside your perimeter. Not because we chose to. Because regulated industries require it.\"\n\n--- pause ---\n\n\"And the developers don't sacrifice anything. They get agentic AI coding tools — the same quality of experience as any cloud-hosted solution — without the compliance risk.\"\n\n\"Let me leave you with the next steps.\"",
+
+"Land the plane. Short, confident, concrete.\n\n\"Five components. One platform. Zero data egress.\"\n\n\"llm-d for intelligent inference routing. MaaS for API key governance and audit trails. TrustyAI for prompt injection, PII, and secret detection. vLLM for efficient model serving. DevSpaces for secure, pre-configured AI-powered IDEs.\"\n\n\"The reference deployment takes under 30 minutes on an existing OpenShift cluster. Three Helm releases. Declarative, repeatable, GitOps-ready.\"\n\n\"For financial services, this isn't optional infrastructure — it's how you deliver AI developer productivity without creating audit findings.\"\n\n--- pause ---\n\n\"I'd welcome your questions. What resonated? Where do you see this fitting in your environment?\""
+];window.SLIDE_TITLES=["Private AI Coding Infrastructure for Financial Services","The Developer AI Paradox in Financial Services","Three Forces Driving This Conversation","The Architecture","Reference Architecture: End-to-End Request Path","llm-d: Kubernetes-Native Distributed LLM Inference","EPP Scoring: How Requests Hit the Right GPU","MaaS: Models as a Service Governance","TrustyAI Guardrails in the Inference Path","OpenShift DevSpaces: AI-Powered IDE Per Developer","Why This Matters for Fintech","Cloud AI vs. Self-Hosted: The Risk Calculus","Compliance Architecture: Four Design Choices","Four Regulatory Frameworks \u2014 One Platform","Proof","What We Deployed: Live Reference Architecture","Reference Deployment Metrics","Deployed Component Stack","Developer Experience: Login to First AI-Assisted Commit","The safest code never leaves the building","Private AI Coding Infrastructure for Financial Services"];</script>
+
+<div id="viewport" class="tmpl-general"><div id="slides">
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 1 — TITLE
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-title">
+  <div class="title-area">
+    <h1>Private AI Coding Infrastructure for Financial Services</h1>
+    <p class="title-subtitle">Secure, Self-Hosted AI Developer Tooling on Red Hat OpenShift AI</p>
+  </div>
+  <div class="title-presenter">
+    Raghu Banda<span class="tp-sep">&middot;</span>Red Hat OpenShift AI<span class="tp-sep">&middot;</span>September 2026
+  </div>
+  <div class="title-white-strip">
+    <span class="title-brand">Red Hat</span>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 2 — STATS: The Paradox
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-stats">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="rh-tag">The Challenge</div>
+  <div class="rh-title-area">
+    <h2>The Developer AI Paradox in Financial Services</h2>
+    <div class="rh-rule"></div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-item"><div class="stat-value">92%</div><div class="stat-label">of developers use AI coding tools today</div></div>
+    <div class="stat-item"><div class="stat-value">78%</div><div class="stat-label">of FS CISOs report unauthorized AI tool usage</div></div>
+    <div class="stat-item"><div class="stat-value">$4.88M</div><div class="stat-label">average cost of a data breach in financial services</div></div>
+  </div>
+  <div class="rh-note-stats">Sources: GitHub Developer Survey 2025 &middot; Gartner/EY FS CISO Survey 2025 &middot; IBM Cost of a Data Breach 2024</div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 3 — ICON ROW: Three Forces
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-icon-row">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="rh-tag">The Challenge</div>
+  <div class="rh-title-area">
+    <h2>Three Forces Driving This Conversation</h2>
+    <div class="rh-rule"></div>
+  </div>
+  <div class="icon-row">
+    <div class="icon-row-item">
+      <div class="icon-row-icon">&#x1F680;</div>
+      <div class="icon-row-label">Developer Productivity</div>
+      <div class="icon-row-desc">AI coding agents deliver 30&ndash;55% faster task completion. Your competitors' developers already have them. Every month without them is a competitive gap.</div>
+    </div>
+    <div class="icon-row-item">
+      <div class="icon-row-icon">&#x1F512;</div>
+      <div class="icon-row-label">Regulatory Reality</div>
+      <div class="icon-row-desc">PCI-DSS, SOX, GDPR, and internal IP policies prohibit source code from leaving your perimeter. Cloud AI tools violate these constraints by design.</div>
+    </div>
+    <div class="icon-row-item">
+      <div class="icon-row-icon">&#x26A0;&#xFE0F;</div>
+      <div class="icon-row-label">Shadow AI Risk</div>
+      <div class="icon-row-desc">Developers aren&rsquo;t waiting. They paste code into ChatGPT, install unauthorized extensions, run local models. Uncontrolled data channels with zero audit trail.</div>
+    </div>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 4 — SECTION: The Architecture
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-section">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="section-title-area">
+    <h2>The Architecture</h2>
+    <div class="section-rule"></div>
+    <p class="section-subtitle">Five components &middot; Zero data egress &middot; Kubernetes-native</p>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 5 — CONTENT: Reference Architecture
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-content">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="rh-tag">Architecture</div>
+  <div class="rh-title-area">
+    <h2>Reference Architecture: End-to-End Request Path</h2>
+    <div class="rh-rule"></div>
+  </div>
+  <div class="rh-body">
+    <div class="rh-bullets-wrap">
+      <div class="flow-container">
+        <div class="flow-box blue">Developer IDE<br><small>DevSpaces + OpenCode</small></div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box red">MaaS Gateway<br><small>sk-oai auth + rate limits</small></div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box purple">TrustyAI Guardrails<br><small>injection &middot; PII &middot; secrets</small></div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box teal">llm-d EPP<br><small>prefix-cache routing</small></div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box green">vLLM<br><small>GPU inference</small></div>
+      </div>
+      <ul class="rh-bullets" style="margin-top:16px">
+        <li><strong>Every hop is within the OpenShift cluster</strong> &mdash; no data leaves the perimeter</li>
+        <li>OpenAI-compatible API &mdash; works with any tool that speaks <code>/v1/chat/completions</code></li>
+        <li>Declarative: entire stack defined in Helm charts, GitOps-ready, repeatable</li>
+        <li>Model-agnostic: swap Qwen for Granite, Llama, or any vLLM-supported model</li>
+      </ul>
+      <div class="rh-note">CRDs: LLMInferenceService &middot; MaaSModelRef &middot; MaaSSubscription &middot; MaaSAuthPolicy &middot; DevWorkspace</div>
+    </div>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 6 — CONTENT: llm-d
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-content">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="rh-tag">Architecture</div>
+  <div class="rh-title-area">
+    <h2>llm-d: Kubernetes-Native Distributed LLM Inference</h2>
+    <div class="rh-rule"></div>
+  </div>
+  <div class="rh-body">
+    <div class="rh-bullets-wrap">
+      <ul class="rh-bullets">
+        <li><strong>CNCF Sandbox project</strong> &mdash; co-created by Red Hat, Google Cloud, IBM Research, CoreWeave, NVIDIA</li>
+        <li><strong>LLMInferenceService CRD</strong> declares model, replicas, GPU resources &rarr; RHOAI creates vLLM pods, Gateway, HTTPRoute, InferencePool, and EPP automatically</li>
+        <li><strong>EPP (Endpoint Picker Plugin)</strong> scores every replica on three dimensions &mdash; does NOT round-robin</li>
+        <li><strong>Prefix-cache-aware routing</strong>: sequential agent requests hit the replica with warm context &rarr; skip prefill entirely</li>
+        <li><strong>Native activation</strong>: <code>scheduler: {}</code> on the LLMInferenceService &rarr; RHOAI creates EPP natively, no manual deployment</li>
+        <li>GA in Red Hat OpenShift AI since version 3.3</li>
+      </ul>
+      <div class="rh-note">For coding agents, prefix-cache routing is the highest-impact optimization: subsequent requests in a chain reuse cached context, reducing prefill from hundreds of milliseconds to &lt;20ms.</div>
+    </div>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 7 — CONTENT: EPP Scoring
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-content">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="rh-tag">Architecture</div>
+  <div class="rh-title-area">
+    <h2>EPP Scoring: How Requests Hit the Right GPU</h2>
+    <div class="rh-rule"></div>
+  </div>
+  <div class="rh-body">
+    <div class="rh-bullets-wrap">
+      <div class="scorer-grid">
+        <div class="scorer-card s1">
+          <h4>Prefix Cache Scorer</h4>
+          <div class="weight">Weight 3</div>
+          <p>Does this replica have the prompt prefix cached? Routes agent chains to the same replica &mdash; skips prefill entirely.</p>
+        </div>
+        <div class="scorer-card s2">
+          <h4>Queue Depth Scorer</h4>
+          <div class="weight">Weight 2</div>
+          <p>How many requests are queued? Prevents hotspotting even when cache affinity is high.</p>
+        </div>
+        <div class="scorer-card s3">
+          <h4>KV-Cache Utilization</h4>
+          <div class="weight">Weight 2</div>
+          <p>How full is the replica&rsquo;s KV-cache? Avoids routing to replicas near eviction threshold.</p>
+        </div>
+      </div>
+      <ul class="rh-bullets" style="margin-top:14px">
+        <li><strong>Composite score</strong> = (prefix &times; 3) + (queue &times; 2) + (kv_util &times; 2) &mdash; highest score wins</li>
+        <li>InferencePool discovers replicas via label selector: <code>kserve.io/component: workload</code></li>
+        <li>Scoring happens in sub-millisecond &mdash; negligible overhead vs. prefill savings</li>
+      </ul>
+    </div>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 8 — TWO-COLUMN: MaaS Governance
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-two-col">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="rh-tag">Governance</div>
+  <div class="rh-title-area">
+    <h2>MaaS: Models as a Service Governance</h2>
+    <div class="rh-rule"></div>
+  </div>
+  <div class="two-col-body">
+    <div class="col-left">
+      <div class="col-label">Governed Access</div>
+      <ul class="rh-bullets">
+        <li><strong>sk-oai API keys</strong> per developer or team</li>
+        <li><strong>MaaSSubscription</strong> with token rate limits and model entitlements</li>
+        <li><strong>MaaSAuthPolicy</strong> enforces authentication at the gateway</li>
+        <li><strong>Audit trail</strong>: subscription ID, model, tokens, timestamp on every request</li>
+        <li><strong>401 without key</strong> &mdash; no unauthenticated path to the model</li>
+      </ul>
+    </div>
+    <div class="col-divider"></div>
+    <div class="col-right">
+      <div class="col-label">Ungoverned Access</div>
+      <ul class="rh-bullets">
+        <li>Direct vLLM endpoint, no authentication</li>
+        <li>No rate limits &mdash; one user can consume all GPU capacity</li>
+        <li>No audit trail &mdash; impossible to attribute usage</li>
+        <li>No model access policies &mdash; every model exposed to every user</li>
+        <li>No revocation &mdash; no way to cut off a compromised client</li>
+      </ul>
+    </div>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 9 — CONTENT: Guardrails
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-content">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="rh-tag">Security</div>
+  <div class="rh-title-area">
+    <h2>TrustyAI Guardrails in the Inference Path</h2>
+    <div class="rh-rule"></div>
+  </div>
+  <div class="rh-body">
+    <div class="rh-bullets-wrap">
+      <div class="flow-container" style="margin-bottom:14px">
+        <div class="flow-box red" style="font-size:12px">MaaS Gateway</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box purple" style="font-size:12px">Prompt Injection<br>Detector</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box purple" style="font-size:12px">PII<br>Scanner</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box purple" style="font-size:12px">Secret Leak<br>Detector</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box teal" style="font-size:12px">llm-d EPP</div>
+      </div>
+      <ul class="rh-bullets">
+        <li><strong>Prompt Injection</strong>: detects &ldquo;ignore previous instructions,&rdquo; override patterns &mdash; blocks before model sees the prompt</li>
+        <li><strong>PII Scanning</strong>: SSNs, credit card numbers, emails, phone numbers &mdash; catches test data with real customer PII</li>
+        <li><strong>Secret Leak Detection</strong>: API keys, tokens, passwords, credentials in prompts &mdash; defense-in-depth even for self-hosted models</li>
+        <li>Regex-based detection &mdash; <strong>single-digit millisecond</strong> overhead per request, not ML inference</li>
+        <li>Extensible: add industry-specific patterns (SWIFT codes, IBANs, internal identifiers)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 10 — CONTENT: DevSpaces
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-content">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="rh-tag">Developer Experience</div>
+  <div class="rh-title-area">
+    <h2>OpenShift DevSpaces: AI-Powered IDE Per Developer</h2>
+    <div class="rh-rule"></div>
+  </div>
+  <div class="rh-body">
+    <div class="rh-bullets-wrap">
+      <ul class="rh-bullets">
+        <li><strong>Cloud-hosted VS Code</strong> in a dedicated Kubernetes namespace per developer</li>
+        <li><strong>OpenCode pre-installed</strong>: agentic coding tool that reads files, writes code, runs commands, iterates</li>
+        <li><strong>MaaS endpoint pre-configured</strong>: developer opens the IDE and AI assistance is immediately available</li>
+        <li><strong>API key injected as a Secret</strong>: no manual configuration, no &ldquo;enter your API key&rdquo; dialog</li>
+        <li><strong>Source code stays in-cluster</strong>: browser sends keystrokes, receives rendered HTML &mdash; no source code transits the network boundary</li>
+        <li><strong>Declarative onboarding</strong>: DevWorkspace CR &rarr; 60 seconds &rarr; hand them a URL</li>
+        <li>Also supports <strong>Continue</strong> and <strong>Roo Code</strong> (formerly Cline) for teams with existing preferences</li>
+      </ul>
+      <div class="rh-note">DevWorkspace CRD is versionable, templatable, auditable. New developer onboarding is a Helm release, not a ServiceNow ticket.</div>
+    </div>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 11 — SECTION: Why Fintech
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-section">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="section-title-area">
+    <h2>Why This Matters for Fintech</h2>
+    <div class="section-rule"></div>
+    <p class="section-subtitle">Security posture &middot; Regulatory alignment &middot; Operational control</p>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 12 — TWO-COLUMN: Cloud vs Self-Hosted
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-two-col">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="rh-tag">Risk Assessment</div>
+  <div class="rh-title-area">
+    <h2>Cloud AI vs. Self-Hosted: The Risk Calculus</h2>
+    <div class="rh-rule"></div>
+  </div>
+  <div class="two-col-body">
+    <div class="col-left">
+      <div class="col-label">Cloud-Hosted AI Coding</div>
+      <ul class="rh-bullets">
+        <li>Source code transits external infrastructure for inference</li>
+        <li>Limited visibility into data handling, caching, retention</li>
+        <li>PCI-DSS scope expands to include third-party AI vendor</li>
+        <li>Compliance team must audit vendor infrastructure</li>
+        <li>Data residency uncertain &mdash; inference may cross regions</li>
+      </ul>
+    </div>
+    <div class="col-divider"></div>
+    <div class="col-right">
+      <div class="col-label">Self-Hosted (This Architecture)</div>
+      <ul class="rh-bullets">
+        <li><strong>Source code never leaves the cluster</strong></li>
+        <li>Full visibility &mdash; you own every component</li>
+        <li>PCI-DSS scope unchanged &mdash; no data crosses the perimeter</li>
+        <li>Compliance team audits your own infrastructure</li>
+        <li>Data residency guaranteed &mdash; your DC, your VPC</li>
+      </ul>
+    </div>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 13 — CONTENT: Compliance Architecture
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-content">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="rh-tag">Compliance</div>
+  <div class="rh-title-area">
+    <h2>Compliance Architecture: Four Design Choices</h2>
+    <div class="rh-rule"></div>
+  </div>
+  <div class="rh-body">
+    <div class="rh-bullets-wrap">
+      <ul class="rh-bullets">
+        <li><strong>Air-gapped deployment</strong>: entire stack deployable via mirror registries and OCI artifacts &mdash; no internet connectivity post-deployment</li>
+        <li><strong>FIPS 140-2 / 140-3</strong>: RHEL validated cryptographic modules for all TLS, encryption, and certificate operations &mdash; OS-level, not application-level</li>
+        <li><strong>Three-layer audit trail</strong>: MaaS logs (API requests) + TrustyAI logs (blocked prompts) + OpenShift audit logs (K8s API calls)</li>
+        <li><strong>Zero data egress</strong>: DevSpaces in-cluster, inference in-cluster, model weights on PVCs &mdash; browser traffic carries rendered HTML, not source code</li>
+        <li><strong>Namespace isolation</strong>: per-developer RBAC, NetworkPolicy, resource quotas &mdash; K8s-native multi-tenancy enforced at the API server</li>
+      </ul>
+      <div class="rh-note">ROSA on GovCloud has FedRAMP High Authorization. ARO supports Azure Government regions. On-premises deployments run on RHEL with FIPS mode enabled cluster-wide.</div>
+    </div>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 14 — ICON ROW: Four Frameworks
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-icon-row">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="rh-tag">Compliance</div>
+  <div class="rh-title-area">
+    <h2>Four Regulatory Frameworks &mdash; One Platform</h2>
+    <div class="rh-rule"></div>
+  </div>
+  <div class="icon-row">
+    <div class="icon-row-item">
+      <div class="icon-row-icon">&#x1F4B3;</div>
+      <div class="icon-row-label">PCI-DSS</div>
+      <div class="icon-row-desc">Cardholder data never transmitted externally. In-cluster inference. PII scanner in guardrails catches card numbers in prompts.</div>
+    </div>
+    <div class="icon-row-item">
+      <div class="icon-row-icon">&#x1F4CA;</div>
+      <div class="icon-row-label">SOX</div>
+      <div class="icon-row-desc">Per-developer usage logs via MaaS. Every AI-assisted change traceable to subscription ID + Git commit. End-to-end provenance.</div>
+    </div>
+    <div class="icon-row-item">
+      <div class="icon-row-icon">&#x1F30D;</div>
+      <div class="icon-row-label">GDPR</div>
+      <div class="icon-row-desc">Data residency guaranteed. No third-party processing. DSARs don&rsquo;t need to include an external AI vendor.</div>
+    </div>
+    <div class="icon-row-item">
+      <div class="icon-row-icon">&#x1F6E1;&#xFE0F;</div>
+      <div class="icon-row-label">IP Protection</div>
+      <div class="icon-row-desc">Proprietary algorithms, risk models, and trading logic never leave the perimeter. Self-hosted model, in-cluster inference.</div>
+    </div>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 15 — SECTION: Proof
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-section">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="section-title-area">
+    <h2>Proof</h2>
+    <div class="section-rule"></div>
+    <p class="section-subtitle">Live reference deployment &middot; Real metrics &middot; Reproducible</p>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 16 — CONTENT: What We Deployed
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-content">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="rh-tag">Proof</div>
+  <div class="rh-title-area">
+    <h2>What We Deployed: Live Reference Architecture</h2>
+    <div class="rh-rule"></div>
+  </div>
+  <div class="rh-body">
+    <div class="rh-bullets-wrap">
+      <div class="arch-stack">
+        <div class="arch-row">
+          <div class="arch-box blue">
+            <h4>2&times; vLLM Replicas</h4>
+            <p>Qwen2.5-Coder-7B-Instruct &middot; vLLM v0.19.0 &middot; hermes tool-call parser &middot; NVIDIA A10G 24GB</p>
+          </div>
+          <div class="arch-box teal">
+            <h4>llm-d EPP</h4>
+            <p>Native via scheduler:{} &middot; Both replicas discovered &middot; Prefix-cache + queue + KV-util scoring</p>
+          </div>
+        </div>
+        <div class="arch-row">
+          <div class="arch-box red">
+            <h4>MaaS Gateway</h4>
+            <p>maas-default-gateway &middot; MaaSModelRef: Ready &middot; MaaSSubscription: Active &middot; 401 without key</p>
+          </div>
+          <div class="arch-box purple">
+            <h4>TrustyAI Guardrails</h4>
+            <p>Three detectors: prompt injection, PII, secret leak &middot; In the inference path</p>
+          </div>
+        </div>
+        <div class="arch-row">
+          <div class="arch-box green">
+            <h4>DevSpaces + OpenCode</h4>
+            <p>Pre-configured IDE &middot; Per-namespace API keys &middot; MaaS endpoint auto-wired</p>
+          </div>
+          <div class="arch-box gold">
+            <h4>3 Helm Releases</h4>
+            <p>pca-platform-config &middot; pca-ai-serving &middot; pca-devspaces &middot; &lt;30 min total deploy</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 17 — STATS: Deployment Metrics
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-stats">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="rh-tag">Proof</div>
+  <div class="rh-title-area">
+    <h2>Reference Deployment Metrics</h2>
+    <div class="rh-rule"></div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-item"><div class="stat-value">2</div><div class="stat-label">vLLM replicas discovered by EPP and actively routing</div></div>
+    <div class="stat-item"><div class="stat-value">401</div><div class="stat-label">HTTP response without API key &mdash; auth enforced</div></div>
+    <div class="stat-item"><div class="stat-value">3</div><div class="stat-label">Helm releases to deploy the entire stack</div></div>
+    <div class="stat-item"><div class="stat-value">&lt;30m</div><div class="stat-label">total deployment time on existing OpenShift</div></div>
+  </div>
+  <div class="rh-note-stats">Metrics from live deployment on OpenShift with RHOAI 3.5, NVIDIA A10G GPUs (g5.2xlarge)</div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 18 — TABLE: Component Stack
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-table">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="rh-tag">Proof</div>
+  <div class="rh-title-area">
+    <h2>Deployed Component Stack</h2>
+    <div class="rh-rule"></div>
+  </div>
+  <div class="table-wrap">
+    <table class="rh-table">
+      <thead><tr><th>Component</th><th>Version / Source</th><th>Role</th><th>Runs On</th></tr></thead>
+      <tbody>
+        <tr><td><strong>vLLM</strong></td><td>v0.19.0 (open source)</td><td>LLM inference engine with PagedAttention, continuous batching</td><td>GPU</td></tr>
+        <tr><td><strong>llm-d EPP</strong></td><td>CNCF Sandbox / RHOAI 3.3+ GA</td><td>Prefix-cache-aware, queue-aware, KV-util-aware request routing</td><td>CPU</td></tr>
+        <tr><td><strong>MaaS Gateway</strong></td><td>RHOAI native (Envoy)</td><td>API key auth, token rate limits, subscription management, audit</td><td>CPU</td></tr>
+        <tr><td><strong>TrustyAI</strong></td><td>RHOAI (open source)</td><td>Guardrails: prompt injection, PII, secret leak detection</td><td>CPU</td></tr>
+        <tr><td><strong>DevSpaces</strong></td><td>OpenShift DevSpaces 3.x</td><td>Cloud-hosted VS Code with pre-configured AI tools</td><td>CPU</td></tr>
+        <tr><td><strong>OpenCode</strong></td><td>Open source agent</td><td>Agentic coding: reads files, writes code, runs commands</td><td>CPU</td></tr>
+        <tr><td><strong>LLMInferenceService</strong></td><td>KServe CRD / RHOAI</td><td>Declares model, replicas, GPU resources &rarr; creates everything</td><td>&mdash;</td></tr>
+        <tr><td><strong>Qwen2.5-Coder-7B</strong></td><td>Qwen (open weights)</td><td>Dense 7B coding model, fits single 24GB GPU</td><td>GPU</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 19 — CONTENT: Developer Experience
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-content">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="rh-tag">Experience</div>
+  <div class="rh-title-area">
+    <h2>Developer Experience: Login to First AI-Assisted Commit</h2>
+    <div class="rh-rule"></div>
+  </div>
+  <div class="rh-body">
+    <div class="rh-bullets-wrap">
+      <ul class="rh-bullets">
+        <li><strong>Step 1</strong>: IT creates a DevWorkspace CR (Helm release or <code>oc apply</code>) &mdash; 30 seconds</li>
+        <li><strong>Step 2</strong>: Developer receives a URL, opens it in any browser &mdash; full VS Code IDE loads with OpenCode pre-installed</li>
+        <li><strong>Step 3</strong>: Developer clones a project from the internal Git server and opens a file</li>
+        <li><strong>Step 4</strong>: Developer asks the AI agent: &ldquo;Refactor this function to handle the new payment type&rdquo; &mdash; agent reads context, writes code, runs tests</li>
+        <li><strong>Step 5</strong>: Developer reviews, accepts, commits &mdash; Git push goes to internal server, not github.com</li>
+      </ul>
+      <ul class="rh-bullets" style="margin-top:12px;border-top:1px solid #E0E0E0;padding-top:12px">
+        <li>No local installation &middot; No VPN &middot; No API key configuration &middot; No ServiceNow ticket</li>
+        <li>At no point did source code leave the cluster</li>
+      </ul>
+    </div>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 20 — QUOTE
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-quote quote-dark">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
+  <div class="quote-inner">
+    <span class="quote-mark">&ldquo;</span>
+    <blockquote>The safest code never leaves the building. The best developer tools don&rsquo;t ask it to.</blockquote>
+    <cite>Private AI Coding Infrastructure &mdash; Design Principle</cite>
+  </div>
+  <div class="rh-footer"><span class="rh-fn"></span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 21 — CLOSING
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide slide-closing slide-title">
+  <div class="closing-area" style="position:absolute;left:17.1%;top:25.4%;width:61.8%">
+    <h1 style="font:900 56px/1.1 var(--fh);color:var(--rh-white);margin-bottom:16px">Private AI Coding Infrastructure</h1>
+    <p class="title-subtitle">Five components &middot; Zero data egress &middot; Under 30 minutes to deploy</p>
+    <p class="closing-contact" style="font:500 16px var(--fb);color:rgba(255,255,255,.7);margin-top:24px">llm-d &middot; MaaS &middot; TrustyAI &middot; vLLM &middot; DevSpaces</p>
+  </div>
+  <div class="title-white-strip">
+    <span class="title-brand">Red Hat</span>
+  </div>
+</section>
+
+</div></div>
+
+<div id="controls">
+  <span>Use <kbd>&larr;</kbd><kbd>&rarr;</kbd> to navigate &nbsp;|&nbsp; <kbd>F</kbd> fullscreen &nbsp;|&nbsp; click left/right half</span>
+  <span id="slide-counter">1 / 1</span>
+  <button onclick="printPDF()">Export PDF</button>
+  <button onclick="openPresenterView()" id="btn-presenter" style="margin-left:8px">Presenter View</button>
+</div>
+
+<script>
+(function(){
+  const slides=document.querySelectorAll('.slide');
+  const container=document.getElementById('slides');
+  const counter=document.getElementById('slide-counter');
+  let current=0;
+  let n=1;
+  slides.forEach(s=>{
+    const isEdge=s.classList.contains('slide-title')||s.classList.contains('slide-closing');
+    const fn=s.querySelector('.rh-fn');
+    if(fn&&!isEdge){fn.textContent=n++;}
+  });
+  function goto(idx){
+    current=Math.max(0,Math.min(slides.length-1,idx));
+    container.style.transform=`translateX(-${current*1280}px)`;
+    counter.textContent=`${current+1} / ${slides.length}`;
+    if(window.parent!==window)window.parent.postMessage({type:'slideChange',current:current,total:slides.length},'*');
+  }
+  goto(0);
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();window.slideNav.goto(current+1)}
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();window.slideNav.goto(current-1)}
+    if(e.key==='Home'){e.preventDefault();window.slideNav.goto(0)}
+    if(e.key==='End'){e.preventDefault();window.slideNav.goto(slides.length-1)}
+    if(e.key==='f'||e.key==='F'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen()}
+  });
+  let tx=0;
+  document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX});
+  document.addEventListener('touchend',e=>{const dx=tx-e.changedTouches[0].clientX;if(Math.abs(dx)>50)window.slideNav.goto(current+(dx>0?1:-1))});
+  document.getElementById('viewport').addEventListener('click',e=>{
+    window.slideNav.goto(current+(e.clientX/window.innerWidth>0.5?1:-1));
+  });
+  window.printPDF=function(){window.print()};
+  window.slideNav={current:function(){return current},total:function(){return slides.length},goto:goto};
+  function scaleViewport(){
+    const vp=document.getElementById('viewport');
+    const scale=Math.min(window.innerWidth/1280,(window.innerHeight-48)/720,1);
+    vp.style.transform=`scale(${scale})`;
+    vp.style.transformOrigin='top center';
+    vp.style.marginBottom=`${-720*(1-scale)}px`;
+    document.body.style.paddingBottom='48px';
+  }
+  window.addEventListener('resize',scaleViewport);
+  scaleViewport();
+})();
+</script>
+
+<script>
+(function(){
+  var channel = null;
+  try { channel = new BroadcastChannel('presenter-sync'); } catch(e) {}
+  var presenterWin = null;
+
+  if (channel) {
+    channel.onmessage = function(e) {
+      if (e.data && e.data.type === 'navigate' && window.slideNav) {
+        window.slideNav.goto(e.data.index);
+      }
+    };
+  }
+
+  var origGoto = null;
+  function hookGoto() {
+    if (!window.slideNav || origGoto) return;
+    origGoto = window.slideNav.goto;
+    window.slideNav.goto = function(idx) {
+      origGoto(idx);
+      if (channel) channel.postMessage({ type: 'navigate', index: window.slideNav.current() });
+    };
+  }
+  setTimeout(hookGoto, 100);
+
+  window.openPresenterView = function() {
+    if (presenterWin && !presenterWin.closed) { presenterWin.focus(); return; }
+    var notes = window.SPEAKER_NOTES || [];
+    var titles = window.SLIDE_TITLES || [];
+    var total = window.slideNav ? window.slideNav.total() : 1;
+    var cur = window.slideNav ? window.slideNav.current() : 0;
+
+    presenterWin = window.open('', 'presenter', 'width=900,height=700');
+    if (!presenterWin) { alert('Pop-up blocked — allow pop-ups for this site'); return; }
+    var d = presenterWin.document;
+    d.open();
+    d.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Presenter View</title>');
+    d.write('<style>');
+    d.write('*{box-sizing:border-box;margin:0;padding:0}');
+    d.write('body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#1a1a1a;color:#e0e0e0;display:grid;grid-template-rows:auto 1fr auto;height:100vh;overflow:hidden}');
+    d.write('.pv-header{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:#111;border-bottom:1px solid #333;font-size:13px}');
+    d.write('.pv-header .pv-title{color:#EE0000;font-weight:700;font-size:14px}');
+    d.write('.pv-header .pv-timer{font-variant-numeric:tabular-nums;font-size:20px;font-weight:600;color:#fff}');
+    d.write('.pv-header .pv-clock{color:#888;font-size:13px}');
+    d.write('.pv-main{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px;overflow:hidden}');
+    d.write('.pv-slide-col{display:flex;flex-direction:column;gap:8px;min-height:0}');
+    d.write('.pv-slide-box{background:#212121;border:1px solid #333;border-radius:6px;padding:8px;flex:0 0 auto}');
+    d.write('.pv-slide-box h4{font-size:11px;color:#888;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}');
+    d.write('.pv-slide-title{font-size:13px;color:#fff;font-weight:600;margin-top:4px;line-height:1.3}');
+    d.write('.pv-notes-col{display:flex;flex-direction:column;min-height:0}');
+    d.write('.pv-notes-col h3{font-size:12px;color:#EE0000;text-transform:uppercase;letter-spacing:0.5px;padding-bottom:6px;border-bottom:1px solid #333;margin-bottom:8px;flex-shrink:0}');
+    d.write('.pv-notes{flex:1;overflow-y:auto;font-size:15px;line-height:1.6;color:#d2d2d2;white-space:pre-wrap;padding-right:8px}');
+    d.write('.pv-notes strong{color:#fff}');
+    d.write('.pv-footer{display:flex;align-items:center;justify-content:center;gap:12px;padding:8px 16px;background:#111;border-top:1px solid #333}');
+    d.write('.pv-btn{background:#333;color:#fff;border:1px solid #555;border-radius:4px;padding:6px 18px;font-size:13px;cursor:pointer;font-family:inherit}');
+    d.write('.pv-btn:hover{background:#444}');
+    d.write('.pv-counter{font-size:15px;font-weight:600;min-width:80px;text-align:center}');
+    d.write('.pv-notes::-webkit-scrollbar{width:6px}.pv-notes::-webkit-scrollbar-track{background:#1a1a1a}.pv-notes::-webkit-scrollbar-thumb{background:#444;border-radius:3px}');
+    d.write('</style></head><body>');
+    d.write('<div class="pv-header"><span class="pv-title">Presenter View</span><span class="pv-timer" id="pv-timer">00:00</span><span class="pv-clock" id="pv-clock"></span></div>');
+    d.write('<div class="pv-main">');
+    d.write('<div class="pv-slide-col">');
+    d.write('<div class="pv-slide-box"><h4>Current Slide</h4><div class="pv-slide-title" id="pv-cur-title"></div></div>');
+    d.write('<div class="pv-slide-box"><h4>Next Slide</h4><div class="pv-slide-title" id="pv-next-title"></div></div>');
+    d.write('</div>');
+    d.write('<div class="pv-notes-col"><h3>Speaker Notes</h3><div class="pv-notes" id="pv-notes"></div></div>');
+    d.write('</div>');
+    d.write('<div class="pv-footer"><button class="pv-btn" id="pv-prev">\u25C0 Prev</button><span class="pv-counter" id="pv-counter"></span><button class="pv-btn" id="pv-next">Next \u25B6</button></div>');
+    d.write('</body></html>');
+    d.close();
+
+    var pvNotes = notes.slice();
+    var pvTitles = titles.slice();
+    var pvTotal = total;
+    var pvCurrent = cur;
+    var startTime = Date.now();
+
+    var pvChannel = null;
+    try { pvChannel = new BroadcastChannel("presenter-sync"); } catch(e) {}
+
+    function updatePV(idx) {
+      pvCurrent = idx;
+      var dd = presenterWin.document;
+      if (!dd || !dd.getElementById) return;
+      dd.getElementById("pv-cur-title").textContent = (idx + 1) + ". " + (pvTitles[idx] || "");
+      dd.getElementById("pv-next-title").textContent = idx + 1 < pvTotal ? (idx + 2) + ". " + (pvTitles[idx + 1] || "") : "(End)";
+      dd.getElementById("pv-notes").textContent = pvNotes[idx] || "(No notes for this slide)";
+      dd.getElementById("pv-counter").textContent = (idx + 1) + " / " + pvTotal;
+    }
+
+    function pvNavigate(idx) {
+      idx = Math.max(0, Math.min(pvTotal - 1, idx));
+      updatePV(idx);
+      if (pvChannel) pvChannel.postMessage({ type: "navigate", index: idx });
+    }
+
+    if (pvChannel) {
+      pvChannel.onmessage = function(e) {
+        if (e.data && e.data.type === "navigate") updatePV(e.data.index);
+      };
+    }
+
+    presenterWin.document.getElementById("pv-prev").onclick = function() { pvNavigate(pvCurrent - 1); };
+    presenterWin.document.getElementById("pv-next").onclick = function() { pvNavigate(pvCurrent + 1); };
+    presenterWin.document.addEventListener("keydown", function(e) {
+      if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); pvNavigate(pvCurrent + 1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); pvNavigate(pvCurrent - 1); }
+    });
+
+    setInterval(function() {
+      if (presenterWin.closed) return;
+      var elapsed = Math.floor((Date.now() - startTime) / 1000);
+      var mm = String(Math.floor(elapsed / 60)).padStart(2, "0");
+      var ss = String(elapsed % 60).padStart(2, "0");
+      var dd = presenterWin.document;
+      if (dd && dd.getElementById) {
+        dd.getElementById("pv-timer").textContent = mm + ":" + ss;
+        dd.getElementById("pv-clock").textContent = new Date().toLocaleTimeString();
+      }
+    }, 1000);
+
+    updatePV(cur);
+  };
+})();
+</script>
+</body>
+</html>
