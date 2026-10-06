@@ -213,6 +213,7 @@ g[data-flow]::after{content:''}
   <button class="tab" data-tab="security" role="tab">Isolation Rings &amp; Enforcement</button>
   <button class="tab" data-tab="inference" role="tab">Inference Routing &amp; Tool Governance</button>
   <button class="tab" data-tab="journey" role="tab">End-to-End Journey</button>
+  <button class="tab" data-tab="profiling" role="tab">Pipeline Profiling</button>
 </nav>
 
 <!-- ═══════════ FULL BLUEPRINT ═══════════ -->
@@ -570,6 +571,168 @@ g[data-flow]::after{content:''}
     <div class="info-card"><h3><span class="dot" style="background:var(--green)"></span>Tier 1 — Security</h3><p>Lives client-side in every sandbox, inside the supervisor. Confidential context never leaves the cluster. Anything routed externally is PII-masked first.</p></div>
     <div class="info-card"><h3><span class="dot" style="background:var(--cyan)"></span>Tier 2 — Cost</h3><p>A lightweight classifier selects the cheapest model that can handle the request. Adds latency and can misroute — needs a fallback that escalates on low confidence.</p></div>
     <div class="info-card"><h3><span class="dot" style="background:var(--blue)"></span>Tier 3 — Efficiency</h3><p>Once the model pool is fixed, llm-d endpoint picker maximizes KV-cache hits and balances load across vLLM workers.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════ PIPELINE PROFILING ═══════════ -->
+<section class="section" id="profiling">
+  <h2>Pipeline Profiling — What Each Layer Costs</h2>
+  <p class="desc">OTEL-traced pipeline decomposition from the <a href="https://www.redhat.com/en/blog/opening-black-box-profiling-secured-agentic-pipeline-red-hat-openshift-ai" target="_blank" style="color:var(--blue)">PSAP Agentic benchmarks</a> on Red Hat OpenShift AI. Qwen3-8B-FP8 on 8×A100-SXM4-80GB, OpenClaw harness, OpenShell sandbox, 512 output tokens.</p>
+
+  <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+    <div style="background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;flex:1;min-width:140px">
+      <div style="font-size:1.5rem;font-weight:700;color:var(--green)">2.2%</div>
+      <div style="font-size:.72rem;color:var(--t2)">Sandbox overhead of E2E at C=1</div>
+    </div>
+    <div style="background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;flex:1;min-width:140px">
+      <div style="font-size:1.5rem;font-weight:700;color:var(--cyan)">35%</div>
+      <div style="font-size:.72rem;color:var(--t2)">GPU tensor core activity at C=10</div>
+    </div>
+    <div style="background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;flex:1;min-width:140px">
+      <div style="font-size:1.5rem;font-weight:700;color:var(--amber)">2,437ms</div>
+      <div style="font-size:.72rem;color:var(--t2)">Response processing at C=10 — the real bottleneck</div>
+    </div>
+    <div style="background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;flex:1;min-width:140px">
+      <div style="font-size:1.5rem;font-weight:700;color:var(--blue)"><120mc</div>
+      <div style="font-size:.72rem;color:var(--t2)">OpenShell stack CPU (gateway + 10 sandboxes)</div>
+    </div>
+  </div>
+
+  <!-- Pipeline breakdown SVG -->
+  <div class="diagram-wrap">
+    <svg id="profSvg" viewBox="0 0 1100 520" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
+      <!-- Title -->
+      <text x="20" y="22" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Secured Agent Pipeline (OpenClaw + OpenShell) — per-stage latency in ms</text>
+      <text x="20" y="36" fill="var(--t3)" font-size="9" font-family="system-ui,sans-serif">Each bar segment = one OTEL-traced pipeline stage. Hover for values.</text>
+
+      <!-- Legend -->
+      <g transform="translate(600,12)">
+        <rect x="0" y="0" width="10" height="10" rx="2" fill="#58a6ff"/><text x="14" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">HTTP parse</text>
+        <rect x="80" y="0" width="10" height="10" rx="2" fill="#3fb950"/><text x="94" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Sandbox init</text>
+        <rect x="160" y="0" width="10" height="10" rx="2" fill="#d29922"/><text x="174" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Context assembly</text>
+        <rect x="270" y="0" width="10" height="10" rx="2" fill="#bc8cff"/><text x="284" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">vLLM prefill</text>
+        <rect x="350" y="0" width="10" height="10" rx="2" fill="#f778ba"/><text x="364" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Response proc</text>
+        <rect x="445" y="0" width="10" height="10" rx="2" fill="#484f58"/><text x="459" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Token gen</text>
+      </g>
+
+      <!-- C=1 bar -->
+      <text x="20" y="68" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">C=1 (1 agent)</text>
+      <text x="1050" y="68" fill="var(--t2)" font-size="9" font-family="system-ui,sans-serif" text-anchor="end">5,814 ms E2E</text>
+      <!-- Scale: 1000px = 12000ms, so 1px = 12ms -->
+      <rect x="20" y="74" width="3" height="28" rx="2" fill="#58a6ff"><title>HTTP parse: 37ms</title></rect>
+      <rect x="23" y="74" width="12" height="28" rx="2" fill="#3fb950"><title>Sandbox init: 140ms</title></rect>
+      <rect x="35" y="74" width="18" height="28" rx="2" fill="#d29922"><title>Context assembly: 219ms</title></rect>
+      <rect x="53" y="74" width="3" height="28" rx="2" fill="#bc8cff"><title>vLLM prefill: 41ms</title></rect>
+      <rect x="56" y="74" width="75" height="28" rx="2" fill="#f778ba"><title>Response processing: 895ms</title></rect>
+      <rect x="131" y="74" width="373" height="28" rx="2" fill="#484f58"><title>Token generation: 4,481ms</title></rect>
+      <!-- labels on bar -->
+      <text x="90" y="92" fill="#fff" font-size="7" font-family="system-ui,sans-serif" text-anchor="middle">895ms</text>
+      <text x="317" y="92" fill="#fff" font-size="8" font-family="system-ui,sans-serif" text-anchor="middle">Token gen: 4,481ms</text>
+
+      <!-- C=5 bar -->
+      <text x="20" y="126" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">C=5 (5 agents)</text>
+      <text x="1050" y="126" fill="var(--t2)" font-size="9" font-family="system-ui,sans-serif" text-anchor="end">10,416 ms E2E</text>
+      <rect x="20" y="132" width="14" height="28" rx="2" fill="#58a6ff"><title>HTTP parse: 164ms</title></rect>
+      <rect x="34" y="132" width="43" height="28" rx="2" fill="#3fb950"><title>Sandbox init: 521ms</title></rect>
+      <rect x="77" y="132" width="30" height="28" rx="2" fill="#d29922"><title>Context assembly: 361ms</title></rect>
+      <rect x="107" y="132" width="6" height="28" rx="2" fill="#bc8cff"><title>vLLM prefill: 68ms</title></rect>
+      <rect x="113" y="132" width="211" height="28" rx="2" fill="#f778ba"><title>Response processing: 2,537ms</title></rect>
+      <rect x="324" y="132" width="607" height="28" rx="2" fill="#484f58"><title>Token generation: 7,286ms</title></rect>
+      <text x="218" y="150" fill="#fff" font-size="7" font-family="system-ui,sans-serif" text-anchor="middle">Resp proc: 2,537ms</text>
+      <text x="627" y="150" fill="#fff" font-size="8" font-family="system-ui,sans-serif" text-anchor="middle">Token gen: 7,286ms</text>
+
+      <!-- C=10 bar -->
+      <text x="20" y="184" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">C=10 (10 agents)</text>
+      <text x="1050" y="184" fill="var(--t2)" font-size="9" font-family="system-ui,sans-serif" text-anchor="end">11,446 ms E2E</text>
+      <rect x="20" y="190" width="38" height="28" rx="2" fill="#58a6ff"><title>HTTP parse: 458ms</title></rect>
+      <rect x="58" y="190" width="46" height="28" rx="2" fill="#3fb950"><title>Sandbox init: 551ms</title></rect>
+      <rect x="104" y="190" width="29" height="28" rx="2" fill="#d29922"><title>Context assembly: 342ms</title></rect>
+      <rect x="133" y="190" width="5" height="28" rx="2" fill="#bc8cff"><title>vLLM prefill: 65ms</title></rect>
+      <rect x="138" y="190" width="134" height="28" rx="2" fill="#f778ba"><title>Response processing: 1,610ms</title></rect>
+      <rect x="272" y="190" width="747" height="28" rx="2" fill="#484f58"><title>Token generation: 8,971ms</title></rect>
+      <text x="205" y="208" fill="#fff" font-size="7" font-family="system-ui,sans-serif" text-anchor="middle">1,610ms</text>
+      <text x="645" y="208" fill="#fff" font-size="8" font-family="system-ui,sans-serif" text-anchor="middle">Token gen: 8,971ms</text>
+
+      <!-- Separator -->
+      <line x1="20" y1="235" x2="1060" y2="235" stroke="var(--border)" stroke-width=".5"/>
+
+      <!-- Sandbox overhead section -->
+      <text x="20" y="258" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Sandbox Overhead — % of End-to-End</text>
+      <text x="20" y="272" fill="var(--t3)" font-size="9" font-family="system-ui,sans-serif">OpenShell sandbox init as a fraction of total E2E. Drops under 5% because baseline grows while init stays flat.</text>
+
+      <!-- 3 gauge-like bars -->
+      <text x="30" y="298" fill="var(--t2)" font-size="9" font-family="system-ui,sans-serif">C=1</text>
+      <rect x="70" y="286" width="400" height="18" rx="4" fill="var(--raised)" stroke="var(--border)" stroke-width=".5"/>
+      <rect x="70" y="286" width="9" height="18" rx="4" fill="var(--green)"/>
+      <text x="84" y="299" fill="var(--green)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">2.2%</text>
+      <text x="130" y="299" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">127ms P50 · 227ms P95 · ±56ms</text>
+
+      <text x="30" y="324" fill="var(--t2)" font-size="9" font-family="system-ui,sans-serif">C=5</text>
+      <rect x="70" y="312" width="400" height="18" rx="4" fill="var(--raised)" stroke="var(--border)" stroke-width=".5"/>
+      <rect x="70" y="312" width="20" height="18" rx="4" fill="var(--amber)"/>
+      <text x="95" y="325" fill="var(--amber)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">4.9%</text>
+      <text x="130" y="325" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">507ms P50 · 1,222ms P95 · ±331ms</text>
+
+      <text x="30" y="350" fill="var(--t2)" font-size="9" font-family="system-ui,sans-serif">C=10</text>
+      <rect x="70" y="338" width="400" height="18" rx="4" fill="var(--raised)" stroke="var(--border)" stroke-width=".5"/>
+      <rect x="70" y="338" width="19" height="18" rx="4" fill="var(--amber)"/>
+      <text x="95" y="351" fill="var(--amber)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">4.8%</text>
+      <text x="130" y="351" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">526ms P50 · 1,228ms P95 · ±336ms</text>
+
+      <!-- Separator -->
+      <line x1="20" y1="372" x2="1060" y2="372" stroke="var(--border)" stroke-width=".5"/>
+
+      <!-- Resource utilization section -->
+      <text x="20" y="395" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Resource Utilization</text>
+
+      <!-- GPU gauges -->
+      <text x="30" y="418" fill="var(--t2)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">GPU at C=10</text>
+      <text x="30" y="434" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">Tensor cores</text>
+      <rect x="120" y="424" width="200" height="12" rx="3" fill="var(--raised)" stroke="var(--border)" stroke-width=".5"/>
+      <rect x="120" y="424" width="70" height="12" rx="3" fill="var(--cyan)"/>
+      <text x="196" y="434" fill="var(--cyan)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">35%</text>
+
+      <text x="30" y="450" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">KV cache</text>
+      <rect x="120" y="440" width="200" height="12" rx="3" fill="var(--raised)" stroke="var(--border)" stroke-width=".5"/>
+      <rect x="120" y="440" width="28" height="12" rx="3" fill="var(--green)"/>
+      <text x="152" y="450" fill="var(--green)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">14%</text>
+
+      <text x="30" y="466" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">HBM bandwidth</text>
+      <rect x="120" y="456" width="200" height="12" rx="3" fill="var(--raised)" stroke="var(--border)" stroke-width=".5"/>
+      <rect x="120" y="456" width="96" height="12" rx="3" fill="var(--amber)"/>
+      <text x="220" y="466" fill="var(--amber)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">48%</text>
+
+      <text x="30" y="482" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">Queue empty</text>
+      <rect x="120" y="472" width="200" height="12" rx="3" fill="var(--raised)" stroke="var(--border)" stroke-width=".5"/>
+      <rect x="120" y="472" width="134" height="12" rx="3" fill="var(--neutral)"/>
+      <text x="258" y="482" fill="var(--neutral)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">67% idle</text>
+
+      <!-- Node sizing table -->
+      <text x="380" y="418" fill="var(--t2)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Node sizing (per agent: 1.8 cores avg / 0.69 GiB avg)</text>
+      <rect x="380" y="426" width="340" height="18" rx="3" fill="var(--raised)" stroke="var(--border)" stroke-width=".5"/>
+      <text x="390" y="439" fill="var(--t1)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">1–3 agents</text>
+      <text x="490" y="439" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">8 vCPU / 8 GiB — fits on a single worker</text>
+
+      <rect x="380" y="448" width="340" height="18" rx="3" fill="var(--raised)" stroke="var(--border)" stroke-width=".5"/>
+      <text x="390" y="461" fill="var(--t1)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">5 agents</text>
+      <text x="490" y="461" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">16 vCPU / 8 GiB — ~60% node utilization at P95</text>
+
+      <rect x="380" y="470" width="340" height="18" rx="3" fill="var(--raised)" stroke="var(--border)" stroke-width=".5"/>
+      <text x="390" y="483" fill="var(--t1)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">10 agents</text>
+      <text x="490" y="483" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">24 vCPU / 16 GiB — ~80% node at P95 (18.6 cores)</text>
+
+      <!-- OpenShell footprint -->
+      <rect x="380" y="494" width="340" height="18" rx="3" fill="var(--green-d)" stroke="var(--green)" stroke-width=".5"/>
+      <text x="390" y="507" fill="var(--green)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">OpenShell stack</text>
+      <text x="490" y="507" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">&lt;120 millicores / &lt;242 MiB (gateway + 10 sandboxes)</text>
+    </svg>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card"><h3><span class="dot" style="background:var(--green)"></span>Sandbox security is cheap</h3><p>Enable it by default. Init adds 2.2% of E2E at C=1, under 5% at C=10. Full stack fits in 120mc / 242 MiB. The security benefits — per-binary policy, credential hiding, seccomp enforcement — far outweigh a cost that is barely measurable.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--amber)"></span>Benchmark the harness, not the model</h3><p>Response processing (token classification, tool detection, stream forwarding) dominates latency: 498ms→2,437ms from C=1→C=10. GPU tensor cores are only 35% busy. Optimize the harness pipeline — you may not need more GPUs.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--cyan)"></span>Understand your pipeline first</h3><p>Every framework expands prompts 16–17× by injecting system instructions, tool schemas, and context. OTEL tracing decomposes the black box into measurable stages. Context assembly alone uses 1.34 cores avg (2.53 at P95).</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--purple)"></span>Part 2 & 3 coming</h3><p>This is single-turn baseline. Part 2: multiturn tool calling with sandbox code execution. Part 3: scaling beyond 10 agents. History accumulation and tool-call variability will compound these numbers.</p></div>
   </div>
 </section>
 
