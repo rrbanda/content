@@ -113,6 +113,43 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,san
 .example strong{color:var(--t1);font-weight:600}
 footer{text-align:center;padding:32px 24px;color:var(--t3);font-size:12px;border-top:1px solid var(--border-s);margin-top:40px;transition:all .3s}
 footer a{color:var(--blue);text-decoration:none}footer a:hover{text-decoration:underline}
+/* ── Clickable SVG boxes ────────────────────────────── */
+g[data-flow]{cursor:pointer}
+g[data-flow]:hover rect:first-child{filter:brightness(1.3);stroke-width:2}
+g[data-flow]:hover{filter:drop-shadow(0 0 6px var(--blue))}
+/* ── Modal overlay ──────────────────────────────────── */
+.modal-backdrop{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.6);
+  display:none;align-items:flex-start;justify-content:center;padding:48px 16px;overflow-y:auto;
+  backdrop-filter:blur(4px)}
+.modal-backdrop.open{display:flex;animation:fadeIn .2s ease}
+.modal-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  width:100%;max-width:660px;overflow:hidden;animation:modalIn .25s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;
+  border-bottom:1px solid var(--border);gap:12px}
+.modal-hdr h3{font-size:1rem;font-weight:600;flex:1}
+.modal-hdr .src{font-size:10px;color:var(--t3);background:var(--raised);padding:2px 8px;border-radius:4px;white-space:nowrap}
+.modal-close{background:none;border:none;color:var(--t2);font-size:22px;cursor:pointer;padding:0 4px;line-height:1}
+.modal-close:hover{color:var(--t1)}
+.modal-body{padding:20px}
+.step{display:flex;gap:12px;position:relative;padding-bottom:4px}
+.step:not(:last-child){padding-bottom:18px}
+.step:not(:last-child)::after{content:'';position:absolute;left:13px;top:28px;bottom:0;width:1.5px;background:var(--border)}
+.step-n{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;flex-shrink:0;position:relative;z-index:1}
+.step-body{flex:1;padding-top:4px}
+.step-text{font-size:.85rem;color:var(--t1);line-height:1.5}
+.step-detail{display:block;font-size:.78rem;color:var(--t2);margin-top:2px}
+.step-branch{display:flex;gap:8px;margin-top:6px}
+.step-allow,.step-deny{font-size:.78rem;padding:3px 10px;border-radius:4px}
+.step-allow{background:var(--green-d);color:var(--green)}
+.step-deny{background:var(--pink-d);color:var(--pink)}
+.modal-metrics{display:flex;gap:12px;padding:12px 20px;border-top:1px solid var(--border);flex-wrap:wrap}
+.metric{display:flex;flex-direction:column;gap:1px}
+.metric-val{font-size:1.1rem;font-weight:700;color:var(--blue)}
+.metric-lbl{font-size:.7rem;color:var(--t3)}
+.modal-ft{padding:8px 20px 12px;border-top:1px solid var(--border)}
+.modal-ft p{font-size:.72rem;color:var(--t3);font-style:italic}
 @media(max-width:768px){.tabs{flex-wrap:wrap}.tab{font-size:12px;padding:6px 14px}.hero h1{font-size:1.3rem}}
 </style>
 </head>
@@ -159,13 +196,13 @@ footer a{color:var(--blue);text-decoration:none}footer a:hover{text-decoration:u
       <g class="box"><rect x="16" y="10" width="268" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="16" y="10" width="3" height="52" rx="1" fill="var(--ss)"/>
         <text x="150" y="30" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Agent Blueprint / GitOps</text>
         <text x="150" y="45" text-anchor="middle" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Agent deployments · Helm · NemoClaw</text></g>
-      <g class="box"><rect x="300" y="10" width="268" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="300" y="10" width="3" height="52" rx="1" fill="var(--ss)"/>
+      <g class="box" data-flow="F03"><rect x="300" y="10" width="268" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="300" y="10" width="3" height="52" rx="1" fill="var(--ss)"/>
         <text x="434" y="30" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Sandbox Control Plane</text>
         <text x="434" y="45" text-anchor="middle" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">OpenShell Gateway</text></g>
-      <g class="box"><rect x="584" y="10" width="268" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="584" y="10" width="3" height="52" rx="1" fill="var(--ss)"/>
+      <g class="box" data-flow="F03"><rect x="584" y="10" width="268" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="584" y="10" width="3" height="52" rx="1" fill="var(--ss)"/>
         <text x="718" y="30" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Sandbox CRD + Controller</text>
         <text x="718" y="45" text-anchor="middle" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">K8s agent-sandbox SIG</text></g>
-      <g class="box"><rect x="868" y="10" width="268" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="868" y="10" width="3" height="52" rx="1" fill="var(--ss)"/>
+      <g class="box" data-flow="F05"><rect x="868" y="10" width="268" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="868" y="10" width="3" height="52" rx="1" fill="var(--ss)"/>
         <text x="1002" y="30" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Workload Identity</text>
         <text x="1002" y="45" text-anchor="middle" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">SPIFFE / SPIRE · JWT-SVID</text></g>
 
@@ -206,11 +243,11 @@ footer a{color:var(--blue);text-decoration:none}footer a:hover{text-decoration:u
       <text x="254" y="104" fill="var(--es)" font-size="9.5" font-weight="700" font-family="system-ui,sans-serif">Agent Pod: one per Sandbox CR</text>
       <text x="540" y="104" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">PSS/SCC · SELinux · kata (optional)</text>
 
-      <g class="box"><rect x="254" y="112" width="205" height="56" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
+      <g class="box" data-flow="F09"><rect x="254" y="112" width="205" height="56" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
         <text x="356" y="132" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Harness</text>
         <text x="356" y="145" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">OpenClaw · Hermes · LangGraph</text>
         <text x="356" y="157" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Deep Agents · custom · reason→act→observe</text></g>
-      <g class="box"><rect x="469" y="112" width="205" height="56" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
+      <g class="box" data-flow="F04"><rect x="469" y="112" width="205" height="56" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
         <text x="571" y="132" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Sandbox Supervisor</text>
         <text x="571" y="145" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">OpenShell (PID 1) · egress proxy</text>
         <text x="571" y="157" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Tier-1 route · PII guard · credential injection</text></g>
@@ -261,7 +298,7 @@ footer a{color:var(--blue);text-decoration:none}footer a:hover{text-decoration:u
       <line x1="674" y1="150" x2="698" y2="170" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
       <text x="684" y="168" fill="var(--t3)" font-size="6.5" font-family="system-ui,sans-serif">in-cluster (private)</text>
 
-      <g class="box"><rect x="702" y="108" width="225" height="48" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="108" width="3" height="48" rx="1" fill="var(--is)"/>
+      <g class="box" data-flow="F01"><rect x="702" y="108" width="225" height="48" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="108" width="3" height="48" rx="1" fill="var(--is)"/>
         <text x="814" y="128" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">AI Gateway (MaaS)</text>
         <text x="814" y="141" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">OpenResponses · OGX</text>
         <text x="814" y="151" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">auth · quota · guardrails</text></g>
@@ -270,22 +307,22 @@ footer a{color:var(--blue);text-decoration:none}footer a:hover{text-decoration:u
         <text x="1043" y="142" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">disguised queries only</text></g>
 
       <line x1="814" y1="156" x2="814" y2="164" stroke="var(--t3)" stroke-width=".8" marker-end="url(#a1)"/>
-      <g class="box"><rect x="702" y="166" width="225" height="44" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="166" width="3" height="44" rx="1" fill="var(--is)"/>
+      <g class="box" data-flow="F01"><rect x="702" y="166" width="225" height="44" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="166" width="3" height="44" rx="1" fill="var(--is)"/>
         <text x="814" y="184" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Semantic routing</text>
         <text x="814" y="196" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">vLLM Semantic Router · Red Hat AI gateway</text>
         <text x="814" y="206" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Tier 2: which model?</text></g>
-      <g class="box"><rect x="938" y="166" width="210" height="44" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="938" y="166" width="3" height="44" rx="1" fill="var(--is)"/>
+      <g class="box" data-flow="F01"><rect x="938" y="166" width="210" height="44" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="938" y="166" width="3" height="44" rx="1" fill="var(--is)"/>
         <text x="1043" y="184" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Inference Scheduler</text>
         <text x="1043" y="196" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">llm-d EPP · Gateway API</text>
         <text x="1043" y="206" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Tier 3: which replica?</text></g>
 
       <line x1="814" y1="210" x2="814" y2="220" stroke="var(--t3)" stroke-width=".8" marker-end="url(#a1)"/>
-      <g class="box"><rect x="702" y="222" width="225" height="46" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="222" width="3" height="46" rx="1" fill="var(--is)"/>
+      <g class="box" data-flow="F01"><rect x="702" y="222" width="225" height="46" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="222" width="3" height="46" rx="1" fill="var(--is)"/>
         <text x="814" y="240" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Model Workers</text>
         <text x="814" y="253" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">NIM / TensorRT-LLM · vLLM: any accelerator</text>
         <text x="814" y="264" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Nemotron · Llama · DeepSeek</text></g>
 
-      <g class="box"><rect x="702" y="278" width="225" height="40" rx="5" fill="var(--pc)" stroke="var(--ps)" stroke-width="1"/><rect x="702" y="278" width="3" height="40" rx="1" fill="var(--ps)"/>
+      <g class="box" data-flow="F07"><rect x="702" y="278" width="225" height="40" rx="5" fill="var(--pc)" stroke="var(--ps)" stroke-width="1"/><rect x="702" y="278" width="3" height="40" rx="1" fill="var(--ps)"/>
         <text x="814" y="295" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Inference Guardrails</text>
         <text x="814" y="308" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">TrustyAI · NeMo Guardrails · input/output screening</text></g>
 
@@ -293,13 +330,13 @@ footer a{color:var(--blue);text-decoration:none}footer a:hover{text-decoration:u
         <text x="1043" y="242" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Audit &amp; Tracing</text>
         <text x="1043" y="256" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">MLflow · OpenTelemetry · OCSF</text>
         <text x="1043" y="268" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">end-to-end traces + security events</text></g>
-      <g class="box"><rect x="938" y="284" width="210" height="40" rx="5" fill="var(--xc)" stroke="var(--xs)" stroke-width="1"/><rect x="938" y="284" width="3" height="40" rx="1" fill="var(--xs)"/>
+      <g class="box" data-flow="F08"><rect x="938" y="284" width="210" height="40" rx="5" fill="var(--xc)" stroke="var(--xs)" stroke-width="1"/><rect x="938" y="284" width="3" height="40" rx="1" fill="var(--xs)"/>
         <text x="1043" y="300" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Pre-production Testing</text>
         <text x="1043" y="314" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Garak (120+ probes) · EvalHub</text></g>
 
       <!-- MCP GATEWAY -->
       <line x1="464" y1="388" x2="464" y2="410" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
-      <g class="box"><rect x="260" y="414" width="420" height="42" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/><rect x="260" y="414" width="3" height="42" rx="1" fill="var(--ss)"/>
+      <g class="box" data-flow="F02"><rect x="260" y="414" width="420" height="42" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/><rect x="260" y="414" width="3" height="42" rx="1" fill="var(--ss)"/>
         <text x="470" y="432" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">MCP Gateway: tool authorization</text>
         <text x="470" y="448" text-anchor="middle" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Envoy · Kuadrant / Authorino: authz by SVID token claims — fronts MCP servers only</text></g>
       <line x1="260" y1="435" x2="226" y2="136" stroke="var(--t3)" stroke-width=".8" stroke-dasharray="3 2" marker-end="url(#a1)"/>
@@ -500,7 +537,188 @@ footer a{color:var(--blue);text-decoration:none}footer a:hover{text-decoration:u
   <p style="margin-top:4px">Components: <a href="https://github.com/NVIDIA/OpenShell" target="_blank" rel="noopener">OpenShell</a> · <a href="https://github.com/Kuadrant/mcp-gateway" target="_blank" rel="noopener">MCP Gateway</a> · <a href="https://llm-d.ai" target="_blank" rel="noopener">llm-d</a> · <a href="https://kubernetes-sigs.github.io/agent-sandbox/" target="_blank" rel="noopener">agent-sandbox SIG</a></p>
 </footer>
 
+<!-- Modal -->
+<div class="modal-backdrop" id="modal" onclick="if(event.target===this)closeFlow()"></div>
+
 <script>
+/* ── Flow data (technically accurate from llm-d deep dive, agentic deep dive, blog, OpenShell docs) ── */
+const F={
+F01:{t:"End-to-end inference flow",src:"llm-d deep dive slides 11-18; Blog §Inference routing",
+steps:[
+{t:"Agent harness sends inference request through Sandbox Supervisor egress proxy",c:"green"},
+{t:"Tier 1 — Security: Supervisor egress router evaluates policy",c:"green",d:"Privacy class check → PII detection-and-redaction → local vs cloud decision. Confidential context never leaves the cluster."},
+{t:"Request enters AI Gateway (Gateway API-conformant proxy)",c:"cyan",d:"Authorino authenticates based on subscription (ext-authz). Limitador rate-limits based on token usage."},
+{t:"Tier 2 — Cost: Semantic Router classifies the request",c:"cyan",d:"Lightweight classifier selects cheapest capable model. Intent + complexity → model pool. Fallback escalates on low confidence."},
+{t:"Tier 3 — Efficiency: llm-d EPP selects optimal replica (ext-proc)",c:"blue",d:"EPP probes vLLM /metrics. Two modes: prefix-affinity (route to pod with cached KVs) + load-awareness (back-pressure management)."},
+{t:"If disaggregated: EPP selects prefill + decode workers separately",c:"blue",d:"Prefill pod processes prompt → returns KVXfer metadata. NIXL sidecar coordinates KV transfer. Decode pod pulls KVs → generates tokens."},
+{t:"vLLM worker runs inference on GPU — streams token response",c:"cyan"},
+{t:"KV cache management: offload to CPU RAM (local, global index) or remote storage for multi-turn reuse",c:"blue"},
+{t:"Response flows back: vLLM → EPP → Gateway → Supervisor proxy → Agent harness",c:"green"},
+{t:"Every hop traced: OTEL spans across all 3 tiers + MLflow records latencies and token costs",c:"neutral"}
+],m:[
+{v:"95%",l:"KV cache hit rate (prefix-aware, 24 replicas)"},
+{v:"$1.2/M",l:"Output tokens (vs $25/M Opus, $15/M Sonnet)"},
+{v:"900",l:"Tokens/sec/GPU (B200)"},
+{v:"2.2%",l:"Sandbox overhead of E2E latency"}
+]},
+
+F02:{t:"Tool call authorization flow",src:"Blog §Tool governance; Agentic deep dive slides 16-17",
+steps:[
+{t:"Agent harness reads skill instruction file → decides to invoke an MCP tool",c:"amber"},
+{t:"Harness formats MCP call, sends through Sandbox Supervisor egress proxy",c:"green"},
+{t:"seccomp-BPF intercepts connect() syscall at kernel level",c:"green",d:"Supervisor resolves calling binary via /proc/pid/exe + SHA-256 hash verification (TOFU model)."},
+{t:"OPA/Rego policy evaluates: {destination, binary identity, L7 rules}",c:"green",d:"Supports REST method+path, GraphQL, MCP tool names, JSON-RPC, SQL, WebSocket protocols."},
+{t:"If DENY: connection refused, OCSF NetworkActivity event logged",c:"pink"},
+{t:"If ALLOW: request reaches MCP Gateway (single endpoint — agent sees one MCP_URL)",c:"blue"},
+{t:"MCP Gateway extracts SVID token claims from the request",c:"blue",d:"Envoy + Kuadrant/Authorino. Authorization is by token claims, never by prompt content."},
+{t:"Gateway forwards to correct MCP server from aggregated tool catalog",c:"neutral"},
+{t:"MCP server calls its service backend (optimization engine, query service, etc.)",c:"neutral"},
+{t:"Response returns: backend → MCP server → Gateway → Supervisor → Agent",c:"green"},
+{t:"OCSF events emitted for every allow AND every deny decision",c:"neutral"}
+]},
+
+F03:{t:"Sandbox creation lifecycle",src:"OpenShell technical writeup §3, §8; Blog §Agent packaging",
+steps:[
+{t:"User runs: openshell sandbox create --name my-agent --image <image>",c:"blue"},
+{t:"CLI sends gRPC request (mTLS) to OpenShell Gateway on port 17670",c:"blue"},
+{t:"Gateway validates policy with Z3 prover — checks for risky configurations",c:"blue"},
+{t:"Gateway creates Sandbox CR (agents.x-k8s.io/v1beta1) with OpenShell annotations",c:"blue",d:"Labels: openshell.ai/managed-by, openshell.ai/sandbox-id, openshell.ai/sandbox-workspace"},
+{t:"Agent Sandbox Operator (SIG Apps) watches the CR → reconciles into pod spec",c:"neutral"},
+{t:"Pod includes init containers: supervisor-install (copies binary) + workspace-init",c:"green"},
+{t:"OpenShift schedules pod onto worker node",c:"neutral"},
+{t:"Main container starts: /opt/openshell/bin/openshell-sandbox --workdir /sandbox",c:"green"},
+{t:"Supervisor (PID 1) connects outbound to Gateway over mTLS gRPC",c:"green",d:"Authenticates with projected ServiceAccount token (1h TTL). Gateway streams policy + credentials + config."},
+{t:"Supervisor applies Landlock LSM — irreversible filesystem scoping",c:"green",d:"Explicit path allowlist. Not even root can loosen it after process start."},
+{t:"Supervisor installs seccomp-BPF filter — intercepts network syscalls (USER_NOTIF)",c:"green"},
+{t:"Supervisor drops ALL capabilities, then launches agent as child process (capability-free)",c:"green"}
+],m:[
+{v:"16.4s",l:"Cold start P50"},
+{v:"247ms",l:"Warm start P50 (with pool)"},
+{v:"134ms",l:"Session reuse P50"},
+{v:"<120mc",l:"Gateway + 10 sandboxes CPU"}
+]},
+
+F04:{t:"Credential injection flow",src:"OpenShell technical writeup §2.2, §8; Blog §Governance",
+steps:[
+{t:"Admin creates provider: openshell provider create --name anthropic --api-key <key>",c:"blue"},
+{t:"Gateway encrypts key with AES-256-GCM (KEK-wrapped) → stored in gateway database",c:"blue"},
+{t:"Admin attaches provider: openshell sandbox update my-agent --provider anthropic",c:"blue"},
+{t:"Gateway streams encrypted credential handle to supervisor inside the sandbox pod",c:"green"},
+{t:"Agent makes outbound request to api.anthropic.com:443",c:"amber"},
+{t:"seccomp-BPF intercepts connect() → Supervisor evaluates binary identity + policy",c:"green"},
+{t:"Policy ALLOW: Supervisor proxy injects real API key into outbound request header",c:"green",d:"Supports 7 provider categories: API key, bearer token, SigV4, and more. Agent calls inference.local — zero keys in environment."},
+{t:"Request leaves sandbox with real credential — agent process never saw it",c:"green"},
+{t:"env | grep API_KEY inside sandbox → nothing (only placeholders)",c:"neutral"},
+{t:"If DENY: connection refused, credential never injected, OCSF event logged",c:"pink"}
+]},
+
+F05:{t:"SPIFFE workload identity lifecycle",src:"Blog §Workload identity; Agentic deep dive slide 24",
+steps:[
+{t:"SPIFFE/SPIRE issues JWT-SVID to each sandbox pod and gateway at deploy time",c:"blue",d:"SVID scoped to namespace + service account. Automatically rotated."},
+{t:"Supervisor presents projected ServiceAccount token (1h TTL) to gateway",c:"green"},
+{t:"Gateway mints Ed25519-signed sandbox token for the session",c:"blue"},
+{t:"For downstream services: authentication sidecar performs token exchange",c:"blue",d:"RFC 8693 token exchange or RFC 7523 JWT bearer grant with Keycloak/IdP."},
+{t:"SVID traded for short-lived access tokens to downstream services",c:"cyan"},
+{t:"No static API key exists anywhere in the path",c:"neutral"},
+{t:"A leaked prompt or workspace file contains nothing durable to steal",c:"neutral"},
+{t:"Lifecycle tooling injects sidecar + identity plumbing at deploy time — no agent code changes",c:"blue"}
+]},
+
+F06:{t:"Per-binary network enforcement",src:"OpenShell technical writeup §2.2; Agentic deep dive slides 15, 18",
+steps:[
+{t:"Agent process calls connect() to establish a TCP connection",c:"amber"},
+{t:"seccomp-BPF filter intercepts the syscall (USER_NOTIF mode)",c:"green"},
+{t:"Supervisor resolves calling binary via /proc/pid/exe",c:"green"},
+{t:"SHA-256 hash computed and compared against TOFU (Trust On First Use) record",c:"green",d:"First-use hash is pinned. SHA-256 mismatch on subsequent calls → deny immediately."},
+{t:"Supervisor queries OPA/Rego with: {destination host:port, binary identity, L7 rules}",c:"green"},
+{t:"Example: 'gh' can reach github.com:443 while 'curl' is denied to the same host",c:"neutral"},
+{t:"If ALLOW: Supervisor proxy forwards request, optionally injects credentials at egress",c:"green"},
+{t:"If DENY: connection refused, OCSF NetworkActivity with disposition=Blocked",c:"pink"},
+{t:"nftables catch any attempt to bypass the proxy — raw sockets blocked by seccomp",c:"green"},
+{t:"Process ancestry tracked — subprocess inherits parent's identity constraints",c:"green"}
+],m:[
+{v:"L7",l:"REST, GraphQL, MCP, JSON-RPC, SQL, WebSocket"},
+{v:"SHA-256",l:"Binary verification (TOFU)"},
+{v:"0",l:"Keys in agent environment"}
+]},
+
+F07:{t:"Guardrails screening pipeline",src:"Agentic deep dive slides 26-28; NeMo Guardrails architecture",
+steps:[
+{t:"User or agent input arrives at the inference boundary",c:"amber"},
+{t:"TrustyAI Operator deploys NeMo Guardrails Server via NeMo-Guardrails CR",c:"blue",d:"Admin defines rails with oc create. Operator watches, deploys, and manages lifecycle."},
+{t:"Input detectors run in parallel: prompt injection, PII, toxicity, topic filter",c:"purple",d:"Internal detectors run in-process. External detectors called via API (e.g., regex, classifier)."},
+{t:"If input blocked: request rejected before reaching model — saves inference cost",c:"pink"},
+{t:"If input passes: forwarded to vLLM-deployed model for inference",c:"green"},
+{t:"Model generates response",c:"cyan"},
+{t:"Output detectors screen response: harmful content, data leakage, off-policy generation",c:"purple"},
+{t:"If output blocked: response filtered or replaced",c:"pink"},
+{t:"If output passes: delivered to user/agent",c:"green"},
+{t:"All decisions logged — findings feed back into guardrail rules",c:"neutral"}
+]},
+
+F08:{t:"Evaluation and red teaming pipeline",src:"Agentic deep dive slides 29-32, 36",
+steps:[
+{t:"Inner loop: MLflow traces every step the agent takes during development",c:"cyan",d:"Python scorers, LLM judges, expert feedback on real traces."},
+{t:"Red teaming: Garak runs 120+ attack probes against the agent",c:"pink",d:"Probe categories: prompt injection, jailbreaks, encoding attacks, latent injection, data leakage, DAN."},
+{t:"Garak generators wrap the LLM API; probes generate adversarial prompts",c:"pink"},
+{t:"Detectors analyze outputs to determine if the attack succeeded",c:"pink"},
+{t:"Evaluators convert detector results into pass/fail metrics per risk taxonomy (OWASP Top-10)",c:"neutral"},
+{t:"Findings feed back into guardrail rules — attack catalog improves defenses",c:"amber"},
+{t:"Release gate: EvalHub runs the full eval suite against candidate version",c:"blue",d:"EvalHub server: REST API, OTEL metrics, provider registry, job orchestration, PostgreSQL/SQLite storage."},
+{t:"Pass/fail thresholds enforced — nothing ships below the bar",c:"blue"},
+{t:"Results stored as audit evidence linked to configuration version in MLflow",c:"neutral"},
+{t:"Production traces become new eval cases — continuous improvement loop",c:"cyan"},
+{t:"asago (Red Hat + NVIDIA) turns governance policies into risk scenarios and tests",c:"neutral"}
+]},
+
+F09:{t:"ReAct loop and harness internals",src:"Agentic deep dive slides 2-5; Blog §A new workload class",
+steps:[
+{t:"Harness receives goal/prompt from user or orchestrator",c:"green"},
+{t:"System prompt assembled: instructions + skill files + conversation context + tool schemas",c:"amber",d:"Prompt expansion: ~83 user tokens → 7,867–8,135 total input tokens (16–17× expansion)."},
+{t:"Model reasons about the next action (Reason step)",c:"cyan"},
+{t:"If tool call needed: harness formats MCP call, sends through supervisor proxy (Act step)",c:"green"},
+{t:"Tool result returned to harness, added to conversation context (Observe step)",c:"green"},
+{t:"Loop repeats: reason → act → observe until goal met or limits reached",c:"amber",d:"Limits: step count, token budget, cost cap, timeout. 40%+ of sessions run full auto-approve."},
+{t:"Two integration modes into OpenShell:",c:"blue"},
+{t:"Pattern 1: openshell sandbox create -- claude (whole-agent, no code changes)",c:"blue"},
+{t:"Pattern 2: harness.use_plugin('openshell') (per tool call, per sub-agent, or per session)",c:"blue"},
+{t:"Harness options: OpenClaw, Hermes, LangGraph, LangChain Deep Agents, custom",c:"neutral"}
+],m:[
+{v:"16.9×",l:"Prompt expansion (with OpenShell)"},
+{v:"+268",l:"Input tokens added by sandbox context"},
+{v:"3",l:"Sandboxing patterns supported"}
+]}
+};
+
+/* ── Modal rendering ── */
+const colorMap={green:'var(--green)',blue:'var(--blue)',cyan:'var(--cyan)',amber:'var(--amber)',
+  purple:'var(--purple)',pink:'var(--pink)',neutral:'var(--neutral)'};
+
+function showFlow(id){
+  const f=F[id];if(!f)return;
+  const modal=document.getElementById('modal');
+  let html=`<div class="modal-card">
+    <div class="modal-hdr"><h3>${f.t}</h3><span class="src">${id}</span><button class="modal-close" onclick="closeFlow()">&times;</button></div>
+    <div class="modal-body">`;
+  f.steps.forEach((s,i)=>{
+    html+=`<div class="step">
+      <div class="step-n" style="background:${colorMap[s.c]||colorMap.neutral}">${i+1}</div>
+      <div class="step-body"><div class="step-text">${s.t}</div>${s.d?`<span class="step-detail">${s.d}</span>`:''}</div></div>`;
+  });
+  html+=`</div>`;
+  if(f.m){
+    html+=`<div class="modal-metrics">`;
+    f.m.forEach(m=>{html+=`<div class="metric"><span class="metric-val">${m.v}</span><span class="metric-lbl">${m.l}</span></div>`;});
+    html+=`</div>`;
+  }
+  html+=`<div class="modal-ft"><p>Source: ${f.src}</p></div></div>`;
+  modal.innerHTML=html;
+  modal.classList.add('open');
+  document.addEventListener('keydown',escHandler);
+}
+function closeFlow(){document.getElementById('modal').classList.remove('open');document.removeEventListener('keydown',escHandler)}
+function escHandler(e){if(e.key==='Escape')closeFlow()}
+
 /* Tab switching */
 document.querySelectorAll('.tab').forEach(btn=>{
   btn.addEventListener('click',()=>{
@@ -510,6 +728,15 @@ document.querySelectorAll('.tab').forEach(btn=>{
     document.getElementById(btn.dataset.tab).classList.add('active');
   });
 });
+
+/* Click delegation for data-flow boxes */
+document.querySelectorAll('[data-flow]').forEach(el=>{
+  el.addEventListener('click',()=>showFlow(el.dataset.flow));
+  el.setAttribute('role','button');
+  el.setAttribute('tabindex','0');
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showFlow(el.dataset.flow)}});
+});
+
 /* Theme toggle */
 const html=document.documentElement,toggle=document.getElementById('themeBtn');
 function setTheme(t){html.setAttribute('data-theme',t);toggle.textContent=t==='dark'?'☀️':'🌙';localStorage.setItem('theme',t)}
