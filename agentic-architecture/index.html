@@ -114,6 +114,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,san
 .example summary::before{content:'▸';transition:transform .2s}
 .example[open] summary::before{transform:rotate(90deg)}
 footer{text-align:center;padding:20px 24px;color:var(--t3);font-size:11px;border-top:1px solid var(--border-s);margin-top:24px;transition:all .3s}
+/* ── Journey stepper ─────────────────────────────────── */
+.journey-svg{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);padding:20px 12px 8px;transition:all .3s}
+.j-node{cursor:pointer;transition:transform .2s}
+.j-node:hover{transform:scale(1.12)}
+.j-node .ring{transition:all .3s}
+.j-node.active .ring{filter:drop-shadow(0 0 10px var(--blue))}
+.j-label{font-size:8px;fill:var(--t2);font-family:system-ui,sans-serif;text-anchor:middle;pointer-events:none}
+.j-path{fill:none;stroke:var(--border);stroke-width:2;stroke-linecap:round}
+.j-path-active{fill:none;stroke:var(--blue);stroke-width:2.5;stroke-linecap:round;transition:stroke-dashoffset .6s ease}
+.j-dot{fill:var(--blue);filter:drop-shadow(0 0 6px var(--blue))}
+.j-detail{background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px 20px;margin-top:12px;min-height:90px;transition:all .3s}
+.j-detail h3{font-size:.95rem;font-weight:600;margin-bottom:2px;display:flex;align-items:center;gap:8px}
+.j-detail .j-comp{font-size:.78rem;color:var(--t2);margin-bottom:6px}
+.j-detail .j-desc{font-size:.82rem;color:var(--t1);line-height:1.55}
+.j-detail .j-metric{font-size:.78rem;color:var(--blue);font-weight:600;margin-top:6px}
+.j-badge{display:inline-block;font-size:10px;padding:1px 8px;border-radius:3px;font-weight:600}
+.stepper{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.stepper button{background:var(--surface);border:1px solid var(--border);color:var(--t1);
+  border-radius:6px;padding:5px 14px;font-size:12px;cursor:pointer;transition:all .2s;font-family:system-ui,sans-serif}
+.stepper button:hover{background:var(--raised);border-color:var(--blue)}
+.stepper button.play-btn{background:var(--blue-d);border-color:var(--blue);color:var(--blue)}
+.s-dots{display:flex;gap:5px;align-items:center}
+.s-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--t3);background:transparent;cursor:pointer;transition:all .2s}
+.s-dot.visited{background:var(--t3);border-color:var(--t3)}
+.s-dot.current{background:var(--blue);border-color:var(--blue);transform:scale(1.3);box-shadow:0 0 6px var(--blue)}
 footer a{color:var(--blue);text-decoration:none}footer a:hover{text-decoration:underline}
 /* ── Clickable SVG boxes ────────────────────────────── */
 g[data-flow]{cursor:pointer}
@@ -181,6 +207,7 @@ g[data-flow]::after{content:''}
   <button class="tab active" data-tab="blueprint" role="tab">Control &amp; Execution Planes</button>
   <button class="tab" data-tab="security" role="tab">Isolation Rings &amp; Enforcement</button>
   <button class="tab" data-tab="inference" role="tab">Inference Routing &amp; Tool Governance</button>
+  <button class="tab" data-tab="journey" role="tab">End-to-End Journey</button>
 </nav>
 
 <!-- ═══════════ FULL BLUEPRINT ═══════════ -->
@@ -541,6 +568,41 @@ g[data-flow]::after{content:''}
   </div>
 </section>
 
+<!-- ═══════════ END-TO-END JOURNEY ═══════════ -->
+<section class="section" id="journey">
+  <h2>End-to-End Journey</h2>
+  <p class="desc">One request traced from user to GPU and back. The ReAct loop repeats until the goal is met. Click any node or use the stepper.</p>
+
+  <div class="journey-svg">
+    <svg id="jSvg" viewBox="0 0 1160 200" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ja" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,6 2.5,0 5" fill="var(--t3)"/></marker>
+        <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- Path segments drawn by JS -->
+      <path id="jPathBg" class="j-path" d=""/>
+      <path id="jPathActive" class="j-path-active" d=""/>
+      <circle id="jDot" class="j-dot" r="5" filter="url(#glow)" style="display:none"/>
+      <!-- Nodes drawn by JS -->
+      <g id="jNodes"></g>
+    </svg>
+  </div>
+
+  <div class="j-detail" id="jDetail">
+    <h3 id="jTitle"></h3>
+    <div class="j-comp" id="jComp"></div>
+    <div class="j-desc" id="jDesc"></div>
+    <div class="j-metric" id="jMetric"></div>
+  </div>
+
+  <div class="stepper">
+    <button onclick="jPrev()" id="jPrevBtn">◀ Prev</button>
+    <div class="s-dots" id="jDots"></div>
+    <button onclick="jNext()" id="jNextBtn">Next ▶</button>
+    <button class="play-btn" onclick="jTogglePlay()" id="jPlayBtn">▶ Play</button>
+  </div>
+</section>
+
 <footer>
   <p>Based on <a href="https://developers.redhat.com/articles/2026/07/20/architect-open-blueprint-cloud-native-ai-agents" target="_blank" rel="noopener">Architect an open blueprint for cloud-native AI agents</a> (Red Hat Developer, July 2026)</p>
   <p style="margin-top:4px">Components: <a href="https://github.com/NVIDIA/OpenShell" target="_blank" rel="noopener">OpenShell</a> · <a href="https://github.com/Kuadrant/mcp-gateway" target="_blank" rel="noopener">MCP Gateway</a> · <a href="https://llm-d.ai" target="_blank" rel="noopener">llm-d</a> · <a href="https://kubernetes-sigs.github.io/agent-sandbox/" target="_blank" rel="noopener">agent-sandbox SIG</a></p>
@@ -770,6 +832,212 @@ document.querySelectorAll('[data-flow]').forEach(el=>{
     el.appendChild(icon);
   }
 });
+
+/* ── Journey stepper logic ── */
+const JStages=[
+{id:"S01",l:"User",c:"var(--neutral)",comp:"CLI / Browser / SDK",plane:"External",
+ w:"User sends a goal or prompt to the agent",
+ d:"openshell sandbox exec my-agent -- 'fix the CI'. Or via browser through TLS Route to Secure Agent Workspace. OIDC auth (Keycloak PKCE / device flow) → short-lived token.",m:""},
+{id:"S02",l:"Gateway",c:"var(--blue)",comp:"OpenShell Gateway (port 17670)",plane:"Control",
+ w:"Control plane receives request over gRPC/mTLS",
+ d:"Validates auth (Ed25519 JWT). Routes to existing sandbox or creates new one. Z3 prover validates policy. Creates Sandbox CR (agents.x-k8s.io/v1beta1).",m:"~60mc / ~122 MiB overhead"},
+{id:"S03",l:"Operator",c:"var(--blue)",comp:"Agent Sandbox Operator (SIG Apps)",plane:"Control",
+ w:"Controller reconciles the Sandbox CR into a pod",
+ d:"Produces pod spec: init containers (supervisor-install + workspace-init), projected SA token (1h TTL). If warm pool exists → claims pre-provisioned pod.",m:"Cold: 16.4s → Warm: 247ms P50"},
+{id:"S04",l:"Supervisor",c:"var(--green)",comp:"OpenShell Supervisor (PID 1)",plane:"Execution",
+ w:"Applies kernel isolation inside the pod",
+ d:"Connects outbound to Gateway (mTLS). Receives policy + credentials. Applies Landlock LSM (irreversible). Installs seccomp-BPF (USER_NOTIF). Drops ALL capabilities. Launches agent as child — capability-free.",m:""},
+{id:"S05",l:"Agent",c:"var(--green)",comp:"Agent Harness (OpenClaw, Hermes, LangGraph…)",plane:"Execution",
+ w:"Loads skills, assembles prompt, begins ReAct loop",
+ d:"Loads skill instruction files. Assembles: instructions + skills + context + tool schemas. 83 user tokens → 8,135 total (16.9× expansion). Begins: reason → act → observe.",m:"16.9× prompt expansion"},
+{id:"S06",l:"Reason",c:"var(--cyan)",comp:"Inference request → Supervisor Tier 1",plane:"Execution → Inference",
+ w:"Agent thinks — sends inference request through enforcement chain",
+ d:"Supervisor egress router: policy check → PII detection-and-redaction if external → confidential context never leaves cluster. Routes to AI Gateway for in-cluster inference.",m:""},
+{id:"S07",l:"AI GW",c:"var(--cyan)",comp:"AI Gateway (MaaS) — Authorino + Limitador",plane:"Inference",
+ w:"Governed front door: auth, rate limit, guardrails",
+ d:"Gateway API-conformant proxy. Authorino authenticates by subscription (ext-authz). Limitador rate-limits by token usage. NeMo Guardrails screens input (prompt injection, PII, toxicity).",m:""},
+{id:"S08",l:"Router",c:"var(--cyan)",comp:"Semantic Router — Tier 2 (Cost)",plane:"Inference",
+ w:"Classifier picks the cheapest capable model",
+ d:"Lightweight classifier: intent + complexity → model pool (e.g., Nemotron-mini vs full Llama). Fallback escalates on low confidence. Adds latency — measured trade-off.",m:""},
+{id:"S09",l:"EPP",c:"var(--blue)",comp:"llm-d EPP — Tier 3 (Efficiency)",plane:"Inference",
+ w:"Selects optimal vLLM replica via ext-proc",
+ d:"Probes vLLM /metrics. Prefix-affinity: route to pod with cached KVs (95% hit rate). Load-awareness: back-pressure management. If disaggregated: selects separate prefill + decode workers.",m:"95% KV cache hit rate"},
+{id:"S10",l:"vLLM",c:"var(--neutral)",comp:"vLLM on GPU (NVIDIA / AMD / Intel / TPU)",plane:"Infrastructure",
+ w:"GPU runs inference — tokens stream back",
+ d:"If disaggregated: prefill pod → KVXfer metadata → NIXL sidecar → decode pod pulls KVs → generates tokens. KV offload to CPU RAM or remote storage. Tokens stream: vLLM → EPP → Gateway → Supervisor → Harness.",m:"900 tok/s/GPU · $1.2/M output tokens"},
+{id:"S11",l:"Act",c:"var(--amber)",comp:"Tool call → Supervisor → MCP Gateway → Backend",plane:"Execution → Tools",
+ w:"Model calls a tool — full enforcement chain",
+ d:"seccomp intercepts connect(). /proc/exe + SHA-256 TOFU check. OPA/Rego policy: {dest, binary, L7 rules}. MCP Gateway: SVID claims check. Credential injection: supervisor swaps placeholder for real key at egress. Agent never sees it.",m:""},
+{id:"S12",l:"Observe",c:"var(--green)",comp:"Loop decision in harness",plane:"Execution",
+ w:"Result added to context — loop or finish",
+ d:"Tool result added to conversation context. Harness evaluates: goal met? Limits reached (steps, tokens, cost, timeout)? If not done → back to Reason. 40%+ of sessions run full auto-approve.",m:""},
+{id:"S13",l:"Audit",c:"var(--purple)",comp:"OCSF + OTEL + MLflow — every hop",plane:"Cross-cutting",
+ w:"The entire journey traced end-to-end",
+ d:"OCSF v1.8.0 events for every allow/deny. OTEL spans across all 3 inference tiers. MLflow traces: tool calls, prompts, outputs, latencies, costs. Exported to Prometheus, Jaeger/Tempo, SIEM. Production traces become new eval cases.",m:""}
+];
+
+const jNodePositions=[
+  {x:40,y:80},{x:130,y:80},{x:220,y:80},{x:330,y:80},{x:440,y:80},
+  {x:550,y:50},{x:650,y:50},{x:750,y:50},{x:850,y:50},{x:960,y:50},
+  {x:750,y:140},{x:550,y:140},
+  {x:1100,y:110}
+];
+
+let jCur=0,jTimer=null;
+
+function jBuildPath(){
+  const p=jNodePositions;
+  let d='M'+p[0].x+' '+p[0].y;
+  for(let i=1;i<5;i++) d+=' L'+p[i].x+' '+p[i].y;
+  d+=' C'+p[4].x+' '+(p[4].y-40)+' '+p[5].x+' '+p[5].y+' '+p[5].x+' '+p[5].y;
+  for(let i=6;i<=9;i++) d+=' L'+p[i].x+' '+p[i].y;
+  d+=' C'+(p[9].x+20)+' '+p[9].y+' '+(p[9].x+20)+' '+p[10].y+' '+p[10].x+' '+p[10].y;
+  d+=' L'+p[11].x+' '+p[11].y;
+  d+=' C'+(p[11].x-40)+' '+p[11].y+' '+(p[11].x-40)+' '+p[5].y+' '+p[5].x+' '+p[5].y;
+  return d;
+}
+
+function jBuildAuditPath(){
+  const p=jNodePositions;
+  return 'M'+p[0].x+' 185 L'+p[12].x+' 185';
+}
+
+function jInit(){
+  const svg=document.getElementById('jSvg');
+  const nodesG=document.getElementById('jNodes');
+  const mainPath=jBuildPath();
+  document.getElementById('jPathBg').setAttribute('d',mainPath+' M40 185 L1100 185');
+  document.getElementById('jPathActive').setAttribute('d',mainPath);
+
+  const activePath=document.getElementById('jPathActive');
+  const totalLen=activePath.getTotalLength();
+  activePath.style.strokeDasharray=totalLen;
+  activePath.style.strokeDashoffset=totalLen;
+
+  JStages.forEach((s,i)=>{
+    const pos=jNodePositions[i];
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.classList.add('j-node');
+    g.setAttribute('data-stage',String(i));
+    g.addEventListener('click',()=>jGoTo(i));
+
+    const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.classList.add('ring');
+    circle.setAttribute('cx',String(pos.x));circle.setAttribute('cy',String(pos.y));
+    circle.setAttribute('r','14');circle.setAttribute('fill','var(--surface)');
+    circle.setAttribute('stroke',s.c);circle.setAttribute('stroke-width','2');
+    g.appendChild(circle);
+
+    const txt=document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x',String(pos.x));txt.setAttribute('y',String(pos.y+4));
+    txt.setAttribute('text-anchor','middle');txt.setAttribute('font-size','9');
+    txt.setAttribute('font-weight','700');txt.setAttribute('fill','var(--t1)');
+    txt.setAttribute('font-family','system-ui,sans-serif');txt.setAttribute('pointer-events','none');
+    txt.textContent=String(i+1);
+    g.appendChild(txt);
+
+    const label=document.createElementNS('http://www.w3.org/2000/svg','text');
+    label.classList.add('j-label');
+    label.setAttribute('x',String(pos.x));label.setAttribute('y',String(pos.y+(i>=10&&i<12?-20:24)));
+    label.textContent=s.l;
+    g.appendChild(label);
+
+    nodesG.appendChild(g);
+  });
+
+  // Audit bar label
+  const auditLabel=document.createElementNS('http://www.w3.org/2000/svg','text');
+  auditLabel.setAttribute('x','570');auditLabel.setAttribute('y','192');
+  auditLabel.setAttribute('text-anchor','middle');auditLabel.setAttribute('font-size','8');
+  auditLabel.setAttribute('fill','var(--purple)');auditLabel.setAttribute('font-family','system-ui,sans-serif');
+  auditLabel.textContent='───── Audit trail: OCSF + OTEL + MLflow (every hop) ─────';
+  nodesG.appendChild(auditLabel);
+
+  // Loop arc label
+  const loopLabel=document.createElementNS('http://www.w3.org/2000/svg','text');
+  loopLabel.setAttribute('x','1010');loopLabel.setAttribute('y','100');
+  loopLabel.setAttribute('text-anchor','middle');loopLabel.setAttribute('font-size','7.5');
+  loopLabel.setAttribute('fill','var(--t3)');loopLabel.setAttribute('font-family','system-ui,sans-serif');
+  loopLabel.textContent='ReAct loop';
+  nodesG.appendChild(loopLabel);
+
+  // Build stepper dots
+  const dotsC=document.getElementById('jDots');
+  dotsC.innerHTML='';
+  JStages.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='s-dot';d.addEventListener('click',()=>jGoTo(i));
+    dotsC.appendChild(d);
+  });
+
+  jGoTo(0);
+}
+
+function jGoTo(idx){
+  jCur=idx;
+  const s=JStages[idx];
+  // Update detail panel
+  document.getElementById('jTitle').innerHTML='<span class="j-badge" style="background:'+s.c+';color:#fff">'+s.id+'</span> '+s.w;
+  document.getElementById('jComp').textContent=s.comp+' — '+s.plane;
+  document.getElementById('jDesc').textContent=s.d;
+  document.getElementById('jMetric').textContent=s.m;
+
+  // Update nodes
+  document.querySelectorAll('.j-node').forEach((n,i)=>{
+    const circle=n.querySelector('.ring');
+    n.classList.toggle('active',i===idx);
+    if(i<idx){circle.setAttribute('fill',JStages[i].c);circle.setAttribute('stroke-width','2');}
+    else if(i===idx){circle.setAttribute('fill',JStages[i].c);circle.setAttribute('stroke-width','3');}
+    else{circle.setAttribute('fill','var(--surface)');circle.setAttribute('stroke-width','2');}
+  });
+
+  // Update progress on path
+  const activePath=document.getElementById('jPathActive');
+  const totalLen=activePath.getTotalLength();
+  const progress=totalLen*(idx/(JStages.length-1));
+  activePath.style.strokeDashoffset=String(totalLen-progress);
+
+  // Update animated dot position
+  const dot=document.getElementById('jDot');
+  dot.style.display='block';
+  const pt=activePath.getPointAtLength(progress);
+  dot.setAttribute('cx',String(pt.x));dot.setAttribute('cy',String(pt.y));
+
+  // Update stepper dots
+  document.querySelectorAll('.s-dot').forEach((d,i)=>{
+    d.className='s-dot'+(i<idx?' visited':'')+(i===idx?' current':'');
+  });
+}
+
+function jPrev(){if(jCur>0)jGoTo(jCur-1)}
+function jNext(){if(jCur<JStages.length-1)jGoTo(jCur+1)}
+function jTogglePlay(){
+  const btn=document.getElementById('jPlayBtn');
+  if(jTimer){clearInterval(jTimer);jTimer=null;btn.textContent='▶ Play';return;}
+  btn.textContent='⏸ Pause';
+  if(jCur>=JStages.length-1)jGoTo(0);
+  jTimer=setInterval(()=>{
+    if(jCur<JStages.length-1)jNext();
+    else{clearInterval(jTimer);jTimer=null;document.getElementById('jPlayBtn').textContent='▶ Play';}
+  },2500);
+}
+
+// Keyboard navigation
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('journey').classList.contains('active')){
+    if(e.key==='ArrowRight')jNext();
+    else if(e.key==='ArrowLeft')jPrev();
+    else if(e.key===' '&&!document.querySelector('.modal-backdrop.open')){e.preventDefault();jTogglePlay();}
+  }
+});
+
+// Init journey when tab is first shown
+const jObserver=new MutationObserver(()=>{
+  if(document.getElementById('journey').classList.contains('active')&&!document.getElementById('jSvg').dataset.init){
+    document.getElementById('jSvg').dataset.init='1';jInit();
+  }
+});
+jObserver.observe(document.getElementById('journey'),{attributes:true,attributeFilter:['class']});
 
 /* Theme toggle */
 const html=document.documentElement,toggle=document.getElementById('themeBtn');
