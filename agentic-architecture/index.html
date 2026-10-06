@@ -210,7 +210,7 @@ g[data-flow]:hover{filter:drop-shadow(0 0 6px var(--blue))}
       <!-- LEFT COLUMN: three-layer tool stack -->
       <text x="20" y="102" fill="var(--t2)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Tool stack (three layers)</text>
 
-      <g class="box"><rect x="16" y="112" width="210" height="42" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+      <g class="box" data-flow="F02"><rect x="16" y="112" width="210" height="42" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
         <text x="121" y="130" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">MCP servers (tools)</text>
         <text x="121" y="143" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">callable endpoints with advertised schemas</text></g>
 
@@ -319,7 +319,7 @@ g[data-flow]:hover{filter:drop-shadow(0 0 6px var(--blue))}
         <text x="814" y="295" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Inference Guardrails</text>
         <text x="814" y="308" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">TrustyAI · NeMo Guardrails · input/output screening</text></g>
 
-      <g class="box"><rect x="938" y="222" width="210" height="52" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+      <g class="box" data-flow="F11"><rect x="938" y="222" width="210" height="52" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
         <text x="1043" y="242" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Audit &amp; Tracing</text>
         <text x="1043" y="256" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">MLflow · OpenTelemetry · OCSF</text>
         <text x="1043" y="268" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">end-to-end traces + security events</text></g>
@@ -400,19 +400,19 @@ g[data-flow]:hover{filter:drop-shadow(0 0 6px var(--blue))}
       <text x="590" y="38" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Cross-cutting Controls</text>
       <text x="590" y="54" fill="var(--t3)" font-size="9" font-family="system-ui,sans-serif">Apply across all three rings</text>
 
-      <g class="box"><rect x="590" y="68" width="290" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="590" y="68" width="3" height="52" rx="1" fill="var(--ss)"/>
+      <g class="box" data-flow="F05"><rect x="590" y="68" width="290" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="590" y="68" width="3" height="52" rx="1" fill="var(--ss)"/>
         <text x="600" y="86" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">1. Workload Identity</text>
         <text x="600" y="99" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">SPIFFE SVIDs replace static keys</text>
         <text x="600" y="111" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Leaked workspace contains nothing durable to steal</text></g>
-      <g class="box"><rect x="590" y="130" width="290" height="52" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="590" y="130" width="3" height="52" rx="1" fill="var(--is)"/>
+      <g class="box" data-flow="F02"><rect x="590" y="130" width="290" height="52" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="590" y="130" width="3" height="52" rx="1" fill="var(--is)"/>
         <text x="600" y="148" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">2. Tool Authorization</text>
         <text x="600" y="161" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">MCP Gateway authorizes by token claims</text>
         <text x="600" y="173" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Never from prompt content — infrastructure, not model</text></g>
-      <g class="box"><rect x="590" y="192" width="290" height="52" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/><rect x="590" y="192" width="3" height="52" rx="1" fill="var(--es)"/>
+      <g class="box" data-flow="F07"><rect x="590" y="192" width="290" height="52" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/><rect x="590" y="192" width="3" height="52" rx="1" fill="var(--es)"/>
         <text x="600" y="210" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">3. Inference Guardrails</text>
         <text x="600" y="223" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">TrustyAI + NeMo Guardrails</text>
         <text x="600" y="235" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Input/output screening at the inference boundary</text></g>
-      <g class="box"><rect x="590" y="254" width="290" height="52" rx="5" fill="var(--xc)" stroke="var(--xs)" stroke-width="1"/><rect x="590" y="254" width="3" height="52" rx="1" fill="var(--xs)"/>
+      <g class="box" data-flow="F08"><rect x="590" y="254" width="290" height="52" rx="5" fill="var(--xc)" stroke="var(--xs)" stroke-width="1"/><rect x="590" y="254" width="3" height="52" rx="1" fill="var(--xs)"/>
         <text x="600" y="272" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">4. Pre-production Testing</text>
         <text x="600" y="285" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Garak 120+ probes · EvalHub release gates</text>
         <text x="600" y="297" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Adversarial scanning in CI/CD before promotion</text></g>
@@ -455,27 +455,27 @@ g[data-flow]:hover{filter:drop-shadow(0 0 6px var(--blue))}
 
       <line x1="126" y1="66" x2="156" y2="66" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
 
-      <rect x="160" y="36" width="210" height="60" rx="6" fill="var(--ec)" stroke="var(--es)" stroke-width="1.5"/>
+      <g class="box" data-flow="F06"><rect x="160" y="36" width="210" height="60" rx="6" fill="var(--ec)" stroke="var(--es)" stroke-width="1.5"/>
       <text x="265" y="54" text-anchor="middle" fill="var(--es)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 1 — Security</text>
       <text x="265" y="66" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Sandbox egress router (in supervisor)</text>
       <text x="265" y="78" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Where may this query go?</text>
-      <text x="265" y="90" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Policy · privacy class · PII masking · local vs cloud</text>
+      <text x="265" y="90" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Policy · privacy class · PII masking · local vs cloud</text></g>
 
       <line x1="370" y1="66" x2="400" y2="66" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
 
-      <rect x="404" y="36" width="210" height="60" rx="6" fill="var(--ic)" stroke="var(--is)" stroke-width="1.5"/>
+      <g class="box" data-flow="F01"><rect x="404" y="36" width="210" height="60" rx="6" fill="var(--ic)" stroke="var(--is)" stroke-width="1.5"/>
       <text x="509" y="54" text-anchor="middle" fill="var(--is)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 2 — Cost</text>
       <text x="509" y="66" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">vLLM Semantic Router / AI Gateway</text>
       <text x="509" y="78" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Which model should serve it?</text>
-      <text x="509" y="90" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Intent classification · cost · reasoning on/off</text>
+      <text x="509" y="90" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Intent classification · cost · reasoning on/off</text></g>
 
       <line x1="614" y1="66" x2="644" y2="66" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
 
-      <rect x="648" y="36" width="210" height="60" rx="6" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.5"/>
+      <g class="box" data-flow="F01"><rect x="648" y="36" width="210" height="60" rx="6" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.5"/>
       <text x="753" y="54" text-anchor="middle" fill="var(--ss)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 3 — Efficiency</text>
       <text x="753" y="66" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">llm-d Router / EPP (Gateway API ext.)</text>
       <text x="753" y="78" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Which replica serves it?</text>
-      <text x="753" y="90" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">KV cache locality · load · prefill/decode</text>
+      <text x="753" y="90" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">KV cache locality · load · prefill/decode</text></g>
 
       <line x1="858" y1="66" x2="880" y2="66" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
       <rect x="884" y="48" width="22" height="36" rx="3" fill="var(--nc)"/>
@@ -689,6 +689,18 @@ steps:[
 {v:"16.9×",l:"Prompt expansion (with OpenShell)"},
 {v:"+268",l:"Input tokens added by sandbox context"},
 {v:"3",l:"Sandboxing patterns supported"}
+]},
+
+F11:{t:"Observability pipeline",src:"OpenShell technical writeup §2.1; AGENTS.md §Sandbox Logging",
+steps:[
+{t:"Gateway emits OCSF v1.8.0 structured events for every allow/deny decision (JSON lines)",c:"blue"},
+{t:"Supervisor emits OCSF events: NetworkActivity, HttpActivity, ProcessActivity, ConfigStateChange, DetectionFinding",c:"green"},
+{t:"Gateway exports OpenTelemetry traces over OTLP/gRPC to Jaeger or Tempo",c:"cyan"},
+{t:"Agent harness: MLflow Tracing records tool calls, prompts, outputs, latencies, costs",c:"amber"},
+{t:"OTEL GenAI semantic conventions link inference requests to agent actions",c:"cyan",d:"Conventions still in development — plan for attribute changes, not interface rewrites."},
+{t:"All three streams merge: every hop lands in the same traceable trail",c:"neutral"},
+{t:"Export targets: Prometheus (port 9090), Jaeger/Tempo (traces), SIEM (OCSF JSON → Splunk/Elastic)",c:"neutral"},
+{t:"Production traces become new eval cases — feeds the continuous improvement loop back to EvalHub",c:"blue"}
 ]}
 };
 
