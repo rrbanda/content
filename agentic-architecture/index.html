@@ -609,10 +609,15 @@ g[data-flow]::after{content:''}
   </div>
 
   <div class="j-detail" id="jDetail">
-    <h3 id="jTitle"></h3>
-    <div class="j-comp" id="jComp"></div>
-    <div class="j-desc" id="jDesc"></div>
-    <div class="j-metric" id="jMetric"></div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+      <div style="flex:1">
+        <h3 id="jTitle"></h3>
+        <div class="j-comp" id="jComp"></div>
+        <div class="j-desc" id="jDesc"></div>
+        <div class="j-metric" id="jMetric"></div>
+      </div>
+      <button id="jResumeBtn" onclick="jResume()" style="display:none;background:var(--blue-d);border:1px solid var(--blue);color:var(--blue);border-radius:6px;padding:5px 14px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:system-ui,sans-serif;margin-top:2px">▶ Resume</button>
+    </div>
   </div>
 
   <div class="stepper">
@@ -949,7 +954,7 @@ function jInit(){
     const g=document.createElementNS('http://www.w3.org/2000/svg','g');
     g.classList.add('j-node');
     g.setAttribute('data-stage',String(i));
-    g.addEventListener('click',()=>jGoTo(i));
+    g.addEventListener('click',()=>{jPause();jGoTo(i);});
 
     const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
     circle.classList.add('ring');
@@ -996,7 +1001,7 @@ function jInit(){
   dotsC.innerHTML='';
   JStages.forEach((_,i)=>{
     const d=document.createElement('div');
-    d.className='s-dot';d.addEventListener('click',()=>jGoTo(i));
+    d.className='s-dot';d.addEventListener('click',()=>{jPause();jGoTo(i);});
     dotsC.appendChild(d);
   });
 
@@ -1039,8 +1044,8 @@ function jGoTo(idx){
   });
 }
 
-function jPrev(){if(jCur>0)jGoTo(jCur-1)}
-function jNext(){if(jCur<JStages.length-1)jGoTo(jCur+1)}
+function jPrev(){if(jCur>0){jPause();jGoTo(jCur-1);}}
+function jNext(){if(jCur<JStages.length-1){jPause();jGoTo(jCur+1);}}
 function jTogglePlay(){
   const btn=document.getElementById('jPlayBtn');
   if(jTimer){clearInterval(jTimer);jTimer=null;btn.textContent='▶ Play';return;}
@@ -1063,19 +1068,22 @@ document.addEventListener('keydown',e=>{
 
 // Sync detail panel with the traveling dot position
 let jSyncTimer=null;
+let jPaused=false;
 function jStartSync(){
   if(jSyncTimer)return;
-  const activePath=document.getElementById('jPathActive');
-  const totalLen=activePath.getTotalLength();
-  const dur=12000; // matches animateMotion dur
+  const dur=12000;
   const startTime=performance.now();
   document.querySelector('.journey-svg').classList.add('journey-active');
+  jPaused=false;
 
   function sync(){
-    const elapsed=(performance.now()-startTime)%dur;
-    const progress=elapsed/dur;
-    const stageIdx=Math.min(Math.floor(progress*JStages.length),JStages.length-1);
-    if(stageIdx!==jCur)jGoTo(stageIdx);
+    if(!jPaused){
+      const activePath=document.getElementById('jPathActive');
+      const elapsed=(performance.now()-startTime)%dur;
+      const progress=elapsed/dur;
+      const stageIdx=Math.min(Math.floor(progress*JStages.length),JStages.length-1);
+      if(stageIdx!==jCur)jGoTo(stageIdx);
+    }
     jSyncTimer=requestAnimationFrame(sync);
   }
   jSyncTimer=requestAnimationFrame(sync);
@@ -1083,6 +1091,19 @@ function jStartSync(){
 function jStopSync(){
   if(jSyncTimer){cancelAnimationFrame(jSyncTimer);jSyncTimer=null;}
   document.querySelector('.journey-svg')?.classList.remove('journey-active');
+  jPaused=false;
+}
+function jPause(){
+  jPaused=true;
+  document.getElementById('jSvg').pauseAnimations();
+  document.getElementById('jDetail').style.borderColor='var(--blue)';
+  document.getElementById('jResumeBtn').style.display='inline-block';
+}
+function jResume(){
+  jPaused=false;
+  document.getElementById('jSvg').unpauseAnimations();
+  document.getElementById('jDetail').style.borderColor='var(--border)';
+  document.getElementById('jResumeBtn').style.display='none';
 }
 
 // Init journey when tab is first shown
