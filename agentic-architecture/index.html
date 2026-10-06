@@ -140,6 +140,11 @@ footer{text-align:center;padding:20px 24px;color:var(--t3);font-size:11px;border
 .s-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--t3);background:transparent;cursor:pointer;transition:all .2s}
 .s-dot.visited{background:var(--t3);border-color:var(--t3)}
 .s-dot.current{background:var(--blue);border-color:var(--blue);transform:scale(1.3);box-shadow:0 0 6px var(--blue)}
+/* Traveler animation */
+#jTraveler{opacity:0;transition:opacity .5s}
+.journey-active #jTraveler{opacity:1}
+.j-node .ring{transition:all .3s}
+@keyframes nodePulse{0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
 footer a{color:var(--blue);text-decoration:none}footer a:hover{text-decoration:underline}
 /* ── Clickable SVG boxes ────────────────────────────── */
 g[data-flow]{cursor:pointer}
@@ -583,6 +588,21 @@ g[data-flow]::after{content:''}
       <path id="jPathBg" class="j-path" d=""/>
       <path id="jPathActive" class="j-path-active" d=""/>
       <circle id="jDot" class="j-dot" r="5" filter="url(#glow)" style="display:none"/>
+      <!-- Continuously animated traveling dot -->
+      <g id="jTraveler">
+        <circle r="6" fill="var(--blue)" opacity=".9" filter="url(#glow)"/>
+        <circle r="3" fill="#fff" opacity=".8"/>
+        <animateMotion id="jMotion" dur="12s" repeatCount="indefinite" rotate="auto" fill="freeze">
+          <mpath href="#jPathActive"/>
+        </animateMotion>
+      </g>
+      <!-- Trail effect -->
+      <circle id="jTrail1" r="4" fill="var(--blue)" opacity=".3" filter="url(#glow)">
+        <animateMotion dur="12s" repeatCount="indefinite" begin="0.3s"><mpath href="#jPathActive"/></animateMotion>
+      </circle>
+      <circle id="jTrail2" r="3" fill="var(--blue)" opacity=".15">
+        <animateMotion dur="12s" repeatCount="indefinite" begin="0.6s"><mpath href="#jPathActive"/></animateMotion>
+      </circle>
       <!-- Nodes drawn by JS -->
       <g id="jNodes"></g>
     </svg>
@@ -1031,10 +1051,40 @@ document.addEventListener('keydown',e=>{
   }
 });
 
+// Sync detail panel with the traveling dot position
+let jSyncTimer=null;
+function jStartSync(){
+  if(jSyncTimer)return;
+  const activePath=document.getElementById('jPathActive');
+  const totalLen=activePath.getTotalLength();
+  const dur=12000; // matches animateMotion dur
+  const startTime=performance.now();
+  document.querySelector('.journey-svg').classList.add('journey-active');
+
+  function sync(){
+    const elapsed=(performance.now()-startTime)%dur;
+    const progress=elapsed/dur;
+    const stageIdx=Math.min(Math.floor(progress*JStages.length),JStages.length-1);
+    if(stageIdx!==jCur)jGoTo(stageIdx);
+    jSyncTimer=requestAnimationFrame(sync);
+  }
+  jSyncTimer=requestAnimationFrame(sync);
+}
+function jStopSync(){
+  if(jSyncTimer){cancelAnimationFrame(jSyncTimer);jSyncTimer=null;}
+  document.querySelector('.journey-svg')?.classList.remove('journey-active');
+}
+
 // Init journey when tab is first shown
 const jObserver=new MutationObserver(()=>{
-  if(document.getElementById('journey').classList.contains('active')&&!document.getElementById('jSvg').dataset.init){
-    document.getElementById('jSvg').dataset.init='1';jInit();
+  const journeyEl=document.getElementById('journey');
+  if(journeyEl.classList.contains('active')){
+    if(!document.getElementById('jSvg').dataset.init){
+      document.getElementById('jSvg').dataset.init='1';jInit();
+    }
+    jStartSync();
+  } else {
+    jStopSync();
   }
 });
 jObserver.observe(document.getElementById('journey'),{attributes:true,attributeFilter:['class']});
