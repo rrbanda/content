@@ -117,8 +117,16 @@ footer{text-align:center;padding:20px 24px;color:var(--t3);font-size:11px;border
 footer a{color:var(--blue);text-decoration:none}footer a:hover{text-decoration:underline}
 /* ── Clickable SVG boxes ────────────────────────────── */
 g[data-flow]{cursor:pointer}
-g[data-flow]:hover rect:first-child{filter:brightness(1.3);stroke-width:2}
-g[data-flow]:hover{filter:drop-shadow(0 0 6px var(--blue))}
+g[data-flow] rect:first-child{transition:all .2s}
+g[data-flow]:hover rect:first-child{filter:brightness(1.3);stroke-width:2.5}
+g[data-flow]:hover{filter:drop-shadow(0 0 8px var(--blue))}
+/* Subtle pulse hint on clickable boxes */
+g[data-flow] rect:first-child{stroke-dasharray:1000;stroke-dashoffset:0;
+  animation:pulseHint 3s ease-in-out infinite alternate}
+@keyframes pulseHint{0%{opacity:1}100%{opacity:.85}}
+/* Small click icon badge */
+g[data-flow]::after{content:''}
+.click-hint{font-size:7px;fill:var(--t3);font-family:system-ui,sans-serif;pointer-events:none;opacity:.7}
 /* ── Modal overlay ──────────────────────────────────── */
 .modal-backdrop{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.6);
   display:none;align-items:flex-start;justify-content:center;padding:48px 16px;overflow-y:auto;
@@ -160,7 +168,7 @@ g[data-flow]:hover{filter:drop-shadow(0 0 6px var(--blue))}
 
 <div class="hero">
   <h1>Running Agents Safely</h1>
-  <p class="sub">Identity, sandboxing, tool authorization, and three-tier inference routing — from process to silicon. Click any box to see the flow.</p>
+  <p class="sub">Identity, sandboxing, tool authorization, and three-tier inference routing — from process to silicon. <strong style="color:var(--t1)">Click any ↗ box</strong> for the detailed flow.</p>
   <div class="legend">
     <span class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>Control / security plane</span>
     <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>Execution</span>
@@ -742,12 +750,25 @@ document.querySelectorAll('.tab').forEach(btn=>{
   });
 });
 
-/* Click delegation for data-flow boxes */
+/* Click delegation for data-flow boxes + visual hints */
 document.querySelectorAll('[data-flow]').forEach(el=>{
   el.addEventListener('click',()=>showFlow(el.dataset.flow));
   el.setAttribute('role','button');
   el.setAttribute('tabindex','0');
   el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showFlow(el.dataset.flow)}});
+  /* Add small click indicator to each box */
+  const r=el.querySelector('rect');
+  if(r){
+    const x=parseFloat(r.getAttribute('x'))+parseFloat(r.getAttribute('width'))-14;
+    const y=parseFloat(r.getAttribute('y'))+10;
+    const icon=document.createElementNS('http://www.w3.org/2000/svg','text');
+    icon.setAttribute('x',x);icon.setAttribute('y',y);
+    icon.setAttribute('font-size','9');icon.setAttribute('fill','var(--t3)');
+    icon.setAttribute('font-family','system-ui,sans-serif');
+    icon.setAttribute('pointer-events','none');icon.setAttribute('opacity','0.6');
+    icon.textContent='↗';
+    el.appendChild(icon);
+  }
 });
 
 /* Theme toggle */
