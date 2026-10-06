@@ -247,29 +247,27 @@ g[data-flow]::after{content:''}
       <line x1="1002" y1="62" x2="880" y2="88" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
       <text x="938" y="78" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">issues SVIDs</text>
 
-      <!-- LEFT COLUMN: three-layer tool stack -->
-      <text x="20" y="102" fill="var(--t2)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Tool stack (three layers)</text>
+      <!-- LEFT COLUMN: What the agent can reach -->
+      <text x="20" y="102" fill="var(--t2)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">What the agent can reach</text>
 
-      <g class="box" data-flow="F02"><rect x="16" y="112" width="210" height="42" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="121" y="130" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">MCP servers (tools)</text>
-        <text x="121" y="143" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">callable endpoints with advertised schemas</text></g>
+      <text x="20" y="117" fill="var(--is)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Through the MCP Gateway (model-selected)</text>
+      <g class="box" data-flow="F02"><rect x="16" y="122" width="210" height="62" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="121" y="138" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">MCP tool servers</text>
+        <text x="121" y="150" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">GitHub · Jira · databases · search</text>
+        <text x="121" y="162" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">each backed by its own service compute</text>
+        <text x="121" y="174" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">Gateway checks agent identity, not the prompt</text></g>
 
-      <line x1="121" y1="154" x2="121" y2="164" stroke="var(--t3)" stroke-width=".8" marker-end="url(#a1)"/>
-      <text x="131" y="162" fill="var(--t3)" font-size="6.5" font-family="system-ui,sans-serif">fronts</text>
+      <text x="20" y="202" fill="var(--t3)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Platform-managed (own admission control)</text>
+      <g class="box"><rect x="16" y="208" width="210" height="40" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="121" y="224" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Inference → AI Gateway</text>
+        <text x="121" y="237" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">auth, quota, and routing — not MCP</text></g>
+      <g class="box"><rect x="16" y="254" width="210" height="40" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="121" y="270" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Batch jobs → K8s Job API</text>
+        <text x="121" y="283" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">scoped RBAC + admission — not MCP</text></g>
 
-      <g class="box"><rect x="16" y="166" width="210" height="50" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="121" y="184" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Service backends (compute)</text>
-        <text x="121" y="196" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">Optimization · DataFrames · Physics sim</text>
-        <text x="121" y="208" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">GPU or CPU, any cluster, or SaaS</text></g>
-
-      <g class="box"><rect x="16" y="228" width="210" height="42" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="121" y="245" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Batch jobs</text>
-        <text x="121" y="258" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">K8s Job API · Slurm · scoped RBAC</text></g>
-
-      <text x="20" y="286" fill="var(--t3)" font-size="7" font-style="italic" font-family="system-ui,sans-serif">MCP Gateway fronts backends the model selects</text>
-      <text x="20" y="296" fill="var(--t3)" font-size="7" font-style="italic" font-family="system-ui,sans-serif">at runtime. Platform-invoked backends (inference,</text>
-      <text x="20" y="306" fill="var(--t3)" font-size="7" font-style="italic" font-family="system-ui,sans-serif">batch) carry their own admission control.</text>
-      <text x="20" y="318" fill="var(--t3)" font-size="7" font-style="italic" font-family="system-ui,sans-serif">All paths land in the same trace.</text>
+      <text x="20" y="310" fill="var(--t3)" font-size="7" font-style="italic" font-family="system-ui,sans-serif">The model selects tools → MCP Gateway.</text>
+      <text x="20" y="320" fill="var(--t3)" font-size="7" font-style="italic" font-family="system-ui,sans-serif">The platform invokes services → own policy.</text>
+      <text x="20" y="330" fill="var(--t3)" font-size="7" font-style="italic" font-family="system-ui,sans-serif">All paths land in the same OTEL trace.</text>
 
       <!-- AGENT POD (center) -->
       <rect x="244" y="90" width="440" height="340" rx="6" fill="none" stroke="var(--es)" stroke-width="1.5" stroke-dasharray="5 3"/>
@@ -288,30 +286,24 @@ g[data-flow]::after{content:''}
       <line x1="356" y1="168" x2="356" y2="188" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
       <text x="362" y="182" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">loads skills</text>
 
-      <!-- Skills section — clearly labeled as instruction files -->
-      <text x="254" y="200" fill="var(--ks)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Skills: instruction files + schema bindings</text>
-      <text x="480" y="200" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">no compute — loaded by the harness</text>
+      <!-- Skills section — use-case-centric descriptions -->
+      <text x="254" y="200" fill="var(--ks)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Skills loaded by the harness</text>
+      <text x="430" y="200" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">instruction files — tell the agent WHEN and HOW to use each tool. No compute.</text>
 
-      <g class="box"><rect x="254" y="208" width="133" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
-        <text x="320" y="224" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Triage runbook</text>
-        <text x="320" y="236" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">when to call which tool</text></g>
-      <g class="box"><rect x="393" y="208" width="133" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
-        <text x="459" y="224" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Data pipeline</text>
-        <text x="459" y="236" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">ETL orchestration steps</text></g>
-      <g class="box"><rect x="532" y="208" width="142" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
-        <text x="603" y="224" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Research plan</text>
-        <text x="603" y="236" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">retrieval + synthesis flow</text></g>
-      <g class="box"><rect x="254" y="250" width="133" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
-        <text x="320" y="266" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Model ops</text>
-        <text x="320" y="278" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">fine-tuning workflow</text></g>
-      <g class="box"><rect x="393" y="250" width="133" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
-        <text x="459" y="266" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Optimization</text>
-        <text x="459" y="278" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">objective + constraints</text></g>
-      <g class="box"><rect x="532" y="250" width="142" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
-        <text x="603" y="266" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Simulation</text>
-        <text x="603" y="278" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">physics / quantum setup</text></g>
+      <g class="box"><rect x="254" y="208" width="200" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+        <text x="354" y="224" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Incident triage</text>
+        <text x="354" y="236" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">escalate or auto-fix? which tool to call?</text></g>
+      <g class="box"><rect x="460" y="208" width="210" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+        <text x="565" y="224" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Code review checklist</text>
+        <text x="565" y="236" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">scan → test → open PR → request review</text></g>
+      <g class="box"><rect x="254" y="250" width="200" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+        <text x="354" y="266" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Data analysis workflow</text>
+        <text x="354" y="278" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">query → transform → summarize → chart</text></g>
+      <g class="box"><rect x="460" y="250" width="210" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+        <text x="565" y="266" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Research &amp; summarize</text>
+        <text x="565" y="278" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">search → retrieve → cite → draft report</text></g>
 
-      <text x="254" y="302" fill="var(--t3)" font-size="7" font-style="italic" font-family="system-ui,sans-serif">Skills tell the harness what to call. MCP servers are the callable endpoints. Backends are the compute behind them.</text>
+      <text x="254" y="302" fill="var(--t3)" font-size="7" font-style="italic" font-family="system-ui,sans-serif">A skill tells the agent what to do. An MCP tool server is what the agent calls. A service backend is the compute behind it.</text>
 
       <!-- Credential injection callout -->
       <rect x="254" y="312" width="420" height="20" rx="3" fill="var(--pc)" stroke="var(--ps)" stroke-width=".5"/>
@@ -401,10 +393,10 @@ g[data-flow]::after{content:''}
   </details>
 
   <div class="info-grid">
-    <div class="info-card"><h3><span class="dot" style="background:var(--amber)"></span>Skill (instruction file)</h3><p>Instruction files and schema bindings loaded by the harness. A skill tells the agent what to call and when. No compute of its own — progressive disclosure lives here.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--neutral)"></span>MCP server (tool)</h3><p>A callable endpoint in a separate process with an advertised schema. This is the only thing the MCP Gateway fronts and claims-checks. One MCP server can wrap one or many backends.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--cyan)"></span>Service backend (compute)</h3><p>The actual compute the MCP server sits in front of. Optimization on GPU, DataFrames on CPU, a KServe endpoint, or a Slurm job. Swapping a backend is an endpoint change, not a redesign.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--blue)"></span>MCP Gateway (checkpoint)</h3><p>Fronts every backend the model selects at runtime. Backends the platform invokes on the agent's behalf (inference, batch jobs) carry their own admission control. All paths land in the same trace.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--amber)"></span>Skill = what to do</h3><p>Instruction files loaded by the harness. A skill tells the agent when to call a tool, in what order, and what to do with the result. No compute — just the playbook.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--neutral)"></span>MCP tool server = what to call</h3><p>A callable endpoint (GitHub, Jira, database, custom API) running in a separate process. The only thing the MCP Gateway authorizes — by agent identity, never by prompt content.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--cyan)"></span>Service backend = the compute</h3><p>The actual work behind the tool server — a query engine, an optimization solver, a search index. Swapping a backend is an endpoint change, not a redesign.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--blue)"></span>Two paths, one trace</h3><p>Model-selected tools go through the MCP Gateway (identity-checked). Platform services like inference and batch carry their own admission control. Both paths land in the same OTEL trace.</p></div>
   </div>
 </section>
 
