@@ -71,22 +71,21 @@
 html{scroll-behavior:smooth}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
   background:var(--bg);color:var(--t1);line-height:1.6;overflow-x:hidden;transition:background .3s,color .3s}
-.hero{padding:28px 24px 16px;text-align:center;
-  background:linear-gradient(180deg,var(--surface) 0%,var(--bg) 100%);
+.hero{padding:12px 24px 8px;text-align:center;
   border-bottom:1px solid var(--border-s);transition:background .3s}
-.hero h1{font-size:clamp(1.3rem,2.5vw,1.8rem);font-weight:700;letter-spacing:-.02em;margin-bottom:4px}
-.hero .sub{color:var(--t2);font-size:.82rem;max-width:640px;margin:0 auto}
-.legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:10px}
-.legend-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--t2)}
-.legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.hero h1{font-size:1.2rem;font-weight:700;letter-spacing:-.02em;margin-bottom:2px}
+.hero .sub{color:var(--t2);font-size:.75rem;max-width:640px;margin:0 auto;line-height:1.4}
+.legend{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+.legend-item{display:flex;align-items:center;gap:3px;font-size:10px;color:var(--t2)}
+.legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
 .theme-toggle{position:fixed;top:12px;right:16px;z-index:20;width:40px;height:40px;border-radius:50%;
   border:1px solid var(--border);background:var(--surface);color:var(--t1);cursor:pointer;font-size:18px;
   display:flex;align-items:center;justify-content:center;transition:all .2s}
 .theme-toggle:hover{background:var(--raised);transform:scale(1.1)}
-.tabs{display:flex;justify-content:center;gap:4px;padding:10px 24px;
+.tabs{display:flex;justify-content:center;gap:3px;padding:6px 24px;
   position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border-s);transition:background .3s}
-.tab{padding:6px 18px;border-radius:6px;border:1px solid transparent;
-  background:transparent;color:var(--t2);cursor:pointer;font-size:13px;font-weight:500;transition:all .2s}
+.tab{padding:4px 14px;border-radius:5px;border:1px solid transparent;
+  background:transparent;color:var(--t2);cursor:pointer;font-size:12px;font-weight:500;transition:all .2s}
 .tab:hover{color:var(--t1);background:var(--surface)}
 .tab.active{color:var(--t1);background:var(--blue-d);border-color:var(--blue-s)}
 .section{display:none;padding:16px 24px;max-width:1240px;margin:0 auto}
