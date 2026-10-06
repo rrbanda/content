@@ -607,24 +607,24 @@ g[data-flow]::after{content:''}
 
       <!-- Legend -->
       <g transform="translate(600,12)">
-        <rect x="0" y="0" width="10" height="10" rx="2" fill="#58a6ff"/><text x="14" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">HTTP parse</text>
-        <rect x="80" y="0" width="10" height="10" rx="2" fill="#3fb950"/><text x="94" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Sandbox init</text>
-        <rect x="160" y="0" width="10" height="10" rx="2" fill="#d29922"/><text x="174" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Context assembly</text>
-        <rect x="270" y="0" width="10" height="10" rx="2" fill="#bc8cff"/><text x="284" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">vLLM prefill</text>
-        <rect x="350" y="0" width="10" height="10" rx="2" fill="#f778ba"/><text x="364" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Response proc</text>
-        <rect x="445" y="0" width="10" height="10" rx="2" fill="#484f58"/><text x="459" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Token gen</text>
+        <rect x="0" y="0" width="10" height="10" rx="2" fill="var(--blue)"/><text x="14" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">HTTP parse</text>
+        <rect x="80" y="0" width="10" height="10" rx="2" fill="var(--green)"/><text x="94" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Sandbox init</text>
+        <rect x="160" y="0" width="10" height="10" rx="2" fill="var(--amber)"/><text x="174" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Context assembly</text>
+        <rect x="270" y="0" width="10" height="10" rx="2" fill="var(--purple)"/><text x="284" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">vLLM prefill</text>
+        <rect x="350" y="0" width="10" height="10" rx="2" fill="var(--pink)"/><text x="364" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Response proc</text>
+        <rect x="445" y="0" width="10" height="10" rx="2" fill="var(--neutral)"/><text x="459" y="9" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Token gen</text>
       </g>
 
       <!-- C=1 bar -->
       <text x="20" y="68" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">C=1 (1 agent)</text>
       <text x="1050" y="68" fill="var(--t2)" font-size="9" font-family="system-ui,sans-serif" text-anchor="end">5,814 ms E2E</text>
       <!-- Scale: 1000px = 12000ms, so 1px = 12ms -->
-      <rect x="20" y="74" width="3" height="28" rx="2" fill="#58a6ff"><title>HTTP parse: 37ms</title></rect>
-      <rect x="23" y="74" width="12" height="28" rx="2" fill="#3fb950"><title>Sandbox init: 140ms</title></rect>
-      <rect x="35" y="74" width="18" height="28" rx="2" fill="#d29922"><title>Context assembly: 219ms</title></rect>
-      <rect x="53" y="74" width="3" height="28" rx="2" fill="#bc8cff"><title>vLLM prefill: 41ms</title></rect>
-      <rect x="56" y="74" width="75" height="28" rx="2" fill="#f778ba"><title>Response processing: 895ms</title></rect>
-      <rect x="131" y="74" width="373" height="28" rx="2" fill="#484f58"><title>Token generation: 4,481ms</title></rect>
+      <rect x="20" y="74" width="3" height="28" rx="2" fill="var(--blue)"><title>HTTP parse: 37ms</title></rect>
+      <rect x="23" y="74" width="12" height="28" rx="2" fill="var(--green)"><title>Sandbox init: 140ms</title></rect>
+      <rect x="35" y="74" width="18" height="28" rx="2" fill="var(--amber)"><title>Context assembly: 219ms</title></rect>
+      <rect x="53" y="74" width="3" height="28" rx="2" fill="var(--purple)"><title>vLLM prefill: 41ms</title></rect>
+      <rect x="56" y="74" width="75" height="28" rx="2" fill="var(--pink)"><title>Response processing: 895ms</title></rect>
+      <rect x="131" y="74" width="373" height="28" rx="2" fill="var(--neutral)"><title>Token generation: 4,481ms</title></rect>
       <!-- labels on bar -->
       <text x="90" y="92" fill="#fff" font-size="7" font-family="system-ui,sans-serif" text-anchor="middle">895ms</text>
       <text x="317" y="92" fill="#fff" font-size="8" font-family="system-ui,sans-serif" text-anchor="middle">Token gen: 4,481ms</text>
@@ -632,24 +632,24 @@ g[data-flow]::after{content:''}
       <!-- C=5 bar -->
       <text x="20" y="126" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">C=5 (5 agents)</text>
       <text x="1050" y="126" fill="var(--t2)" font-size="9" font-family="system-ui,sans-serif" text-anchor="end">10,416 ms E2E</text>
-      <rect x="20" y="132" width="14" height="28" rx="2" fill="#58a6ff"><title>HTTP parse: 164ms</title></rect>
-      <rect x="34" y="132" width="43" height="28" rx="2" fill="#3fb950"><title>Sandbox init: 521ms</title></rect>
-      <rect x="77" y="132" width="30" height="28" rx="2" fill="#d29922"><title>Context assembly: 361ms</title></rect>
-      <rect x="107" y="132" width="6" height="28" rx="2" fill="#bc8cff"><title>vLLM prefill: 68ms</title></rect>
-      <rect x="113" y="132" width="211" height="28" rx="2" fill="#f778ba"><title>Response processing: 2,537ms</title></rect>
-      <rect x="324" y="132" width="607" height="28" rx="2" fill="#484f58"><title>Token generation: 7,286ms</title></rect>
+      <rect x="20" y="132" width="14" height="28" rx="2" fill="var(--blue)"><title>HTTP parse: 164ms</title></rect>
+      <rect x="34" y="132" width="43" height="28" rx="2" fill="var(--green)"><title>Sandbox init: 521ms</title></rect>
+      <rect x="77" y="132" width="30" height="28" rx="2" fill="var(--amber)"><title>Context assembly: 361ms</title></rect>
+      <rect x="107" y="132" width="6" height="28" rx="2" fill="var(--purple)"><title>vLLM prefill: 68ms</title></rect>
+      <rect x="113" y="132" width="211" height="28" rx="2" fill="var(--pink)"><title>Response processing: 2,537ms</title></rect>
+      <rect x="324" y="132" width="607" height="28" rx="2" fill="var(--neutral)"><title>Token generation: 7,286ms</title></rect>
       <text x="218" y="150" fill="#fff" font-size="7" font-family="system-ui,sans-serif" text-anchor="middle">Resp proc: 2,537ms</text>
       <text x="627" y="150" fill="#fff" font-size="8" font-family="system-ui,sans-serif" text-anchor="middle">Token gen: 7,286ms</text>
 
       <!-- C=10 bar -->
       <text x="20" y="184" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">C=10 (10 agents)</text>
       <text x="1050" y="184" fill="var(--t2)" font-size="9" font-family="system-ui,sans-serif" text-anchor="end">11,446 ms E2E</text>
-      <rect x="20" y="190" width="38" height="28" rx="2" fill="#58a6ff"><title>HTTP parse: 458ms</title></rect>
-      <rect x="58" y="190" width="46" height="28" rx="2" fill="#3fb950"><title>Sandbox init: 551ms</title></rect>
-      <rect x="104" y="190" width="29" height="28" rx="2" fill="#d29922"><title>Context assembly: 342ms</title></rect>
-      <rect x="133" y="190" width="5" height="28" rx="2" fill="#bc8cff"><title>vLLM prefill: 65ms</title></rect>
-      <rect x="138" y="190" width="134" height="28" rx="2" fill="#f778ba"><title>Response processing: 1,610ms</title></rect>
-      <rect x="272" y="190" width="747" height="28" rx="2" fill="#484f58"><title>Token generation: 8,971ms</title></rect>
+      <rect x="20" y="190" width="38" height="28" rx="2" fill="var(--blue)"><title>HTTP parse: 458ms</title></rect>
+      <rect x="58" y="190" width="46" height="28" rx="2" fill="var(--green)"><title>Sandbox init: 551ms</title></rect>
+      <rect x="104" y="190" width="29" height="28" rx="2" fill="var(--amber)"><title>Context assembly: 342ms</title></rect>
+      <rect x="133" y="190" width="5" height="28" rx="2" fill="var(--purple)"><title>vLLM prefill: 65ms</title></rect>
+      <rect x="138" y="190" width="134" height="28" rx="2" fill="var(--pink)"><title>Response processing: 1,610ms</title></rect>
+      <rect x="272" y="190" width="747" height="28" rx="2" fill="var(--neutral)"><title>Token generation: 8,971ms</title></rect>
       <text x="205" y="208" fill="#fff" font-size="7" font-family="system-ui,sans-serif" text-anchor="middle">1,610ms</text>
       <text x="645" y="208" fill="#fff" font-size="8" font-family="system-ui,sans-serif" text-anchor="middle">Token gen: 8,971ms</text>
 
@@ -1118,6 +1118,7 @@ function jInit(){
     g.classList.add('j-node');
     g.setAttribute('data-stage',String(i));
     g.addEventListener('click',()=>{jPause();jGoTo(i);});
+    g.setAttribute('aria-label','Stage '+(i+1)+': '+s.l+' — '+s.w+'. Click to pause and read details.');
 
     const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
     circle.classList.add('ring');
