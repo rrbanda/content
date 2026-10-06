@@ -1,103 +1,135 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Open Blueprint for Cloud-Native AI Agents</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0d1117;--surface:#161b22;--raised:#1c2128;--card:#21262d;
+
+/* ── Dark theme (default) ── */
+[data-theme="dark"]{
+  --bg:#0d1117;--surface:#161b22;--raised:#1c2128;
   --border:#30363d;--border-s:#21262d;
   --t1:#e6edf3;--t2:#8b949e;--t3:#6e7681;
   --blue:#58a6ff;--blue-d:#1f3046;--blue-s:#2d4a70;
-  --green:#3fb950;--green-d:#1a3028;--green-s:#1f4030;
-  --amber:#d29922;--amber-d:#342a1a;--amber-s:#4a3a1f;
-  --cyan:#39d2c0;--cyan-d:#1a3230;--cyan-s:#1f4a44;
+  --green:#3fb950;--green-d:#1a3028;
+  --amber:#d29922;--amber-d:#342a1a;
+  --cyan:#39d2c0;--cyan-d:#1a3230;
   --purple:#bc8cff;--purple-d:#2a1f3d;
   --pink:#f778ba;--pink-d:#3d1f2e;
   --neutral:#484f58;--neutral-d:#1c2128;
-  --radius:8px;--radius-sm:5px;
+  --radius:8px;
+  --sc:var(--blue-d);--ss:var(--blue);/* control fills */
+  --ec:var(--green-d);--es:var(--green);/* exec fills */
+  --kc:var(--amber-d);--ks:var(--amber);/* skill fills */
+  --ic:var(--cyan-d);--is:var(--cyan);/* infer fills */
+  --pc:var(--purple-d);--ps:var(--purple);
+  --xc:var(--pink-d);--xs:var(--pink);
+  --nc:var(--neutral-d);--ns:var(--neutral);
+  --band:#1c2128;--band-s:#30363d;--card-svg:#161b22;
 }
+/* ── Light theme ── */
+[data-theme="light"]{
+  --bg:#ffffff;--surface:#f6f8fa;--raised:#f0f2f5;
+  --border:#d1d9e0;--border-s:#e1e4e8;
+  --t1:#1f2328;--t2:#59636e;--t3:#818b98;
+  --blue:#0969da;--blue-d:#ddf4ff;--blue-s:#a8d4f5;
+  --green:#1a7f37;--green-d:#dafbe1;
+  --amber:#9a6700;--amber-d:#fff8c5;
+  --cyan:#0e7c6b;--cyan-d:#d2f9f0;
+  --purple:#8250df;--purple-d:#eddeff;
+  --pink:#bf3989;--pink-d:#ffdef2;
+  --neutral:#59636e;--neutral-d:#f0f2f5;
+  --radius:8px;
+  --sc:var(--blue-d);--ss:var(--blue);
+  --ec:var(--green-d);--es:var(--green);
+  --kc:var(--amber-d);--ks:var(--amber);
+  --ic:var(--cyan-d);--is:var(--cyan);
+  --pc:var(--purple-d);--ps:var(--purple);
+  --xc:var(--pink-d);--xs:var(--pink);
+  --nc:var(--neutral-d);--ns:var(--neutral);
+  --band:var(--raised);--band-s:var(--border);--card-svg:#ffffff;
+}
+@media(prefers-color-scheme:light){html:not([data-theme="dark"]){
+  --bg:#ffffff;--surface:#f6f8fa;--raised:#f0f2f5;
+  --border:#d1d9e0;--border-s:#e1e4e8;
+  --t1:#1f2328;--t2:#59636e;--t3:#818b98;
+  --blue:#0969da;--blue-d:#ddf4ff;--blue-s:#a8d4f5;
+  --green:#1a7f37;--green-d:#dafbe1;
+  --amber:#9a6700;--amber-d:#fff8c5;
+  --cyan:#0e7c6b;--cyan-d:#d2f9f0;
+  --purple:#8250df;--purple-d:#eddeff;
+  --pink:#bf3989;--pink-d:#ffdef2;
+  --neutral:#59636e;--neutral-d:#f0f2f5;
+  --sc:var(--blue-d);--ss:var(--blue);--ec:var(--green-d);--es:var(--green);
+  --kc:var(--amber-d);--ks:var(--amber);--ic:var(--cyan-d);--is:var(--cyan);
+  --pc:var(--purple-d);--ps:var(--purple);--xc:var(--pink-d);--xs:var(--pink);
+  --nc:var(--neutral-d);--ns:var(--neutral);
+  --band:var(--raised);--band-s:var(--border);--card-svg:#ffffff;
+}}
 html{scroll-behavior:smooth}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
-  background:var(--bg);color:var(--t1);line-height:1.6;overflow-x:hidden}
-
-/* ── Header ───────────────────────────────────────────── */
+  background:var(--bg);color:var(--t1);line-height:1.6;overflow-x:hidden;transition:background .3s,color .3s}
 .hero{padding:48px 24px 32px;text-align:center;
-  background:linear-gradient(180deg,#161b2280 0%,var(--bg) 100%);
-  border-bottom:1px solid var(--border-s)}
+  background:linear-gradient(180deg,var(--surface) 0%,var(--bg) 100%);
+  border-bottom:1px solid var(--border-s);transition:background .3s}
 .hero h1{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
 .hero .sub{color:var(--t2);font-size:clamp(.85rem,1.5vw,1.05rem);max-width:720px;margin:0 auto}
 .legend{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:20px}
 .legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t2)}
 .legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
-
-/* ── Tabs ─────────────────────────────────────────────── */
+.theme-toggle{position:fixed;top:12px;right:16px;z-index:20;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);background:var(--surface);color:var(--t1);cursor:pointer;font-size:18px;
+  display:flex;align-items:center;justify-content:center;transition:all .2s}
+.theme-toggle:hover{background:var(--raised);transform:scale(1.1)}
 .tabs{display:flex;justify-content:center;gap:4px;padding:16px 24px;
-  position:sticky;top:0;z-index:10;
-  background:var(--bg);border-bottom:1px solid var(--border-s)}
+  position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border-s);transition:background .3s}
 .tab{padding:8px 20px;border-radius:6px;border:1px solid transparent;
-  background:transparent;color:var(--t2);cursor:pointer;font-size:14px;
-  font-weight:500;transition:all .2s}
+  background:transparent;color:var(--t2);cursor:pointer;font-size:14px;font-weight:500;transition:all .2s}
 .tab:hover{color:var(--t1);background:var(--surface)}
 .tab.active{color:var(--t1);background:var(--blue-d);border-color:var(--blue-s)}
-
-/* ── Sections ─────────────────────────────────────────── */
 .section{display:none;padding:24px;max-width:1240px;margin:0 auto}
 .section.active{display:block;animation:fadeIn .3s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .section h2{font-size:1.3rem;font-weight:600;margin-bottom:6px}
 .section .desc{color:var(--t2);font-size:.9rem;margin-bottom:20px;max-width:800px}
-
-/* ── Diagram container ────────────────────────────────── */
-.diagram-wrap{border-radius:var(--radius);border:1px solid var(--border);
-  background:var(--surface);overflow-x:auto;padding:16px;
-  background-image:radial-gradient(circle,#30363d33 1px,transparent 1px);
-  background-size:24px 24px}
+.diagram-wrap{border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);
+  overflow-x:auto;padding:16px;background-image:radial-gradient(circle,var(--border)22 1px,transparent 1px);
+  background-size:24px 24px;transition:all .3s}
 .diagram-wrap svg{display:block;margin:0 auto}
-
-/* ── SVG hover effects ────────────────────────────────── */
-.box{transition:filter .15s,opacity .15s}
-.box:hover{filter:brightness(1.25);cursor:default}
-.box text{pointer-events:none}
-
-/* ── Info cards below diagrams ────────────────────────── */
+.box{transition:filter .15s}.box:hover{filter:brightness(1.15);cursor:default}.box text{pointer-events:none}
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:20px}
-.info-card{background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.info-card{background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);padding:16px;transition:all .3s}
 .info-card h3{font-size:.85rem;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:6px}
 .info-card p{font-size:.8rem;color:var(--t2);line-height:1.5}
 .info-card .dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
-
-/* ── Footer ───────────────────────────────────────────── */
-footer{text-align:center;padding:32px 24px;color:var(--t3);font-size:12px;
-  border-top:1px solid var(--border-s);margin-top:40px}
-footer a{color:var(--blue);text-decoration:none}
-footer a:hover{text-decoration:underline}
-
-/* ── Responsive ───────────────────────────────────────── */
-@media(max-width:768px){
-  .tabs{flex-wrap:wrap}.tab{font-size:12px;padding:6px 14px}
-  .hero h1{font-size:1.3rem}
-}
+/* ── Example callout ── */
+.example{background:var(--raised);border:1px solid var(--border);border-left:3px solid var(--cyan);
+  border-radius:var(--radius);padding:16px;margin:16px 0;transition:all .3s}
+.example h3{font-size:.9rem;font-weight:600;color:var(--cyan);margin-bottom:6px}
+.example p,.example li{font-size:.83rem;color:var(--t2);line-height:1.55}
+.example ul{margin:6px 0 0 18px}.example li{margin-bottom:3px}
+.example strong{color:var(--t1);font-weight:600}
+footer{text-align:center;padding:32px 24px;color:var(--t3);font-size:12px;border-top:1px solid var(--border-s);margin-top:40px;transition:all .3s}
+footer a{color:var(--blue);text-decoration:none}footer a:hover{text-decoration:underline}
+@media(max-width:768px){.tabs{flex-wrap:wrap}.tab{font-size:12px;padding:6px 14px}.hero h1{font-size:1.3rem}}
 </style>
 </head>
 <body>
+<button class="theme-toggle" id="themeBtn" title="Toggle light/dark mode">☀️</button>
 
-<!-- ═══════════ HEADER ═══════════ -->
 <div class="hero">
   <h1>Open Blueprint for Cloud-Native AI Agents</h1>
   <p class="sub">Architecture reference for operating autonomous agents as governed cloud-native workloads. Three views — full blueprint, security deep dive, and inference routing — each backed by open interfaces.</p>
   <div class="legend">
     <span class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>Control / security plane</span>
-    <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>Execution (agent &middot; model &middot; backends)</span>
-    <span class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span>Agent skills</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>Execution</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span>Skills (instructions)</span>
     <span class="legend-item"><span class="legend-dot" style="background:var(--cyan)"></span>Inference plane</span>
     <span class="legend-item"><span class="legend-dot" style="background:var(--neutral)"></span>Platform / external</span>
   </div>
 </div>
-
-<!-- ═══════════ TABS ═══════════ -->
 <nav class="tabs" role="tablist">
   <button class="tab active" data-tab="blueprint" role="tab">Full Blueprint</button>
   <button class="tab" data-tab="security" role="tab">Security Rings</button>
@@ -107,444 +139,384 @@ footer a:hover{text-decoration:underline}
 <!-- ═══════════ FULL BLUEPRINT ═══════════ -->
 <section class="section active" id="blueprint">
   <h2>Solution Architecture</h2>
-  <p class="desc">Three horizontal bands — control, execution, platform — with the MCP Gateway as the checkpoint between them. Every component is a role that several implementations can fill; the architecture stands on open interfaces.</p>
+  <p class="desc">Three horizontal bands — control, execution, platform — with the MCP Gateway as the checkpoint between them. Every component is a role that several implementations can fill.</p>
+
+  <div class="example">
+    <h3>Concrete example — 5G Core Health Agent</h3>
+    <p>A network health agent demonstrates the three nouns that the architecture keeps separate:</p>
+    <ul>
+      <li><strong>Skill</strong> (instruction file) — a triage runbook telling the agent when and how to call tools. Loaded by the harness. No compute of its own.</li>
+      <li><strong>MCP server</strong> (tool endpoint) — a Data-Mesh-Map Builder that advertises schemas for correlating logs, traces, and metrics per CNF. This is what the MCP Gateway fronts and claims-checks.</li>
+      <li><strong>Service backend</strong> (compute) — the actual query engine, running on GPU or CPU, that the MCP server sits in front of. Three things, three lifecycles, three enforcement points.</li>
+    </ul>
+  </div>
+
   <div class="diagram-wrap">
-    <svg viewBox="0 0 1180 660" width="100%" style="min-width:900px" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="a1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#6e7681"/></marker>
-        <marker id="a1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#58a6ff"/></marker>
-      </defs>
+    <svg viewBox="0 0 1180 690" width="100%" style="min-width:900px" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="a1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--t3)"/></marker></defs>
 
-      <!-- ── CONTROL BAND ── -->
-      <g class="box"><rect x="16" y="10" width="268" height="52" rx="5" fill="#1f3046" stroke="#58a6ff" stroke-width="1"/>
-        <rect x="16" y="10" width="3" height="52" rx="1" fill="#58a6ff"/>
-        <text x="150" y="30" text-anchor="middle" fill="#e6edf3" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Agent Blueprint / GitOps</text>
-        <text x="150" y="45" text-anchor="middle" fill="#8b949e" font-size="8.5" font-family="system-ui,sans-serif">Agent deployments · Helm · NemoClaw</text>
-      </g>
-      <g class="box"><rect x="300" y="10" width="268" height="52" rx="5" fill="#1f3046" stroke="#58a6ff" stroke-width="1"/>
-        <rect x="300" y="10" width="3" height="52" rx="1" fill="#58a6ff"/>
-        <text x="434" y="30" text-anchor="middle" fill="#e6edf3" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Sandbox Control Plane</text>
-        <text x="434" y="45" text-anchor="middle" fill="#8b949e" font-size="8.5" font-family="system-ui,sans-serif">OpenShell Gateway</text>
-      </g>
-      <g class="box"><rect x="584" y="10" width="268" height="52" rx="5" fill="#1f3046" stroke="#58a6ff" stroke-width="1"/>
-        <rect x="584" y="10" width="3" height="52" rx="1" fill="#58a6ff"/>
-        <text x="718" y="30" text-anchor="middle" fill="#e6edf3" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Sandbox CRD + Controller</text>
-        <text x="718" y="45" text-anchor="middle" fill="#8b949e" font-size="8.5" font-family="system-ui,sans-serif">K8s agent-sandbox SIG</text>
-      </g>
-      <g class="box"><rect x="868" y="10" width="268" height="52" rx="5" fill="#1f3046" stroke="#58a6ff" stroke-width="1"/>
-        <rect x="868" y="10" width="3" height="52" rx="1" fill="#58a6ff"/>
-        <text x="1002" y="30" text-anchor="middle" fill="#e6edf3" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Workload Identity</text>
-        <text x="1002" y="45" text-anchor="middle" fill="#8b949e" font-size="8.5" font-family="system-ui,sans-serif">SPIFFE / SPIRE · JWT-SVID</text>
-      </g>
+      <!-- CONTROL BAND -->
+      <g class="box"><rect x="16" y="10" width="268" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="16" y="10" width="3" height="52" rx="1" fill="var(--ss)"/>
+        <text x="150" y="30" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Agent Blueprint / GitOps</text>
+        <text x="150" y="45" text-anchor="middle" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Agent deployments · Helm · NemoClaw</text></g>
+      <g class="box"><rect x="300" y="10" width="268" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="300" y="10" width="3" height="52" rx="1" fill="var(--ss)"/>
+        <text x="434" y="30" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Sandbox Control Plane</text>
+        <text x="434" y="45" text-anchor="middle" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">OpenShell Gateway</text></g>
+      <g class="box"><rect x="584" y="10" width="268" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="584" y="10" width="3" height="52" rx="1" fill="var(--ss)"/>
+        <text x="718" y="30" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Sandbox CRD + Controller</text>
+        <text x="718" y="45" text-anchor="middle" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">K8s agent-sandbox SIG</text></g>
+      <g class="box"><rect x="868" y="10" width="268" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="868" y="10" width="3" height="52" rx="1" fill="var(--ss)"/>
+        <text x="1002" y="30" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Workload Identity</text>
+        <text x="1002" y="45" text-anchor="middle" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">SPIFFE / SPIRE · JWT-SVID</text></g>
 
-      <!-- ── Control arrows ── -->
-      <line x1="434" y1="62" x2="434" y2="88" stroke="#6e7681" stroke-width="1" marker-end="url(#a1)"/>
-      <text x="438" y="80" fill="#6e7681" font-size="7" font-family="system-ui,sans-serif">policy sync (mTLS)</text>
-      <line x1="680" y1="62" x2="560" y2="88" stroke="#6e7681" stroke-width="1" marker-end="url(#a1)"/>
-      <text x="608" y="78" fill="#6e7681" font-size="7" font-family="system-ui,sans-serif">1 Pod per Sandbox CR</text>
-      <line x1="1002" y1="62" x2="880" y2="88" stroke="#6e7681" stroke-width="1" marker-end="url(#a1)"/>
-      <text x="938" y="78" fill="#6e7681" font-size="7" font-family="system-ui,sans-serif">issues SVIDs</text>
+      <!-- Control arrows -->
+      <line x1="434" y1="62" x2="434" y2="88" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
+      <text x="438" y="80" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">policy sync (mTLS)</text>
+      <line x1="680" y1="62" x2="560" y2="88" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
+      <text x="608" y="78" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">1 Pod per Sandbox CR</text>
+      <line x1="1002" y1="62" x2="880" y2="88" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
+      <text x="938" y="78" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">issues SVIDs</text>
 
-      <!-- ── SKILL BACKENDS (left) ── -->
-      <text x="20" y="102" fill="#8b949e" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Skill backends</text>
-      <text x="120" y="102" fill="#6e7681" font-size="8" font-family="system-ui,sans-serif">location-agnostic services</text>
-      <g class="box"><rect x="16" y="110" width="210" height="52" rx="5" fill="#1c2128" stroke="#484f58" stroke-width="1"/>
-        <text x="121" y="130" text-anchor="middle" fill="#e6edf3" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Optimization service</text>
-        <text x="121" y="143" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">cuOpt · OR-Tools · HiGHS</text>
-        <text x="121" y="154" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">REST: pattern 2</text>
-      </g>
-      <g class="box"><rect x="16" y="170" width="210" height="52" rx="5" fill="#1c2128" stroke="#484f58" stroke-width="1"/>
-        <text x="121" y="190" text-anchor="middle" fill="#e6edf3" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Domain AI services</text>
-        <text x="121" y="203" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">retrieval · embedding · RAG svc</text>
-        <text x="121" y="214" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">REST / gRPC: pattern 2</text>
-      </g>
-      <g class="box"><rect x="16" y="230" width="210" height="52" rx="5" fill="#1c2128" stroke="#484f58" stroke-width="1"/>
-        <text x="121" y="250" text-anchor="middle" fill="#e6edf3" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Batch compute jobs</text>
-        <text x="121" y="263" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">PhysicsNeMo · JAX · Slurm</text>
-        <text x="121" y="274" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">Job API: pattern 3</text>
-      </g>
-      <text x="20" y="300" fill="#6e7681" font-size="7.5" font-style="italic" font-family="system-ui,sans-serif">tools reached via MCP Gateway +</text>
-      <text x="20" y="310" fill="#6e7681" font-size="7.5" font-style="italic" font-family="system-ui,sans-serif">per-endpoint egress policy</text>
+      <!-- LEFT COLUMN: three-layer tool stack -->
+      <text x="20" y="102" fill="var(--t2)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Tool stack (three layers)</text>
 
-      <!-- ── AGENT POD (center) ── -->
-      <rect x="244" y="90" width="440" height="335" rx="6" fill="none" stroke="#3fb950" stroke-width="1.5" stroke-dasharray="5 3"/>
-      <text x="254" y="104" fill="#3fb950" font-size="9.5" font-weight="700" font-family="system-ui,sans-serif">Agent Pod: one per Sandbox CR</text>
-      <text x="540" y="104" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">PSS/SCC · SELinux · kata (optional)</text>
+      <g class="box"><rect x="16" y="112" width="210" height="42" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="121" y="130" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">MCP servers (tools)</text>
+        <text x="121" y="143" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">callable endpoints with advertised schemas</text></g>
 
-      <g class="box"><rect x="254" y="112" width="205" height="56" rx="5" fill="#1a3028" stroke="#3fb950" stroke-width="1"/>
-        <text x="356" y="132" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Harness</text>
-        <text x="356" y="145" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">OpenClaw · Hermes · LangGraph</text>
-        <text x="356" y="157" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">Deep Agents · custom · reason→act→observe</text>
-      </g>
-      <g class="box"><rect x="469" y="112" width="205" height="56" rx="5" fill="#1a3028" stroke="#3fb950" stroke-width="1"/>
-        <text x="571" y="132" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Sandbox Supervisor</text>
-        <text x="571" y="145" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">OpenShell (PID 1) · egress proxy</text>
-        <text x="571" y="157" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">Tier-1 route · PII guard · credential injection</text>
-      </g>
+      <line x1="121" y1="154" x2="121" y2="164" stroke="var(--t3)" stroke-width=".8" marker-end="url(#a1)"/>
+      <text x="131" y="162" fill="var(--t3)" font-size="6.5" font-family="system-ui,sans-serif">fronts</text>
 
-      <!-- tool calls arrow -->
-      <line x1="356" y1="168" x2="356" y2="190" stroke="#6e7681" stroke-width="1" marker-end="url(#a1)"/>
-      <text x="362" y="183" fill="#6e7681" font-size="7" font-family="system-ui,sans-serif">tool calls</text>
+      <g class="box"><rect x="16" y="166" width="210" height="50" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="121" y="184" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Service backends (compute)</text>
+        <text x="121" y="196" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">Optimization · DataFrames · Physics sim</text>
+        <text x="121" y="208" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">GPU or CPU, any cluster, or SaaS</text></g>
 
-      <!-- skills section -->
-      <text x="254" y="202" fill="#d29922" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Agent skills: thin clients</text>
-      <text x="400" y="202" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">portable defs · no GPU in pod</text>
+      <g class="box"><rect x="16" y="228" width="210" height="42" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="121" y="245" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Batch jobs</text>
+        <text x="121" y="258" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">K8s Job API · Slurm · scoped RBAC</text></g>
 
-      <g class="box"><rect x="254" y="210" width="133" height="36" rx="4" fill="#342a1a" stroke="#d29922" stroke-width=".8"/>
-        <text x="320" y="226" text-anchor="middle" fill="#e6edf3" font-size="9" font-weight="600" font-family="system-ui,sans-serif">DataFrames</text>
-        <text x="320" y="238" text-anchor="middle" fill="#8b949e" font-size="7.5" font-family="system-ui,sans-serif">cuDF · Polars · DuckDB</text>
-      </g>
-      <g class="box"><rect x="393" y="210" width="133" height="36" rx="4" fill="#342a1a" stroke="#d29922" stroke-width=".8"/>
-        <text x="459" y="226" text-anchor="middle" fill="#e6edf3" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Optimization</text>
-        <text x="459" y="238" text-anchor="middle" fill="#8b949e" font-size="7.5" font-family="system-ui,sans-serif">cuOpt · OR-Tools</text>
-      </g>
-      <g class="box"><rect x="532" y="210" width="142" height="36" rx="4" fill="#342a1a" stroke="#d29922" stroke-width=".8"/>
-        <text x="603" y="226" text-anchor="middle" fill="#e6edf3" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Research / RAG</text>
-        <text x="603" y="238" text-anchor="middle" fill="#8b949e" font-size="7.5" font-family="system-ui,sans-serif">AI-Q · custom</text>
-      </g>
-      <g class="box"><rect x="254" y="252" width="133" height="36" rx="4" fill="#342a1a" stroke="#d29922" stroke-width=".8"/>
-        <text x="320" y="268" text-anchor="middle" fill="#e6edf3" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Model ops</text>
-        <text x="320" y="280" text-anchor="middle" fill="#8b949e" font-size="7.5" font-family="system-ui,sans-serif">NeMo · TRL · Axolotl</text>
-      </g>
-      <g class="box"><rect x="393" y="252" width="133" height="36" rx="4" fill="#342a1a" stroke="#d29922" stroke-width=".8"/>
-        <text x="459" y="268" text-anchor="middle" fill="#e6edf3" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Physics sim</text>
-        <text x="459" y="280" text-anchor="middle" fill="#8b949e" font-size="7.5" font-family="system-ui,sans-serif">PhysicsNeMo · JAX</text>
-      </g>
-      <g class="box"><rect x="532" y="252" width="142" height="36" rx="4" fill="#342a1a" stroke="#d29922" stroke-width=".8"/>
-        <text x="603" y="268" text-anchor="middle" fill="#e6edf3" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Quantum</text>
-        <text x="603" y="280" text-anchor="middle" fill="#8b949e" font-size="7.5" font-family="system-ui,sans-serif">CUDA-Q · Qiskit</text>
-      </g>
-      <text x="254" y="304" fill="#6e7681" font-size="7" font-style="italic" font-family="system-ui,sans-serif">pattern 1: in-pod exec only with explicit GPU request</text>
+      <text x="20" y="286" fill="var(--t3)" font-size="7" font-style="italic" font-family="system-ui,sans-serif">MCP Gateway fronts backends the model selects</text>
+      <text x="20" y="296" fill="var(--t3)" font-size="7" font-style="italic" font-family="system-ui,sans-serif">at runtime. Platform-invoked backends (inference,</text>
+      <text x="20" y="306" fill="var(--t3)" font-size="7" font-style="italic" font-family="system-ui,sans-serif">batch) carry their own admission control.</text>
+      <text x="20" y="318" fill="var(--t3)" font-size="7" font-style="italic" font-family="system-ui,sans-serif">All paths land in the same trace.</text>
 
-      <!-- credential injection callout -->
-      <rect x="254" y="314" width="420" height="20" rx="3" fill="#2a1f3d" stroke="#bc8cff" stroke-width=".5"/>
-      <text x="464" y="328" text-anchor="middle" fill="#bc8cff" font-size="7.5" font-family="system-ui,sans-serif">Credential flow: agent sees placeholders — supervisor proxy injects real keys at egress only for allowed endpoints</text>
+      <!-- AGENT POD (center) -->
+      <rect x="244" y="90" width="440" height="340" rx="6" fill="none" stroke="var(--es)" stroke-width="1.5" stroke-dasharray="5 3"/>
+      <text x="254" y="104" fill="var(--es)" font-size="9.5" font-weight="700" font-family="system-ui,sans-serif">Agent Pod: one per Sandbox CR</text>
+      <text x="540" y="104" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">PSS/SCC · SELinux · kata (optional)</text>
+
+      <g class="box"><rect x="254" y="112" width="205" height="56" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
+        <text x="356" y="132" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Harness</text>
+        <text x="356" y="145" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">OpenClaw · Hermes · LangGraph</text>
+        <text x="356" y="157" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Deep Agents · custom · reason→act→observe</text></g>
+      <g class="box"><rect x="469" y="112" width="205" height="56" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
+        <text x="571" y="132" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Sandbox Supervisor</text>
+        <text x="571" y="145" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">OpenShell (PID 1) · egress proxy</text>
+        <text x="571" y="157" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Tier-1 route · PII guard · credential injection</text></g>
+
+      <line x1="356" y1="168" x2="356" y2="188" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
+      <text x="362" y="182" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">loads skills</text>
+
+      <!-- Skills section — clearly labeled as instruction files -->
+      <text x="254" y="200" fill="var(--ks)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Skills: instruction files + schema bindings</text>
+      <text x="480" y="200" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">no compute — loaded by the harness</text>
+
+      <g class="box"><rect x="254" y="208" width="133" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+        <text x="320" y="224" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Triage runbook</text>
+        <text x="320" y="236" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">when to call which tool</text></g>
+      <g class="box"><rect x="393" y="208" width="133" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+        <text x="459" y="224" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Data pipeline</text>
+        <text x="459" y="236" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">ETL orchestration steps</text></g>
+      <g class="box"><rect x="532" y="208" width="142" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+        <text x="603" y="224" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Research plan</text>
+        <text x="603" y="236" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">retrieval + synthesis flow</text></g>
+      <g class="box"><rect x="254" y="250" width="133" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+        <text x="320" y="266" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Model ops</text>
+        <text x="320" y="278" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">fine-tuning workflow</text></g>
+      <g class="box"><rect x="393" y="250" width="133" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+        <text x="459" y="266" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Optimization</text>
+        <text x="459" y="278" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">objective + constraints</text></g>
+      <g class="box"><rect x="532" y="250" width="142" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+        <text x="603" y="266" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Simulation</text>
+        <text x="603" y="278" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">physics / quantum setup</text></g>
+
+      <text x="254" y="302" fill="var(--t3)" font-size="7" font-style="italic" font-family="system-ui,sans-serif">Skills tell the harness what to call. MCP servers are the callable endpoints. Backends are the compute behind them.</text>
+
+      <!-- Credential injection callout -->
+      <rect x="254" y="312" width="420" height="20" rx="3" fill="var(--pc)" stroke="var(--ps)" stroke-width=".5"/>
+      <text x="464" y="326" text-anchor="middle" fill="var(--ps)" font-size="7.5" font-family="system-ui,sans-serif">Credential flow: agent sees placeholders — supervisor proxy injects real keys at egress only for allowed endpoints</text>
 
       <!-- AaaS note -->
-      <rect x="254" y="340" width="420" height="18" rx="3" fill="#1a3230" stroke="#39d2c0" stroke-width=".5" stroke-dasharray="3 2"/>
-      <text x="464" y="352" text-anchor="middle" fill="#39d2c0" font-size="7.5" font-family="system-ui,sans-serif">Agent-as-a-Service alternative: OGX Responses API — server-side loop, shared runtime behind standard API</text>
+      <rect x="254" y="338" width="420" height="18" rx="3" fill="var(--ic)" stroke="var(--is)" stroke-width=".5" stroke-dasharray="3 2"/>
+      <text x="464" y="350" text-anchor="middle" fill="var(--is)" font-size="7.5" font-family="system-ui,sans-serif">Agent-as-a-Service alternative: OGX Responses API — server-side loop, shared runtime behind standard API</text>
 
-      <!-- pattern 1 note in pod bottom -->
-      <rect x="254" y="364" width="420" height="18" rx="3" fill="none" stroke="#484f58" stroke-width=".5" stroke-dasharray="2 2"/>
-      <text x="464" y="376" text-anchor="middle" fill="#6e7681" font-size="7" font-family="system-ui,sans-serif">Across every layer: tracing and audit with MLflow, OpenTelemetry, and OCSF v1.8.0 structured security events</text>
+      <!-- Trace note -->
+      <rect x="254" y="362" width="420" height="18" rx="3" fill="none" stroke="var(--ns)" stroke-width=".5" stroke-dasharray="2 2"/>
+      <text x="464" y="374" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">Across every layer: tracing and audit with MLflow, OpenTelemetry, and OCSF v1.8.0 structured security events</text>
 
-      <!-- ── INFERENCE PLANE (right) ── -->
-      <!-- Arrows from pod to inference -->
-      <line x1="674" y1="140" x2="698" y2="124" stroke="#6e7681" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#a1)"/>
-      <text x="684" y="120" fill="#6e7681" font-size="6.5" font-family="system-ui,sans-serif">external (PII-masked)</text>
-      <line x1="674" y1="150" x2="698" y2="170" stroke="#6e7681" stroke-width="1" marker-end="url(#a1)"/>
-      <text x="684" y="168" fill="#6e7681" font-size="6.5" font-family="system-ui,sans-serif">in-cluster (private)</text>
+      <!-- INFERENCE PLANE (right) -->
+      <line x1="674" y1="140" x2="698" y2="124" stroke="var(--t3)" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#a1)"/>
+      <text x="684" y="120" fill="var(--t3)" font-size="6.5" font-family="system-ui,sans-serif">external (PII-masked)</text>
+      <line x1="674" y1="150" x2="698" y2="170" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
+      <text x="684" y="168" fill="var(--t3)" font-size="6.5" font-family="system-ui,sans-serif">in-cluster (private)</text>
 
-      <g class="box"><rect x="702" y="108" width="225" height="48" rx="5" fill="#1a3230" stroke="#39d2c0" stroke-width="1"/>
-        <rect x="702" y="108" width="3" height="48" rx="1" fill="#39d2c0"/>
-        <text x="814" y="128" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600" font-family="system-ui,sans-serif">AI Gateway (MaaS)</text>
-        <text x="814" y="141" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">OpenResponses · OGX</text>
-        <text x="814" y="151" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">auth · quota · guardrails</text>
-      </g>
-      <g class="box"><rect x="938" y="108" width="210" height="48" rx="5" fill="#1c2128" stroke="#484f58" stroke-width="1"/>
-        <text x="1043" y="128" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600" font-family="system-ui,sans-serif">External LLM (optional)</text>
-        <text x="1043" y="142" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">disguised queries only</text>
-      </g>
+      <g class="box"><rect x="702" y="108" width="225" height="48" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="108" width="3" height="48" rx="1" fill="var(--is)"/>
+        <text x="814" y="128" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">AI Gateway (MaaS)</text>
+        <text x="814" y="141" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">OpenResponses · OGX</text>
+        <text x="814" y="151" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">auth · quota · guardrails</text></g>
+      <g class="box"><rect x="938" y="108" width="210" height="48" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="1043" y="128" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">External LLM (optional)</text>
+        <text x="1043" y="142" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">disguised queries only</text></g>
 
-      <line x1="814" y1="156" x2="814" y2="164" stroke="#6e7681" stroke-width=".8" marker-end="url(#a1)"/>
-      <g class="box"><rect x="702" y="166" width="225" height="44" rx="5" fill="#1a3230" stroke="#39d2c0" stroke-width="1"/>
-        <rect x="702" y="166" width="3" height="44" rx="1" fill="#39d2c0"/>
-        <text x="814" y="184" text-anchor="middle" fill="#e6edf3" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Semantic routing</text>
-        <text x="814" y="196" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">vLLM Semantic Router · Red Hat AI gateway</text>
-        <text x="814" y="206" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">Tier 2: which model?</text>
-      </g>
-      <g class="box"><rect x="938" y="166" width="210" height="44" rx="5" fill="#1a3230" stroke="#39d2c0" stroke-width="1"/>
-        <rect x="938" y="166" width="3" height="44" rx="1" fill="#39d2c0"/>
-        <text x="1043" y="184" text-anchor="middle" fill="#e6edf3" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Inference Scheduler</text>
-        <text x="1043" y="196" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">llm-d EPP · Gateway API</text>
-        <text x="1043" y="206" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">Tier 3: which replica?</text>
-      </g>
+      <line x1="814" y1="156" x2="814" y2="164" stroke="var(--t3)" stroke-width=".8" marker-end="url(#a1)"/>
+      <g class="box"><rect x="702" y="166" width="225" height="44" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="166" width="3" height="44" rx="1" fill="var(--is)"/>
+        <text x="814" y="184" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Semantic routing</text>
+        <text x="814" y="196" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">vLLM Semantic Router · Red Hat AI gateway</text>
+        <text x="814" y="206" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Tier 2: which model?</text></g>
+      <g class="box"><rect x="938" y="166" width="210" height="44" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="938" y="166" width="3" height="44" rx="1" fill="var(--is)"/>
+        <text x="1043" y="184" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Inference Scheduler</text>
+        <text x="1043" y="196" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">llm-d EPP · Gateway API</text>
+        <text x="1043" y="206" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Tier 3: which replica?</text></g>
 
-      <line x1="814" y1="210" x2="814" y2="220" stroke="#6e7681" stroke-width=".8" marker-end="url(#a1)"/>
-      <g class="box"><rect x="702" y="222" width="225" height="46" rx="5" fill="#1a3230" stroke="#39d2c0" stroke-width="1"/>
-        <rect x="702" y="222" width="3" height="46" rx="1" fill="#39d2c0"/>
-        <text x="814" y="240" text-anchor="middle" fill="#e6edf3" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Model Workers</text>
-        <text x="814" y="253" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">NIM / TensorRT-LLM · vLLM: any accelerator</text>
-        <text x="814" y="264" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">Nemotron · Llama · DeepSeek</text>
-      </g>
+      <line x1="814" y1="210" x2="814" y2="220" stroke="var(--t3)" stroke-width=".8" marker-end="url(#a1)"/>
+      <g class="box"><rect x="702" y="222" width="225" height="46" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="222" width="3" height="46" rx="1" fill="var(--is)"/>
+        <text x="814" y="240" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Model Workers</text>
+        <text x="814" y="253" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">NIM / TensorRT-LLM · vLLM: any accelerator</text>
+        <text x="814" y="264" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Nemotron · Llama · DeepSeek</text></g>
 
-      <g class="box"><rect x="702" y="278" width="225" height="40" rx="5" fill="#2a1f3d" stroke="#bc8cff" stroke-width="1"/>
-        <rect x="702" y="278" width="3" height="40" rx="1" fill="#bc8cff"/>
-        <text x="814" y="295" text-anchor="middle" fill="#e6edf3" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Inference Guardrails</text>
-        <text x="814" y="308" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">TrustyAI · NeMo Guardrails · input/output screening</text>
-      </g>
+      <g class="box"><rect x="702" y="278" width="225" height="40" rx="5" fill="var(--pc)" stroke="var(--ps)" stroke-width="1"/><rect x="702" y="278" width="3" height="40" rx="1" fill="var(--ps)"/>
+        <text x="814" y="295" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Inference Guardrails</text>
+        <text x="814" y="308" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">TrustyAI · NeMo Guardrails · input/output screening</text></g>
 
-      <g class="box"><rect x="938" y="222" width="210" height="52" rx="5" fill="#1c2128" stroke="#484f58" stroke-width="1"/>
-        <text x="1043" y="242" text-anchor="middle" fill="#e6edf3" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Audit &amp; Tracing</text>
-        <text x="1043" y="256" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">MLflow · OpenTelemetry · OCSF</text>
-        <text x="1043" y="268" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">end-to-end traces + security events</text>
-      </g>
-      <g class="box"><rect x="938" y="284" width="210" height="40" rx="5" fill="#3d1f2e" stroke="#f778ba" stroke-width="1"/>
-        <rect x="938" y="284" width="3" height="40" rx="1" fill="#f778ba"/>
-        <text x="1043" y="300" text-anchor="middle" fill="#e6edf3" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Pre-production Testing</text>
-        <text x="1043" y="314" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">Garak (120+ probes) · EvalHub</text>
-      </g>
+      <g class="box"><rect x="938" y="222" width="210" height="52" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="1043" y="242" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Audit &amp; Tracing</text>
+        <text x="1043" y="256" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">MLflow · OpenTelemetry · OCSF</text>
+        <text x="1043" y="268" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">end-to-end traces + security events</text></g>
+      <g class="box"><rect x="938" y="284" width="210" height="40" rx="5" fill="var(--xc)" stroke="var(--xs)" stroke-width="1"/><rect x="938" y="284" width="3" height="40" rx="1" fill="var(--xs)"/>
+        <text x="1043" y="300" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Pre-production Testing</text>
+        <text x="1043" y="314" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Garak (120+ probes) · EvalHub</text></g>
 
-      <!-- ── MCP GATEWAY ── -->
-      <line x1="464" y1="390" x2="464" y2="410" stroke="#6e7681" stroke-width="1" marker-end="url(#a1)"/>
-      <g class="box"><rect x="260" y="414" width="420" height="42" rx="5" fill="#1f3046" stroke="#58a6ff" stroke-width="1.2"/>
-        <rect x="260" y="414" width="3" height="42" rx="1" fill="#58a6ff"/>
-        <text x="470" y="432" text-anchor="middle" fill="#e6edf3" font-size="11" font-weight="600" font-family="system-ui,sans-serif">MCP Gateway: tool authorization</text>
-        <text x="470" y="448" text-anchor="middle" fill="#8b949e" font-size="8.5" font-family="system-ui,sans-serif">Envoy · Kuadrant / Authorino: authz by SVID token claims</text>
-      </g>
-      <!-- arrow from MCP to skill backends -->
-      <line x1="260" y1="435" x2="226" y2="250" stroke="#6e7681" stroke-width=".8" stroke-dasharray="3 2" marker-end="url(#a1)"/>
+      <!-- MCP GATEWAY -->
+      <line x1="464" y1="388" x2="464" y2="410" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
+      <g class="box"><rect x="260" y="414" width="420" height="42" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/><rect x="260" y="414" width="3" height="42" rx="1" fill="var(--ss)"/>
+        <text x="470" y="432" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">MCP Gateway: tool authorization</text>
+        <text x="470" y="448" text-anchor="middle" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Envoy · Kuadrant / Authorino: authz by SVID token claims — fronts MCP servers only</text></g>
+      <line x1="260" y1="435" x2="226" y2="136" stroke="var(--t3)" stroke-width=".8" stroke-dasharray="3 2" marker-end="url(#a1)"/>
 
-      <!-- ── PLATFORM BARS ── -->
-      <rect x="16" y="476" width="1148" height="30" rx="4" fill="#1c2128" stroke="#30363d" stroke-width=".8"/>
-      <text x="590" y="489" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Kubernetes / OpenShift</text>
-      <text x="590" y="502" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">agent-sandbox · kata + confidential containers · accelerator operators · Gateway API · NetworkPolicy</text>
+      <!-- PLATFORM BARS -->
+      <rect x="16" y="476" width="1148" height="30" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".8"/>
+      <text x="590" y="489" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Kubernetes / OpenShift</text>
+      <text x="590" y="502" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">agent-sandbox · kata + confidential containers · accelerator operators · Gateway API · NetworkPolicy</text>
 
-      <rect x="16" y="514" width="1148" height="30" rx="4" fill="#1c2128" stroke="#30363d" stroke-width=".8"/>
-      <text x="590" y="527" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Linux kernel</text>
-      <text x="590" y="540" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">SELinux (or AppArmor) · seccomp · Landlock · netns · namespaces — primitives activated by the supervisor</text>
+      <rect x="16" y="514" width="1148" height="30" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".8"/>
+      <text x="590" y="527" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Linux kernel</text>
+      <text x="590" y="540" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">SELinux (or AppArmor) · seccomp · Landlock · netns · namespaces — primitives activated by the supervisor</text>
 
-      <rect x="16" y="552" width="1148" height="30" rx="4" fill="#1c2128" stroke="#30363d" stroke-width=".8"/>
-      <text x="590" y="565" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Accelerated infrastructure: silicon of choice</text>
-      <text x="590" y="578" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">NVIDIA CUDA · AMD ROCm · Intel Gaudi · Google TPU · CPU</text>
+      <rect x="16" y="552" width="1148" height="30" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".8"/>
+      <text x="590" y="565" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Accelerated infrastructure: silicon of choice</text>
+      <text x="590" y="578" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">NVIDIA CUDA · AMD ROCm · Intel Gaudi · Google TPU · CPU</text>
 
-      <!-- ── Cross-cutting note ── -->
-      <text x="590" y="606" text-anchor="middle" fill="#8b949e" font-size="8.5" font-weight="500" font-family="system-ui,sans-serif">Cross-cutting controls: Workload Identity · Tool Authorization (MCP Gateway) · Inference Guardrails · Pre-production Testing (Garak + EvalHub)</text>
+      <text x="590" y="606" text-anchor="middle" fill="var(--t2)" font-size="8.5" font-weight="500" font-family="system-ui,sans-serif">Cross-cutting controls: Workload Identity · Tool Authorization (MCP Gateway) · Inference Guardrails · Pre-production Testing</text>
     </svg>
   </div>
 
   <div class="info-grid">
-    <div class="info-card"><h3><span class="dot" style="background:var(--blue)"></span>Control band</h3><p>Creates and governs agents. An agent blueprint declares what each agent is made of; the sandbox control plane turns it into a resource; a controller turns it into one pod; identity issues every pod a verifiable credential.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--green)"></span>Agent pod</h3><p>One pod per sandbox. The harness owns the loop. The supervisor (OpenShell, PID 1) enforces per-binary network policy, Landlock filesystem isolation, seccomp syscall filtering, and credential injection — all at the process level inside the pod.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--cyan)"></span>Inference plane</h3><p>Three-tier routing: security (where may the query go?), cost (which model?), efficiency (which replica?). NIM, TensorRT-LLM, and vLLM serve tokens on any accelerator. Guardrails screen inputs and outputs at the inference boundary.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--amber)"></span>Skills &amp; MCP Gateway</h3><p>Skills are thin clients — definitions and API bindings, not GPU workloads. All tool calls leave the pod through the MCP Gateway, authorized by SVID token claims, never by prompt content. Backends sit behind neutral REST/MCP interfaces.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--amber)"></span>Skill (instruction file)</h3><p>Instruction files and schema bindings loaded by the harness. A skill tells the agent what to call and when. No compute of its own — progressive disclosure lives here.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--neutral)"></span>MCP server (tool)</h3><p>A callable endpoint in a separate process with an advertised schema. This is the only thing the MCP Gateway fronts and claims-checks. One MCP server can wrap one or many backends.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--cyan)"></span>Service backend (compute)</h3><p>The actual compute the MCP server sits in front of. Optimization on GPU, DataFrames on CPU, a KServe endpoint, or a Slurm job. Swapping a backend is an endpoint change, not a redesign.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--blue)"></span>MCP Gateway (checkpoint)</h3><p>Fronts every backend the model selects at runtime. Backends the platform invokes on the agent's behalf (inference, batch jobs) carry their own admission control. All paths land in the same trace.</p></div>
   </div>
 </section>
 
 <!-- ═══════════ SECURITY RINGS ═══════════ -->
 <section class="section" id="security">
   <h2>Defense in Depth: Three Isolation Rings</h2>
-  <p class="desc">Each ring assumes the ring inside it has already been compromised. Four cross-cutting controls apply across all three. The rings limit what a compromised agent can do; the controls reduce the chance it gets compromised and remove the rewards if it does.</p>
+  <p class="desc">Each ring assumes the ring inside it has already been compromised. Four cross-cutting controls apply across all three. The rings limit what a compromised agent can do; the controls reduce the chance it gets compromised.</p>
   <div class="diagram-wrap">
     <svg viewBox="0 0 920 480" width="100%" style="min-width:700px" xmlns="http://www.w3.org/2000/svg">
-      <rect width="920" height="480" fill="transparent" rx="6"/>
+      <rect x="40" y="20" width="510" height="340" rx="14" fill="none" stroke="var(--ns)" stroke-width="2" stroke-dasharray="6 3"/>
+      <text x="52" y="42" fill="var(--t2)" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 3 — Hardware / VM</text>
+      <text x="52" y="56" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Kata Containers · Confidential Computing (AMD SEV-SNP / Intel TDX) · GPU TEE</text>
 
-      <!-- Ring 3: Hardware -->
-      <rect x="40" y="20" width="510" height="340" rx="14" fill="none" stroke="#484f58" stroke-width="2" stroke-dasharray="6 3"/>
-      <text x="52" y="42" fill="#8b949e" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 3 — Hardware / VM</text>
-      <text x="52" y="56" fill="#6e7681" font-size="8.5" font-family="system-ui,sans-serif">Kata Containers · Confidential Computing (AMD SEV-SNP / Intel TDX) · NVIDIA GPU TEE</text>
+      <rect x="80" y="70" width="430" height="260" rx="10" fill="none" stroke="var(--ss)" stroke-width="2"/>
+      <text x="92" y="90" fill="var(--ss)" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 2 — Pod / Container</text>
+      <text x="92" y="103" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Pod Security Standards · SELinux · NetworkPolicy · ResourceQuota · Kata microVM (optional)</text>
 
-      <!-- Ring 2: Pod -->
-      <rect x="80" y="70" width="430" height="260" rx="10" fill="none" stroke="#58a6ff" stroke-width="2"/>
-      <text x="92" y="90" fill="#58a6ff" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 2 — Pod / Container</text>
-      <text x="92" y="103" fill="#6e7681" font-size="8.5" font-family="system-ui,sans-serif">Pod Security Standards · SELinux · NetworkPolicy · ResourceQuota · Kata microVM (optional)</text>
+      <rect x="120" y="115" width="350" height="190" rx="8" fill="var(--ec)" stroke="var(--es)" stroke-width="2"/>
+      <text x="132" y="134" fill="var(--es)" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 1 — Process (OpenShell Supervisor)</text>
+      <text x="132" y="147" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">seccomp-BPF · Landlock LSM · per-binary OPA/Rego · netns</text>
 
-      <!-- Ring 1: Process -->
-      <rect x="120" y="115" width="350" height="190" rx="8" fill="#1a3028" stroke="#3fb950" stroke-width="2"/>
-      <text x="132" y="134" fill="#3fb950" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 1 — Process (OpenShell Supervisor)</text>
-      <text x="132" y="147" fill="#6e7681" font-size="8.5" font-family="system-ui,sans-serif">seccomp-BPF · Landlock LSM · per-binary OPA/Rego · netns</text>
+      <rect x="155" y="160" width="280" height="120" rx="6" fill="var(--band)" stroke="var(--ns)" stroke-width="1"/>
+      <text x="295" y="183" text-anchor="middle" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Agent Process</text>
+      <text x="295" y="198" text-anchor="middle" fill="var(--t2)" font-size="9" font-family="system-ui,sans-serif">Model calls · Tool calls · Code execution · File I/O</text>
+      <rect x="170" y="215" width="250" height="24" rx="3" fill="var(--pc)" stroke="var(--ps)" stroke-width=".5"/>
+      <text x="295" y="231" text-anchor="middle" fill="var(--ps)" font-size="8" font-family="system-ui,sans-serif">Sees placeholders only — real keys injected at egress</text>
+      <text x="170" y="265" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">Policy lives outside the process it constrains — agent cannot override it</text>
 
-      <!-- Agent process (innermost) -->
-      <rect x="155" y="160" width="280" height="120" rx="6" fill="#161b22" stroke="#484f58" stroke-width="1"/>
-      <text x="295" y="183" text-anchor="middle" fill="#e6edf3" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Agent Process</text>
-      <text x="295" y="198" text-anchor="middle" fill="#8b949e" font-size="9" font-family="system-ui,sans-serif">Model calls · Tool calls · Code execution · File I/O</text>
+      <text x="380" y="318" fill="var(--es)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">↑ assumes process compromised</text>
+      <text x="330" y="340" fill="var(--ss)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">↑ assumes pod escaped</text>
+      <text x="280" y="355" fill="var(--t2)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">↑ assumes VM breached</text>
 
-      <rect x="170" y="215" width="250" height="24" rx="3" fill="#2a1f3d" stroke="#bc8cff" stroke-width=".5"/>
-      <text x="295" y="231" text-anchor="middle" fill="#bc8cff" font-size="8" font-family="system-ui,sans-serif">Sees placeholders only — real keys injected at egress</text>
+      <text x="590" y="38" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Cross-cutting Controls</text>
+      <text x="590" y="54" fill="var(--t3)" font-size="9" font-family="system-ui,sans-serif">Apply across all three rings</text>
 
-      <text x="170" y="265" fill="#6e7681" font-size="8" font-family="system-ui,sans-serif">Policy lives outside the process it constrains — agent cannot override it</text>
+      <g class="box"><rect x="590" y="68" width="290" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="590" y="68" width="3" height="52" rx="1" fill="var(--ss)"/>
+        <text x="600" y="86" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">1. Workload Identity</text>
+        <text x="600" y="99" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">SPIFFE SVIDs replace static keys</text>
+        <text x="600" y="111" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Leaked workspace contains nothing durable to steal</text></g>
+      <g class="box"><rect x="590" y="130" width="290" height="52" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="590" y="130" width="3" height="52" rx="1" fill="var(--is)"/>
+        <text x="600" y="148" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">2. Tool Authorization</text>
+        <text x="600" y="161" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">MCP Gateway authorizes by token claims</text>
+        <text x="600" y="173" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Never from prompt content — infrastructure, not model</text></g>
+      <g class="box"><rect x="590" y="192" width="290" height="52" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/><rect x="590" y="192" width="3" height="52" rx="1" fill="var(--es)"/>
+        <text x="600" y="210" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">3. Inference Guardrails</text>
+        <text x="600" y="223" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">TrustyAI + NeMo Guardrails</text>
+        <text x="600" y="235" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Input/output screening at the inference boundary</text></g>
+      <g class="box"><rect x="590" y="254" width="290" height="52" rx="5" fill="var(--xc)" stroke="var(--xs)" stroke-width="1"/><rect x="590" y="254" width="3" height="52" rx="1" fill="var(--xs)"/>
+        <text x="600" y="272" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">4. Pre-production Testing</text>
+        <text x="600" y="285" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Garak 120+ probes · EvalHub release gates</text>
+        <text x="600" y="297" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Adversarial scanning in CI/CD before promotion</text></g>
 
-      <!-- Assumption labels -->
-      <text x="380" y="318" fill="#3fb950" font-size="8" font-weight="600" font-family="system-ui,sans-serif">↑ assumes process compromised</text>
-      <text x="330" y="340" fill="#58a6ff" font-size="8" font-weight="600" font-family="system-ui,sans-serif">↑ assumes pod escaped</text>
-      <text x="280" y="355" fill="#8b949e" font-size="8" font-weight="600" font-family="system-ui,sans-serif">↑ assumes VM breached</text>
+      <line x1="590" y1="94" x2="550" y2="94" stroke="var(--border)" stroke-width=".5" stroke-dasharray="3 2"/>
+      <line x1="590" y1="156" x2="550" y2="156" stroke="var(--border)" stroke-width=".5" stroke-dasharray="3 2"/>
+      <line x1="590" y1="218" x2="550" y2="218" stroke="var(--border)" stroke-width=".5" stroke-dasharray="3 2"/>
+      <line x1="590" y1="280" x2="550" y2="280" stroke="var(--border)" stroke-width=".5" stroke-dasharray="3 2"/>
 
-      <!-- CROSS-CUTTING CONTROLS -->
-      <text x="590" y="38" fill="#e6edf3" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Cross-cutting Controls</text>
-      <text x="590" y="54" fill="#6e7681" font-size="9" font-family="system-ui,sans-serif">Apply across all three rings</text>
+      <rect x="40" y="380" width="840" height="36" rx="5" fill="var(--band)" stroke="var(--band-s)" stroke-width=".8"/>
+      <text x="460" y="396" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Containment economics</text>
+      <text x="460" y="410" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Single-sandbox, single-pod, single-identity: revoke or terminate a misbehaving agent as a single targeted operation. OCSF/OTEL trail = reviewable evidence.</text>
 
-      <g class="box"><rect x="590" y="68" width="290" height="52" rx="5" fill="#1f3046" stroke="#58a6ff" stroke-width="1"/>
-        <rect x="590" y="68" width="3" height="52" rx="1" fill="#58a6ff"/>
-        <text x="600" y="86" fill="#e6edf3" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">1. Workload Identity</text>
-        <text x="600" y="99" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">SPIFFE SVIDs replace static keys</text>
-        <text x="600" y="111" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">Leaked workspace contains nothing durable to steal</text>
-      </g>
-      <g class="box"><rect x="590" y="130" width="290" height="52" rx="5" fill="#1a3230" stroke="#39d2c0" stroke-width="1"/>
-        <rect x="590" y="130" width="3" height="52" rx="1" fill="#39d2c0"/>
-        <text x="600" y="148" fill="#e6edf3" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">2. Tool Authorization</text>
-        <text x="600" y="161" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">MCP Gateway authorizes by token claims</text>
-        <text x="600" y="173" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">Never from prompt content — infrastructure, not model</text>
-      </g>
-      <g class="box"><rect x="590" y="192" width="290" height="52" rx="5" fill="#1a3028" stroke="#3fb950" stroke-width="1"/>
-        <rect x="590" y="192" width="3" height="52" rx="1" fill="#3fb950"/>
-        <text x="600" y="210" fill="#e6edf3" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">3. Inference Guardrails</text>
-        <text x="600" y="223" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">TrustyAI + NeMo Guardrails</text>
-        <text x="600" y="235" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">Input/output screening at the inference boundary</text>
-      </g>
-      <g class="box"><rect x="590" y="254" width="290" height="52" rx="5" fill="#3d1f2e" stroke="#f778ba" stroke-width="1"/>
-        <rect x="590" y="254" width="3" height="52" rx="1" fill="#f778ba"/>
-        <text x="600" y="272" fill="#e6edf3" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">4. Pre-production Testing</text>
-        <text x="600" y="285" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">Garak 120+ probes · EvalHub release gates</text>
-        <text x="600" y="297" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">Adversarial scanning in CI/CD before promotion</text>
-      </g>
-
-      <!-- connecting lines -->
-      <line x1="590" y1="94" x2="550" y2="94" stroke="#484f5840" stroke-width=".5" stroke-dasharray="3 2"/>
-      <line x1="590" y1="156" x2="550" y2="156" stroke="#484f5840" stroke-width=".5" stroke-dasharray="3 2"/>
-      <line x1="590" y1="218" x2="550" y2="218" stroke="#484f5840" stroke-width=".5" stroke-dasharray="3 2"/>
-      <line x1="590" y1="280" x2="550" y2="280" stroke="#484f5840" stroke-width=".5" stroke-dasharray="3 2"/>
-
-      <!-- Containment economics -->
-      <rect x="40" y="380" width="840" height="36" rx="5" fill="#1c2128" stroke="#30363d" stroke-width=".8"/>
-      <text x="460" y="396" text-anchor="middle" fill="#e6edf3" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Containment economics</text>
-      <text x="460" y="410" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">Single-sandbox, single-pod, single-identity: revoke or terminate a misbehaving agent as a single targeted operation. OCSF/OTEL trail = reviewable evidence.</text>
-
-      <!-- Trust progression -->
-      <text x="40" y="440" fill="#8b949e" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Trust progression:</text>
-      <text x="160" y="440" fill="#6e7681" font-size="9" font-family="system-ui,sans-serif">Pods (trust the kernel) → VMs (trust the hypervisor) → Confidential VMs (trust the hardware)</text>
-
-      <!-- Profiles -->
-      <text x="40" y="462" fill="#8b949e" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Composable profiles:</text>
-      <text x="175" y="462" fill="#6e7681" font-size="8.5" font-family="system-ui,sans-serif">Permissive (L2–L3) · Minimally Restrictive (L1–L4) · Typical (L1–L4 tuned) · Kata/VM (L1–L5) · Confidential (L1–L5 + CoCo)</text>
+      <text x="40" y="440" fill="var(--t2)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Trust progression:</text>
+      <text x="160" y="440" fill="var(--t3)" font-size="9" font-family="system-ui,sans-serif">Pods (trust the kernel) → VMs (trust the hypervisor) → Confidential VMs (trust the hardware)</text>
+      <text x="40" y="462" fill="var(--t2)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Composable profiles:</text>
+      <text x="175" y="462" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Permissive (L2–L3) · Minimally Restrictive (L1–L4) · Typical (L1–L4 tuned) · Kata/VM (L1–L5) · Confidential (L1–L5 + CoCo)</text>
     </svg>
   </div>
-
   <div class="info-grid">
-    <div class="info-card"><h3><span class="dot" style="background:var(--green)"></span>Ring 1 — Process</h3><p>OpenShell supervisor enforces per-binary, per-path, per-endpoint policy via seccomp, Landlock, and network namespaces. The agent cannot override this because the policy lives outside the process it constrains. Irreversible after process start.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--green)"></span>Ring 1 — Process</h3><p>OpenShell supervisor enforces per-binary, per-path, per-endpoint policy via seccomp, Landlock, and network namespaces. Irreversible after process start — the agent cannot override it.</p></div>
     <div class="info-card"><h3><span class="dot" style="background:var(--blue)"></span>Ring 2 — Pod</h3><p>Kubernetes pod security standards, SELinux, NetworkPolicy, and resource quotas bound what the pod can reach. Optionally, Kata Containers add a dedicated microVM kernel per sandbox pod.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--neutral)"></span>Ring 3 — Hardware</h3><p>Confidential containers extend the trust boundary into silicon. AMD SEV-SNP and Intel TDX protect agent memory at runtime even from the host node. Hardware attestation verifies the sandbox runs the code it claims before secrets are released.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--neutral)"></span>Ring 3 — Hardware</h3><p>Confidential containers extend the trust boundary into silicon. Hardware attestation verifies the sandbox runs the code it claims before any secret is released.</p></div>
   </div>
 </section>
 
 <!-- ═══════════ INFERENCE & SKILLS ═══════════ -->
 <section class="section" id="inference">
   <h2>Inference Routing &amp; Skill Placement</h2>
-  <p class="desc">An inference request crosses three routers because the three decisions have different owners: where (security), which model (cost), and which replica (efficiency). Skills follow three execution patterns — only one runs in the pod.</p>
+  <p class="desc">An inference request crosses three routers because the three decisions have different owners. The MCP Gateway fronts every backend the model selects at runtime. Backends the platform invokes under pre-authorized policy carry their own admission control. All paths land in the same trace.</p>
   <div class="diagram-wrap">
-    <svg viewBox="0 0 920 420" width="100%" style="min-width:700px" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="a3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#6e7681"/></marker>
-      </defs>
-      <rect width="920" height="420" fill="transparent" rx="6"/>
+    <svg viewBox="0 0 920 380" width="100%" style="min-width:700px" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="a3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--t3)"/></marker></defs>
 
-      <!-- ROUTING FLOW -->
-      <text x="20" y="24" fill="#e6edf3" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Three Inference Routing Tiers</text>
+      <text x="20" y="24" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Three Inference Routing Tiers</text>
 
-      <!-- Agent Pod -->
-      <rect x="16" y="40" width="110" height="52" rx="5" fill="#1a3028" stroke="#3fb950" stroke-width="1"/>
-      <text x="71" y="62" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Pod</text>
-      <text x="71" y="76" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">inference request</text>
+      <rect x="16" y="40" width="110" height="52" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
+      <text x="71" y="62" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Pod</text>
+      <text x="71" y="76" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">inference request</text>
 
-      <line x1="126" y1="66" x2="156" y2="66" stroke="#6e7681" stroke-width="1.5" marker-end="url(#a3)"/>
+      <line x1="126" y1="66" x2="156" y2="66" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
 
-      <!-- Tier 1 -->
-      <rect x="160" y="36" width="210" height="60" rx="6" fill="#1a3028" stroke="#3fb950" stroke-width="1.5"/>
-      <text x="265" y="54" text-anchor="middle" fill="#3fb950" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 1 — Security</text>
-      <text x="265" y="66" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">Sandbox egress router (in supervisor)</text>
-      <text x="265" y="78" text-anchor="middle" fill="#e6edf3" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Where may this query go?</text>
-      <text x="265" y="90" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">Policy · privacy class · PII masking · local vs cloud</text>
+      <rect x="160" y="36" width="210" height="60" rx="6" fill="var(--ec)" stroke="var(--es)" stroke-width="1.5"/>
+      <text x="265" y="54" text-anchor="middle" fill="var(--es)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 1 — Security</text>
+      <text x="265" y="66" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Sandbox egress router (in supervisor)</text>
+      <text x="265" y="78" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Where may this query go?</text>
+      <text x="265" y="90" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Policy · privacy class · PII masking · local vs cloud</text>
 
-      <line x1="370" y1="66" x2="400" y2="66" stroke="#6e7681" stroke-width="1.5" marker-end="url(#a3)"/>
+      <line x1="370" y1="66" x2="400" y2="66" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
 
-      <!-- Tier 2 -->
-      <rect x="404" y="36" width="210" height="60" rx="6" fill="#1a3230" stroke="#39d2c0" stroke-width="1.5"/>
-      <text x="509" y="54" text-anchor="middle" fill="#39d2c0" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 2 — Cost</text>
-      <text x="509" y="66" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">vLLM Semantic Router / AI Gateway</text>
-      <text x="509" y="78" text-anchor="middle" fill="#e6edf3" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Which model should serve it?</text>
-      <text x="509" y="90" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">Intent classification · cost · reasoning on/off</text>
+      <rect x="404" y="36" width="210" height="60" rx="6" fill="var(--ic)" stroke="var(--is)" stroke-width="1.5"/>
+      <text x="509" y="54" text-anchor="middle" fill="var(--is)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 2 — Cost</text>
+      <text x="509" y="66" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">vLLM Semantic Router / AI Gateway</text>
+      <text x="509" y="78" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Which model should serve it?</text>
+      <text x="509" y="90" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Intent classification · cost · reasoning on/off</text>
 
-      <line x1="614" y1="66" x2="644" y2="66" stroke="#6e7681" stroke-width="1.5" marker-end="url(#a3)"/>
+      <line x1="614" y1="66" x2="644" y2="66" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
 
-      <!-- Tier 3 -->
-      <rect x="648" y="36" width="210" height="60" rx="6" fill="#1f3046" stroke="#58a6ff" stroke-width="1.5"/>
-      <text x="753" y="54" text-anchor="middle" fill="#58a6ff" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 3 — Efficiency</text>
-      <text x="753" y="66" text-anchor="middle" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">llm-d Router / EPP (Gateway API ext.)</text>
-      <text x="753" y="78" text-anchor="middle" fill="#e6edf3" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Which replica serves it?</text>
-      <text x="753" y="90" text-anchor="middle" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">KV cache locality · load · prefill/decode disaggregation</text>
+      <rect x="648" y="36" width="210" height="60" rx="6" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.5"/>
+      <text x="753" y="54" text-anchor="middle" fill="var(--ss)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 3 — Efficiency</text>
+      <text x="753" y="66" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">llm-d Router / EPP (Gateway API ext.)</text>
+      <text x="753" y="78" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Which replica serves it?</text>
+      <text x="753" y="90" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">KV cache locality · load · prefill/decode</text>
 
-      <line x1="858" y1="66" x2="880" y2="66" stroke="#6e7681" stroke-width="1.5" marker-end="url(#a3)"/>
-      <rect x="884" y="48" width="22" height="36" rx="3" fill="#484f58"/>
-      <text x="895" y="70" text-anchor="middle" fill="#e6edf3" font-size="9" font-weight="700" font-family="system-ui,sans-serif">⬡</text>
+      <line x1="858" y1="66" x2="880" y2="66" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
+      <rect x="884" y="48" width="22" height="36" rx="3" fill="var(--nc)"/>
+      <text x="895" y="72" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">⬡</text>
 
-      <!-- SEPARATOR -->
-      <line x1="16" y1="118" x2="904" y2="118" stroke="#30363d" stroke-width=".5"/>
+      <line x1="16" y1="118" x2="904" y2="118" stroke="var(--border)" stroke-width=".5"/>
 
-      <!-- SKILL PATTERNS -->
-      <text x="20" y="142" fill="#e6edf3" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Three Skill Execution Patterns</text>
-      <text x="20" y="158" fill="#6e7681" font-size="9" font-family="system-ui,sans-serif">Only Pattern 1 runs in the pod — skills are thin clients and definitions, not hosted GPU workloads</text>
+      <text x="20" y="142" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Three Nouns, Three Enforcement Points</text>
+      <text x="20" y="158" fill="var(--t3)" font-size="9" font-family="system-ui,sans-serif">A skill tells the agent what to call. An MCP server is the callable endpoint. A service backend is the compute behind it.</text>
 
-      <!-- Pattern 1 -->
-      <rect x="16" y="170" width="286" height="115" rx="6" fill="#1a3028" stroke="#3fb950" stroke-width="1"/>
-      <text x="28" y="190" fill="#3fb950" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Pattern 1: In-pod execution</text>
-      <text x="28" y="205" fill="#8b949e" font-size="8.5" font-family="system-ui,sans-serif">Inside the sandbox (explicit GPU request required)</text>
-      <text x="28" y="224" fill="#e6edf3" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Enforcement: Kernel — seccomp, Landlock</text>
-      <text x="28" y="241" fill="#6e7681" font-size="8.5" font-family="system-ui,sans-serif">Typical: Light DataFrame ETL</text>
-      <text x="28" y="254" fill="#6e7681" font-size="8" font-family="system-ui,sans-serif">cuDF · Polars · DuckDB</text>
-      <text x="28" y="272" fill="#8b949e" font-size="7.5" font-style="italic" font-family="system-ui,sans-serif">Agent pod stays cheap, CPU-only in the common case</text>
+      <rect x="16" y="170" width="286" height="105" rx="6" fill="var(--kc)" stroke="var(--ks)" stroke-width="1"/>
+      <text x="28" y="190" fill="var(--ks)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Skill (instruction file)</text>
+      <text x="28" y="205" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Instruction files + schema bindings, loaded by harness</text>
+      <text x="28" y="224" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Enforcement: none — no compute of its own</text>
+      <text x="28" y="241" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Progressive disclosure lives here: tells the agent</text>
+      <text x="28" y="254" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">when and how to use each tool</text>
+      <text x="28" y="268" fill="var(--t2)" font-size="7.5" font-style="italic" font-family="system-ui,sans-serif">Example: triage runbook, research plan, ETL workflow</text>
 
-      <!-- Pattern 2 -->
-      <rect x="316" y="170" width="286" height="115" rx="6" fill="#1a3230" stroke="#39d2c0" stroke-width="1"/>
-      <text x="328" y="190" fill="#39d2c0" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Pattern 2: Service call (default at scale)</text>
-      <text x="328" y="205" fill="#8b949e" font-size="8.5" font-family="system-ui,sans-serif">Separate serving pods, any cluster, or SaaS</text>
-      <text x="328" y="224" fill="#e6edf3" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Enforcement: MCP Gateway + egress policy</text>
-      <text x="328" y="241" fill="#6e7681" font-size="8.5" font-family="system-ui,sans-serif">Typical: Optimization REST, RAG services</text>
-      <text x="328" y="254" fill="#6e7681" font-size="8" font-family="system-ui,sans-serif">cuOpt · OR-Tools · HiGHS</text>
-      <text x="328" y="272" fill="#8b949e" font-size="7.5" font-style="italic" font-family="system-ui,sans-serif">Swapping backend = endpoint + policy change, not redesign</text>
+      <rect x="316" y="170" width="286" height="105" rx="6" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
+      <text x="328" y="190" fill="var(--is)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">MCP server (tool)</text>
+      <text x="328" y="205" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Callable endpoint with advertised schema</text>
+      <text x="328" y="224" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Enforcement: MCP Gateway + egress policy</text>
+      <text x="328" y="241" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Separate process. This is the only thing the</text>
+      <text x="328" y="254" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">MCP Gateway fronts and claims-checks</text>
+      <text x="328" y="268" fill="var(--t2)" font-size="7.5" font-style="italic" font-family="system-ui,sans-serif">Example: Data-Mesh-Map Builder, GitHub, Jira</text>
 
-      <!-- Pattern 3 -->
-      <rect x="616" y="170" width="290" height="115" rx="6" fill="#342a1a" stroke="#d29922" stroke-width="1"/>
-      <text x="628" y="190" fill="#d29922" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Pattern 3: Job dispatch</text>
-      <text x="628" y="205" fill="#8b949e" font-size="8.5" font-family="system-ui,sans-serif">Batch jobs via K8s Job API or Slurm</text>
-      <text x="628" y="224" fill="#e6edf3" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Enforcement: Scoped RBAC + admission</text>
-      <text x="628" y="241" fill="#6e7681" font-size="8.5" font-family="system-ui,sans-serif">Typical: Physics simulation, quantum programs</text>
-      <text x="628" y="254" fill="#6e7681" font-size="8" font-family="system-ui,sans-serif">PhysicsNeMo · JAX · CUDA-Q · Qiskit</text>
-      <text x="628" y="272" fill="#d29922" font-size="7.5" font-family="system-ui,sans-serif">Needs tightest RBAC — agent creating Jobs = arbitrary workloads</text>
+      <rect x="616" y="170" width="290" height="105" rx="6" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+      <text x="628" y="190" fill="var(--ns)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Service backend (compute)</text>
+      <text x="628" y="205" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">The actual compute the MCP server wraps</text>
+      <text x="628" y="224" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Enforcement: per-backend (RBAC, admission)</text>
+      <text x="628" y="241" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">GPU or CPU, any cluster, SaaS, or batch job.</text>
+      <text x="628" y="254" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Swapping = endpoint + policy change, not redesign</text>
+      <text x="628" y="268" fill="var(--t2)" font-size="7.5" font-style="italic" font-family="system-ui,sans-serif">Example: optimization engine, query engine, Slurm job</text>
 
-      <!-- SEPARATOR -->
-      <line x1="16" y1="300" x2="904" y2="300" stroke="#30363d" stroke-width=".5"/>
+      <line x1="16" y1="290" x2="904" y2="290" stroke="var(--border)" stroke-width=".5"/>
 
-      <!-- KEY PROPERTIES -->
-      <text x="20" y="324" fill="#e6edf3" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Key Properties</text>
+      <rect x="16" y="302" width="436" height="34" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".5"/>
+      <text x="28" y="318" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Traceable end-to-end</text>
+      <text x="165" y="318" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">OTEL follows each request across all 3 tiers; MLflow records tool calls, latencies, costs</text>
+      <text x="28" y="331" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">GenAI semantic conventions in development — plan for attribute changes</text>
 
-      <rect x="16" y="336" width="436" height="34" rx="4" fill="#1c2128" stroke="#30363d" stroke-width=".5"/>
-      <text x="28" y="352" fill="#e6edf3" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Traceable end-to-end</text>
-      <text x="165" y="352" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">OTEL follows each request across all 3 tiers; MLflow records tool calls, latencies, costs</text>
-      <text x="28" y="365" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">GenAI semantic conventions in development — plan for attribute changes</text>
+      <rect x="466" y="302" width="440" height="34" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".5"/>
+      <text x="478" y="318" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Decoupled at every hop</text>
+      <text x="618" y="318" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Every hop speaks OpenAI-compatible or OpenResponses APIs</text>
+      <text x="478" y="331" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Model behind the path can change without the agent noticing</text>
 
-      <rect x="466" y="336" width="440" height="34" rx="4" fill="#1c2128" stroke="#30363d" stroke-width=".5"/>
-      <text x="478" y="352" fill="#e6edf3" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Decoupled at every hop</text>
-      <text x="618" y="352" fill="#8b949e" font-size="8" font-family="system-ui,sans-serif">Every hop speaks OpenAI-compatible or OpenResponses APIs</text>
-      <text x="478" y="365" fill="#6e7681" font-size="7.5" font-family="system-ui,sans-serif">Model behind the path can change without the agent noticing</text>
-
-      <rect x="16" y="380" width="890" height="28" rx="4" fill="#1c2128" stroke="#30363d" stroke-width=".5"/>
-      <text x="28" y="398" fill="#e6edf3" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Fleet economics:</text>
-      <text x="130" y="398" fill="#8b949e" font-size="8.5" font-family="system-ui,sans-serif">Agent pods = resource-efficient, dense, CPU-only (common case). Expensive accelerators in pooled backends. Two independent scaling axes — neither purchase forces the other.</text>
+      <rect x="16" y="346" width="890" height="24" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".5"/>
+      <text x="28" y="363" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Fleet economics:</text>
+      <text x="130" y="363" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Agent pods = CPU-only (common case). Expensive accelerators in pooled backends. Two independent scaling axes — neither purchase forces the other.</text>
     </svg>
   </div>
-
   <div class="info-grid">
-    <div class="info-card"><h3><span class="dot" style="background:var(--green)"></span>Tier 1 — Security</h3><p>Lives client-side in every sandbox, inside the supervisor. Confidential context never leaves the cluster. Anything routed externally is PII-masked first. Masking is detection-and-redaction — monitor for false negatives.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--cyan)"></span>Tier 2 — Cost</h3><p>A lightweight classifier selects the cheapest model that can handle the request. Adds latency and can misroute — needs a fallback that escalates on low confidence. This tier is a measured trade-off.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--blue)"></span>Tier 3 — Efficiency</h3><p>Once the model pool is fixed, llm-d endpoint picker maximizes KV-cache hits and balances load across vLLM workers. Prefill/decode disaggregation further optimizes throughput under concurrency.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--green)"></span>Tier 1 — Security</h3><p>Lives client-side in every sandbox, inside the supervisor. Confidential context never leaves the cluster. Anything routed externally is PII-masked first.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--cyan)"></span>Tier 2 — Cost</h3><p>A lightweight classifier selects the cheapest model that can handle the request. Adds latency and can misroute — needs a fallback that escalates on low confidence.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--blue)"></span>Tier 3 — Efficiency</h3><p>Once the model pool is fixed, llm-d endpoint picker maximizes KV-cache hits and balances load across vLLM workers.</p></div>
   </div>
 </section>
 
-<!-- ═══════════ FOOTER ═══════════ -->
 <footer>
   <p>Based on <a href="https://developers.redhat.com/articles/2026/07/20/architect-open-blueprint-cloud-native-ai-agents" target="_blank" rel="noopener">Architect an open blueprint for cloud-native AI agents</a> (Red Hat Developer, July 2026)</p>
   <p style="margin-top:4px">Components: <a href="https://github.com/NVIDIA/OpenShell" target="_blank" rel="noopener">OpenShell</a> · <a href="https://github.com/Kuadrant/mcp-gateway" target="_blank" rel="noopener">MCP Gateway</a> · <a href="https://llm-d.ai" target="_blank" rel="noopener">llm-d</a> · <a href="https://kubernetes-sigs.github.io/agent-sandbox/" target="_blank" rel="noopener">agent-sandbox SIG</a></p>
 </footer>
 
-<!-- ═══════════ SCRIPT ═══════════ -->
 <script>
-document.querySelectorAll('.tab').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+/* Tab switching */
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById(btn.dataset.tab).classList.add('active');
   });
 });
+/* Theme toggle */
+const html=document.documentElement,toggle=document.getElementById('themeBtn');
+function setTheme(t){html.setAttribute('data-theme',t);toggle.textContent=t==='dark'?'☀️':'🌙';localStorage.setItem('theme',t)}
+toggle.addEventListener('click',()=>setTheme(html.getAttribute('data-theme')==='dark'?'light':'dark'));
+const saved=localStorage.getItem('theme');
+if(saved)setTheme(saved);
+else if(window.matchMedia('(prefers-color-scheme:light)').matches)setTheme('light');
 </script>
 </body>
 </html>
