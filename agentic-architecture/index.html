@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Open Blueprint for Cloud-Native AI Agents</title>
+<title>Running Agents Safely — Architecture for Governed AI Workloads</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
@@ -157,8 +157,8 @@ g[data-flow]:hover{filter:drop-shadow(0 0 6px var(--blue))}
 <button class="theme-toggle" id="themeBtn" title="Toggle light/dark mode">☀️</button>
 
 <div class="hero">
-  <h1>Open Blueprint for Cloud-Native AI Agents</h1>
-  <p class="sub">Architecture reference for operating autonomous agents as governed cloud-native workloads. Three views — full blueprint, security deep dive, and inference routing — each backed by open interfaces.</p>
+  <h1>Running Agents Safely</h1>
+  <p class="sub">How identity, sandboxing, tool authorization, and three-tier inference routing secure autonomous agents end-to-end — from the process inside the pod to the silicon underneath it. Click any box to see the flow.</p>
   <div class="legend">
     <span class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>Control / security plane</span>
     <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>Execution</span>
@@ -168,15 +168,15 @@ g[data-flow]:hover{filter:drop-shadow(0 0 6px var(--blue))}
   </div>
 </div>
 <nav class="tabs" role="tablist">
-  <button class="tab active" data-tab="blueprint" role="tab">Full Blueprint</button>
-  <button class="tab" data-tab="security" role="tab">Security Rings</button>
-  <button class="tab" data-tab="inference" role="tab">Inference &amp; Skills</button>
+  <button class="tab active" data-tab="blueprint" role="tab">Control &amp; Execution Planes</button>
+  <button class="tab" data-tab="security" role="tab">Isolation Rings &amp; Enforcement</button>
+  <button class="tab" data-tab="inference" role="tab">Inference Routing &amp; Tool Governance</button>
 </nav>
 
 <!-- ═══════════ FULL BLUEPRINT ═══════════ -->
 <section class="section active" id="blueprint">
-  <h2>Solution Architecture</h2>
-  <p class="desc">Three horizontal bands — control, execution, platform — with the MCP Gateway as the checkpoint between them. Every component is a role that several implementations can fill.</p>
+  <h2>Control &amp; Execution Planes</h2>
+  <p class="desc">Three horizontal bands — control, execution, platform — with the MCP Gateway as the authorization checkpoint between them. Every box is a role; implementations are interchangeable behind open interfaces.</p>
 
   <div class="example">
     <h3>Concrete example — 5G Core Health Agent</h3>
@@ -368,8 +368,8 @@ g[data-flow]:hover{filter:drop-shadow(0 0 6px var(--blue))}
 
 <!-- ═══════════ SECURITY RINGS ═══════════ -->
 <section class="section" id="security">
-  <h2>Defense in Depth: Three Isolation Rings</h2>
-  <p class="desc">Each ring assumes the ring inside it has already been compromised. Four cross-cutting controls apply across all three. The rings limit what a compromised agent can do; the controls reduce the chance it gets compromised.</p>
+  <h2>Isolation Rings &amp; Enforcement</h2>
+  <p class="desc">Three nested isolation boundaries — process, pod, hardware — each assuming the one inside it has already been compromised. Four cross-cutting controls reduce the chance of compromise and remove the rewards when it happens.</p>
   <div class="diagram-wrap">
     <svg viewBox="0 0 920 480" width="100%" style="min-width:700px" xmlns="http://www.w3.org/2000/svg">
       <rect x="40" y="20" width="510" height="340" rx="14" fill="none" stroke="var(--ns)" stroke-width="2" stroke-dasharray="6 3"/>
@@ -439,8 +439,8 @@ g[data-flow]:hover{filter:drop-shadow(0 0 6px var(--blue))}
 
 <!-- ═══════════ INFERENCE & SKILLS ═══════════ -->
 <section class="section" id="inference">
-  <h2>Inference Routing &amp; Skill Placement</h2>
-  <p class="desc">An inference request crosses three routers because the three decisions have different owners. The MCP Gateway fronts every backend the model selects at runtime. Backends the platform invokes under pre-authorized policy carry their own admission control. All paths land in the same trace.</p>
+  <h2>Inference Routing &amp; Tool Governance</h2>
+  <p class="desc">An inference request crosses three routers because security, cost, and efficiency are owned by different teams. Tool calls cross a separate authorization boundary. Three nouns — skill, MCP server, service backend — keep the enforcement points clean.</p>
   <div class="diagram-wrap">
     <svg viewBox="0 0 920 380" width="100%" style="min-width:700px" xmlns="http://www.w3.org/2000/svg">
       <defs><marker id="a3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--t3)"/></marker></defs>
