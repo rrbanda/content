@@ -579,7 +579,7 @@ g[data-flow]::after{content:''}
   <p class="desc">One request traced from user to GPU and back. The ReAct loop repeats until the goal is met. Click any node or use the stepper.</p>
 
   <div class="journey-svg">
-    <svg id="jSvg" viewBox="0 0 1160 200" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
+    <svg id="jSvg" viewBox="0 0 1160 210" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <marker id="ja" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,6 2.5,0 5" fill="var(--t3)"/></marker>
         <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
@@ -868,15 +868,15 @@ const JStages=[
 {id:"S01",l:"User",c:"var(--neutral)",comp:"CLI / Browser / SDK",plane:"External",
  w:"User sends a goal or prompt to the agent",
  d:"openshell sandbox exec my-agent -- 'fix the CI'. Or via browser through TLS Route to Secure Agent Workspace. OIDC auth (Keycloak PKCE / device flow) → short-lived token.",m:""},
-{id:"S02",l:"Gateway",c:"var(--blue)",comp:"OpenShell Gateway (port 17670)",plane:"Control",
- w:"Control plane receives request over gRPC/mTLS",
- d:"Validates auth (Ed25519 JWT). Routes to existing sandbox or creates new one. Z3 prover validates policy. Creates Sandbox CR (agents.x-k8s.io/v1beta1).",m:"~60mc / ~122 MiB overhead"},
-{id:"S03",l:"Operator",c:"var(--blue)",comp:"Agent Sandbox Operator (SIG Apps)",plane:"Control",
- w:"Controller reconciles the Sandbox CR into a pod",
- d:"Produces pod spec: init containers (supervisor-install + workspace-init), projected SA token (1h TTL). If warm pool exists → claims pre-provisioned pod.",m:"Cold: 16.4s → Warm: 247ms P50"},
-{id:"S04",l:"Supervisor",c:"var(--green)",comp:"OpenShell Supervisor (PID 1)",plane:"Execution",
- w:"Applies kernel isolation inside the pod",
- d:"Connects outbound to Gateway (mTLS). Receives policy + credentials. Applies Landlock LSM (irreversible). Installs seccomp-BPF (USER_NOTIF). Drops ALL capabilities. Launches agent as child — capability-free.",m:""},
+{id:"S02",l:"OS Gateway",c:"var(--blue)",comp:"OpenShell Gateway — Helm-deployed StatefulSet",plane:"Control",
+ w:"OpenShell Gateway: the control plane for all sandbox operations",
+ d:"Deployed via Helm chart (helm install openshell) as a StatefulSet with PVC-backed database. Exposes gRPC/mTLS on port 17670. Manages sandbox lifecycle, policy engine (Z3 prover), credential store (AES-256-GCM), JWT issuance (Ed25519), and OCSF audit. On sandbox request: validates policy, mints tokens, writes the Sandbox CR.",m:"Helm chart: helm-chart-0.0.116 · ~60mc / ~122 MiB"},
+{id:"S03",l:"Sandbox Op",c:"var(--blue)",comp:"Agent Sandbox Operator (Red Hat, SIG Apps CRD)",plane:"Control",
+ w:"Agent Sandbox Operator reconciles the CR into a running pod",
+ d:"Red Hat-distributed operator in agent-sandbox-system namespace. Watches Sandbox CRs (agents.x-k8s.io/v1beta1) created by OpenShell Gateway. Reconciles each CR into a pod spec with init containers (supervisor-install copies binary, workspace-init sets up /sandbox). Also runs the Sandbox Router for SSH/exec traffic. SandboxWarmPool CRs pre-provision pods for fast startup. The operator manages pod lifecycle only — it does not enforce security (that's the supervisor's job).",m:"Cold: 16.4s → Warm: 247ms P50"},
+{id:"S04",l:"Supervisor",c:"var(--green)",comp:"OpenShell Supervisor (PID 1) — inside the pod",plane:"Execution",
+ w:"Supervisor bootstraps: the handoff from operator to OpenShell",
+ d:"The operator created the pod — now OpenShell takes over inside it. Supervisor binary was injected via init container. Runs as PID 1 in the main container. Connects outbound to OpenShell Gateway (mTLS gRPC). Gateway streams policy + credentials + config. Supervisor applies Landlock LSM (irreversible filesystem scoping), installs seccomp-BPF (USER_NOTIF), then drops ALL capabilities and launches agent as child process — capability-free. The operator manages the pod lifecycle; the supervisor enforces what happens inside it.",m:""},
 {id:"S05",l:"Agent",c:"var(--green)",comp:"Agent Harness (OpenClaw, Hermes, LangGraph…)",plane:"Execution",
  w:"Loads skills, assembles prompt, begins ReAct loop",
  d:"Loads skill instruction files. Assembles: instructions + skills + context + tool schemas. 83 user tokens → 8,135 total (16.9× expansion). Begins: reason → act → observe.",m:"16.9× prompt expansion"},
@@ -907,10 +907,10 @@ const JStages=[
 ];
 
 const jNodePositions=[
-  {x:40,y:80},{x:130,y:80},{x:220,y:80},{x:330,y:80},{x:440,y:80},
-  {x:550,y:50},{x:650,y:50},{x:750,y:50},{x:850,y:50},{x:960,y:50},
-  {x:750,y:140},{x:550,y:140},
-  {x:1100,y:110}
+  {x:40,y:80},{x:140,y:80},{x:260,y:80},{x:380,y:80},{x:490,y:80},
+  {x:590,y:45},{x:690,y:45},{x:790,y:45},{x:890,y:45},{x:1000,y:45},
+  {x:790,y:145},{x:590,y:145},
+  {x:1100,y:100}
 ];
 
 let jCur=0,jTimer=null;
@@ -954,7 +954,7 @@ function jInit(){
     const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
     circle.classList.add('ring');
     circle.setAttribute('cx',String(pos.x));circle.setAttribute('cy',String(pos.y));
-    circle.setAttribute('r','14');circle.setAttribute('fill','var(--surface)');
+    circle.setAttribute('r','16');circle.setAttribute('fill','var(--surface)');
     circle.setAttribute('stroke',s.c);circle.setAttribute('stroke-width','2');
     g.appendChild(circle);
 
