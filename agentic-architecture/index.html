@@ -822,14 +822,24 @@ function showFlow(id){
 function closeFlow(){document.getElementById('modal').classList.remove('open');document.removeEventListener('keydown',escHandler)}
 function escHandler(e){if(e.key==='Escape')closeFlow()}
 
-/* Tab switching */
+/* Tab switching with URL hash */
+function switchTab(tabId){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  const btn=document.querySelector('.tab[data-tab="'+tabId+'"]');
+  const sec=document.getElementById(tabId);
+  if(btn&&sec){btn.classList.add('active');sec.classList.add('active');history.replaceState(null,null,'#'+tabId);}
+}
 document.querySelectorAll('.tab').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById(btn.dataset.tab).classList.add('active');
-  });
+  btn.addEventListener('click',()=>switchTab(btn.dataset.tab));
+});
+/* Load tab from URL hash on page load */
+const hashTab=(location.hash||'').replace('#','');
+if(hashTab&&document.getElementById(hashTab))switchTab(hashTab);
+/* Handle back/forward navigation */
+window.addEventListener('hashchange',()=>{
+  const h=(location.hash||'').replace('#','');
+  if(h&&document.getElementById(h))switchTab(h);
 });
 
 /* Click delegation for data-flow boxes + visual hints */
