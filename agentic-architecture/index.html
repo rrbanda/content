@@ -644,7 +644,7 @@ html.presentation .modal-card{max-width:95vw}
       <div style="font-size:.72rem;color:var(--t2)">GPU tensor core activity at C=10</div>
     </div>
     <div style="background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;flex:1;min-width:140px">
-      <div style="font-size:1.5rem;font-weight:700;color:var(--amber)">2,437ms</div>
+      <div style="font-size:1.5rem;font-weight:700;color:var(--amber)">1,610ms</div>
       <div style="font-size:.72rem;color:var(--t2)">Response processing at C=10 — the real bottleneck</div>
     </div>
     <div style="background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;flex:1;min-width:140px">
@@ -1001,7 +1001,7 @@ steps:[
 {t:"Agent harness reads skill instruction → decides to invoke an MCP tool",c:"amber"},
 {t:"Harness formats MCP call, sends through Sandbox Supervisor egress proxy",c:"green"},
 {t:"seccomp-BPF intercepts `connect()` syscall at kernel level",c:"green",d:"Supervisor resolves calling binary via /proc/pid/exe + SHA-256 hash verification (TOFU model)."},
-{t:"OPA/Rego policy evaluates: `{destination, binary_identity, L7_rules}`",c:"green",d:"Supports REST method+path, GraphQL, MCP tool names, JSON-RPC, SQL, WebSocket protocols."},
+{t:"OPA/Rego policy evaluates: `{destination, binary_identity, L7_rules}`",c:"green",d:"Supports REST method+path, GraphQL, MCP tool names, JSON-RPC, native TCP, WebSocket protocols."},
 {t:"If DENY: connection refused, OCSF NetworkActivity event logged. If ALLOW: request reaches MCP Gateway",c:"pink"},
 {t:"MCP Gateway at single endpoint — agent configured with `MCP_URL`",c:"blue",d:"Envoy + Kuadrant/Authorino. Authorization is by SVID token claims, never by prompt content."},
 {t:"Gateway forwards to correct MCP server from aggregated tool catalog",c:"neutral"},
@@ -1067,7 +1067,7 @@ steps:[
 {t:"`nftables` catch any attempt to bypass the proxy — raw sockets blocked by seccomp",c:"green"},
 {t:"Process ancestry tracked — subprocess inherits parent's identity constraints",c:"green"}
 ],m:[
-{v:"L7",l:"REST, GraphQL, MCP, JSON-RPC, SQL, WebSocket"},
+{v:"L7",l:"REST, GraphQL, MCP, JSON-RPC, native TCP, WebSocket"},
 {v:"SHA-256",l:"Binary verification (TOFU)"},
 {v:"0",l:"Keys in agent environment"}
 ]},
