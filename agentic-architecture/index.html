@@ -881,14 +881,14 @@ F01:{t:"End-to-end inference flow",src:"llm-d deep dive slides 11-18; Blog §Inf
 steps:[
 {t:"Agent harness sends inference request through Sandbox Supervisor egress proxy",c:"green"},
 {t:"Tier 1 — Security: Supervisor egress router evaluates policy",c:"green",d:"Privacy class check → PII detection-and-redaction → local vs cloud decision. Confidential context never leaves the cluster."},
-{t:"Request enters AI Gateway (Gateway API-conformant proxy)",c:"cyan",d:"Authorino authenticates based on subscription (ext-authz). Limitador rate-limits based on token usage."},
+{t:"Request enters AI Gateway (`Gateway API`-conformant proxy)",c:"cyan",d:"Authorino authenticates based on subscription (ext-authz). Limitador rate-limits based on token usage."},
 {t:"Tier 2 — Cost: Semantic Router classifies the request",c:"cyan",d:"Lightweight classifier selects cheapest capable model. Intent + complexity → model pool. Fallback escalates on low confidence."},
-{t:"Tier 3 — Efficiency: llm-d EPP selects optimal replica (ext-proc)",c:"blue",d:"EPP probes vLLM /metrics. Two modes: prefix-affinity (route to pod with cached KVs) + load-awareness (back-pressure management)."},
-{t:"If disaggregated: EPP selects prefill + decode workers separately",c:"blue",d:"Prefill pod processes prompt → returns KVXfer metadata. NIXL sidecar coordinates KV transfer. Decode pod pulls KVs → generates tokens."},
+{t:"Tier 3 — Efficiency: llm-d EPP selects optimal replica (`ext-proc`)",c:"blue",d:"EPP probes vLLM /metrics. Two modes: prefix-affinity (route to pod with cached KVs) + load-awareness (back-pressure management)."},
+{t:"If disaggregated: EPP selects `prefill` + `decode` workers separately",c:"blue",d:"Prefill pod processes prompt → returns KVXfer metadata. NIXL sidecar coordinates KV transfer. Decode pod pulls KVs → generates tokens."},
 {t:"vLLM worker runs inference on GPU — streams token response",c:"cyan"},
-{t:"KV cache management: offload to CPU RAM (local, global index) or remote storage for multi-turn reuse",c:"blue"},
-{t:"Response flows back: vLLM → EPP → Gateway → Supervisor proxy → Agent harness",c:"green"},
-{t:"Every hop traced: OTEL spans across all 3 tiers + MLflow records latencies and token costs",c:"neutral"}
+{t:"KV cache management: offload to `CPU RAM` (local, global index) or `remote storage` for multi-turn reuse",c:"blue"},
+{t:"Response flows back: `vLLM → EPP → Gateway → Supervisor → Agent`",c:"green"},
+{t:"Every hop traced: `OTEL` spans across all 3 tiers + `MLflow` records latencies and token costs",c:"neutral"}
 ],m:[
 {v:"95%",l:"KV cache hit rate (prefix-aware, 24 replicas)"},
 {v:"$1.2/M",l:"Output tokens (vs $25/M Opus, $15/M Sonnet)"},
@@ -898,15 +898,14 @@ steps:[
 
 F02:{t:"Tool call authorization flow",src:"Blog §Tool governance; Agentic deep dive slides 16-17",
 steps:[
-{t:"Agent harness reads skill instruction file → decides to invoke an MCP tool",c:"amber"},
+{t:"Agent harness reads skill instruction → decides to invoke an MCP tool",c:"amber"},
 {t:"Harness formats MCP call, sends through Sandbox Supervisor egress proxy",c:"green"},
-{t:"seccomp-BPF intercepts connect() syscall at kernel level",c:"green",d:"Supervisor resolves calling binary via /proc/pid/exe + SHA-256 hash verification (TOFU model)."},
-{t:"OPA/Rego policy evaluates: {destination, binary identity, L7 rules}",c:"green",d:"Supports REST method+path, GraphQL, MCP tool names, JSON-RPC, SQL, WebSocket protocols."},
-{t:"If DENY: connection refused, OCSF NetworkActivity event logged",c:"pink"},
-{t:"If ALLOW: request reaches MCP Gateway (single endpoint — agent sees one MCP_URL)",c:"blue"},
-{t:"MCP Gateway extracts SVID token claims from the request",c:"blue",d:"Envoy + Kuadrant/Authorino. Authorization is by token claims, never by prompt content."},
+{t:"seccomp-BPF intercepts `connect()` syscall at kernel level",c:"green",d:"Supervisor resolves calling binary via /proc/pid/exe + SHA-256 hash verification (TOFU model)."},
+{t:"OPA/Rego policy evaluates: `{destination, binary_identity, L7_rules}`",c:"green",d:"Supports REST method+path, GraphQL, MCP tool names, JSON-RPC, SQL, WebSocket protocols."},
+{t:"If DENY: connection refused, OCSF NetworkActivity event logged. If ALLOW: request reaches MCP Gateway",c:"pink"},
+{t:"MCP Gateway at single endpoint — agent configured with `MCP_URL`",c:"blue",d:"Envoy + Kuadrant/Authorino. Authorization is by SVID token claims, never by prompt content."},
 {t:"Gateway forwards to correct MCP server from aggregated tool catalog",c:"neutral"},
-{t:"MCP server calls its service backend (optimization engine, query service, etc.)",c:"neutral"},
+{t:"MCP server calls its service backend (query engine, optimization solver, etc.)",c:"neutral"},
 {t:"Response returns: backend → MCP server → Gateway → Supervisor → Agent",c:"green"},
 {t:"OCSF events emitted for every allow AND every deny decision",c:"neutral"}
 ]},
@@ -947,27 +946,25 @@ steps:[
 
 F05:{t:"SPIFFE workload identity lifecycle",src:"Blog §Workload identity; Agentic deep dive slide 24",
 steps:[
-{t:"SPIFFE/SPIRE issues JWT-SVID to each sandbox pod and gateway at deploy time",c:"blue",d:"SVID scoped to namespace + service account. Automatically rotated."},
-{t:"Supervisor presents projected ServiceAccount token (1h TTL) to gateway",c:"green"},
-{t:"Gateway mints Ed25519-signed sandbox token for the session",c:"blue"},
-{t:"For downstream services: authentication sidecar performs token exchange",c:"blue",d:"RFC 8693 token exchange or RFC 7523 JWT bearer grant with Keycloak/IdP."},
-{t:"SVID traded for short-lived access tokens to downstream services",c:"cyan"},
-{t:"No static API key exists anywhere in the path",c:"neutral"},
+{t:"SPIFFE/SPIRE issues `JWT-SVID` to each sandbox pod and gateway at deploy time",c:"blue",d:"SVID scoped to namespace + service account. Automatically rotated."},
+{t:"Supervisor presents projected `ServiceAccount` token (1h TTL) to gateway",c:"green"},
+{t:"Gateway mints `Ed25519`-signed sandbox token for the session",c:"blue"},
+{t:"Authentication sidecar performs token exchange for downstream services",c:"blue",d:"RFC 8693 token exchange or RFC 7523 JWT bearer grant with Keycloak/IdP."},
+{t:"SVID traded for short-lived access tokens — no static API key in any path",c:"cyan"},
 {t:"A leaked prompt or workspace file contains nothing durable to steal",c:"neutral"},
-{t:"Lifecycle tooling injects sidecar + identity plumbing at deploy time — no agent code changes",c:"blue"}
+{t:"Lifecycle tooling injects sidecar + identity plumbing at deploy time — `no agent code changes`",c:"blue"}
 ]},
 
-F06:{t:"Per-binary network enforcement",src:"OpenShell technical writeup §2.2; Agentic deep dive slides 15, 18",
+F06:{t:"Per-binary network enforcement",src:"OpenShell docs: policies/network-rules; Agentic deep dive slides 15, 18",
 steps:[
-{t:"Agent process calls connect() to establish a TCP connection",c:"amber"},
-{t:"seccomp-BPF filter intercepts the syscall (USER_NOTIF mode)",c:"green"},
-{t:"Supervisor resolves calling binary via /proc/pid/exe",c:"green"},
-{t:"SHA-256 hash computed and compared against TOFU (Trust On First Use) record",c:"green",d:"First-use hash is pinned. SHA-256 mismatch on subsequent calls → deny immediately."},
-{t:"Supervisor queries OPA/Rego with: {destination host:port, binary identity, L7 rules}",c:"green"},
-{t:"Example: 'gh' can reach github.com:443 while 'curl' is denied to the same host",c:"neutral"},
-{t:"If ALLOW: Supervisor proxy forwards request, optionally injects credentials at egress",c:"green"},
-{t:"If DENY: connection refused, OCSF NetworkActivity with disposition=Blocked",c:"pink"},
-{t:"nftables catch any attempt to bypass the proxy — raw sockets blocked by seccomp",c:"green"},
+{t:"Agent process calls `connect()` to establish a TCP connection",c:"amber"},
+{t:"`seccomp-BPF` filter intercepts the syscall (USER_NOTIF mode)",c:"green"},
+{t:"Supervisor resolves calling binary via `/proc/pid/exe`",c:"green"},
+{t:"SHA-256 hash computed — compared against TOFU record. Mismatch → deny immediately.",c:"green",d:"OpenShell records a hash of each executable the first time it takes part in a connection, and denies later connections if the file at that path changes."},
+{t:"OPA/Rego evaluates: `{destination host:port, binary identity, L7 rules}`",c:"green"},
+{t:"Example: `gh` can reach github.com:443 while `curl` is denied to the same host",c:"neutral",d:"A rule also applies to processes that a listed binary starts. A rule with an empty binaries list matches nothing."},
+{t:"If ALLOW: proxy forwards, optionally injects credentials. If DENY: connection refused, OCSF logged",c:"pink"},
+{t:"`nftables` catch any attempt to bypass the proxy — raw sockets blocked by seccomp",c:"green"},
 {t:"Process ancestry tracked — subprocess inherits parent's identity constraints",c:"green"}
 ],m:[
 {v:"L7",l:"REST, GraphQL, MCP, JSON-RPC, SQL, WebSocket"},
@@ -978,14 +975,12 @@ steps:[
 F07:{t:"Guardrails screening pipeline",src:"Agentic deep dive slides 26-28; NeMo Guardrails architecture",
 steps:[
 {t:"User or agent input arrives at the inference boundary",c:"amber"},
-{t:"TrustyAI Operator deploys NeMo Guardrails Server via NeMo-Guardrails CR",c:"blue",d:"Admin defines rails with oc create. Operator watches, deploys, and manages lifecycle."},
-{t:"Input detectors run in parallel: prompt injection, PII, toxicity, topic filter",c:"purple",d:"Internal detectors run in-process. External detectors called via API (e.g., regex, classifier)."},
-{t:"If input blocked: request rejected before reaching model — saves inference cost",c:"pink"},
-{t:"If input passes: forwarded to vLLM-deployed model for inference",c:"green"},
-{t:"Model generates response",c:"cyan"},
+{t:"TrustyAI Operator deploys NeMo Guardrails Server via `NeMo-Guardrails CR`",c:"blue",d:"Admin defines rails with oc create. Operator watches, deploys, and manages lifecycle."},
+{t:"Input detectors run in parallel: prompt injection, PII, toxicity, topic filter",c:"purple",d:"Internal detectors run in-process. External detectors called via API (regex, classifier, custom)."},
+{t:"If input blocked: request rejected before reaching model — saves inference cost. If passes: forwarded to model.",c:"pink"},
+{t:"Model generates response via `vLLM`",c:"cyan"},
 {t:"Output detectors screen response: harmful content, data leakage, off-policy generation",c:"purple"},
-{t:"If output blocked: response filtered or replaced",c:"pink"},
-{t:"If output passes: delivered to user/agent",c:"green"},
+{t:"If output blocked: response filtered or replaced. If passes: delivered to user/agent.",c:"pink"},
 {t:"All decisions logged — findings feed back into guardrail rules",c:"neutral"}
 ]},
 
@@ -1007,14 +1002,13 @@ steps:[
 F09:{t:"ReAct loop and harness internals",src:"Agentic deep dive slides 2-5; Blog §A new workload class",
 steps:[
 {t:"Harness receives goal/prompt from user or orchestrator",c:"green"},
-{t:"System prompt assembled: instructions + skill files + conversation context + tool schemas",c:"amber",d:"Prompt expansion: ~83 user tokens → 7,867–8,135 total input tokens (16–17× expansion)."},
+{t:"System prompt assembled: `instructions + skills + context + tool_schemas`",c:"amber",d:"Prompt expansion: ~83 user tokens → 7,867–8,135 total input tokens (16–17× expansion)."},
 {t:"Model reasons about the next action (Reason step)",c:"cyan"},
-{t:"If tool call needed: harness formats MCP call, sends through supervisor proxy (Act step)",c:"green"},
+{t:"If tool call needed: harness formats MCP call via supervisor proxy (Act step)",c:"green"},
 {t:"Tool result returned to harness, added to conversation context (Observe step)",c:"green"},
-{t:"Loop repeats: reason → act → observe until goal met or limits reached",c:"amber",d:"Limits: step count, token budget, cost cap, timeout. 40%+ of sessions run full auto-approve."},
-{t:"Two integration modes into OpenShell:",c:"blue"},
-{t:"Pattern 1: openshell sandbox create -- claude (whole-agent, no code changes)",c:"blue"},
-{t:"Pattern 2: harness.use_plugin('openshell') (per tool call, per sub-agent, or per session)",c:"blue"},
+{t:"Loop repeats: `reason → act → observe` until goal met or limits reached",c:"amber",d:"Limits: step count, token budget, cost cap, timeout. 40%+ of sessions run full auto-approve."},
+{t:"Integration mode 1: `openshell sandbox create -- claude` (whole-agent, no code changes)",c:"blue"},
+{t:"Integration mode 2: `harness.use_plugin('openshell')` (per tool call, sub-agent, or session)",c:"blue"},
 {t:"Harness options: OpenClaw, Hermes, LangGraph, LangChain Deep Agents, custom",c:"neutral"}
 ],m:[
 {v:"16.9×",l:"Prompt expansion (with OpenShell)"},
@@ -1022,16 +1016,16 @@ steps:[
 {v:"3",l:"Sandboxing patterns supported"}
 ]},
 
-F11:{t:"Observability pipeline",src:"OpenShell technical writeup §2.1; AGENTS.md §Sandbox Logging",
+F11:{t:"Observability pipeline",src:"OpenShell docs; AGENTS.md §Sandbox Logging; MLflow Tracing docs",
 steps:[
-{t:"Gateway emits OCSF v1.8.0 structured events for every allow/deny decision (JSON lines)",c:"blue"},
-{t:"Supervisor emits OCSF events: NetworkActivity, HttpActivity, ProcessActivity, ConfigStateChange, DetectionFinding",c:"green"},
-{t:"Gateway exports OpenTelemetry traces over OTLP/gRPC to Jaeger or Tempo",c:"cyan"},
-{t:"Agent harness: MLflow Tracing records tool calls, prompts, outputs, latencies, costs",c:"amber"},
+{t:"Gateway emits `OCSF v1.8.0` structured events for every allow/deny decision (JSON lines)",c:"blue"},
+{t:"Supervisor emits OCSF events: `NetworkActivity, HttpActivity, ProcessActivity, ConfigStateChange, DetectionFinding`",c:"green"},
+{t:"Gateway exports OpenTelemetry traces over `OTLP/gRPC` to Jaeger or Tempo",c:"cyan"},
+{t:"MLflow Tracing records agent steps, tool calls, prompts, outputs, latencies, and costs",c:"amber",d:"OpenTelemetry-compatible. One-line auto-tracing: mlflow.openai.autolog(). Framework-agnostic — works with OpenAI, LangChain, DSPy, and custom harnesses."},
 {t:"OTEL GenAI semantic conventions link inference requests to agent actions",c:"cyan",d:"Conventions still in development — plan for attribute changes, not interface rewrites."},
 {t:"All three streams merge: every hop lands in the same traceable trail",c:"neutral"},
-{t:"Export targets: Prometheus (port 9090), Jaeger/Tempo (traces), SIEM (OCSF JSON → Splunk/Elastic)",c:"neutral"},
-{t:"Production traces become new eval cases — feeds the continuous improvement loop back to EvalHub",c:"blue"}
+{t:"Export: `Prometheus` (port 9090), `Jaeger/Tempo` (traces), SIEM (`Splunk/Elastic` via OCSF JSON)",c:"neutral"},
+{t:"Production traces become new eval cases — feeds the continuous improvement loop back to `EvalHub`",c:"blue"}
 ]}
 };
 
