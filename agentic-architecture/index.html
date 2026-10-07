@@ -973,23 +973,23 @@ html.presentation .modal-card{max-width:95vw}
 <script>
 /* ── Flow data (technically accurate from llm-d deep dive, agentic deep dive, blog, OpenShell docs) ── */
 const F={
-F01:{t:"End-to-end inference flow",src:"llm-d deep dive slides 11-18; Blog §Inference routing",
+F01:{t:"MaaS: Model-as-a-Service inference flow",src:"RHOAI 3.5 MaaS docs; llm-d deep dive slides 11-18",
 steps:[
-{t:"Agent harness sends inference request through Sandbox Supervisor egress proxy",c:"green"},
-{t:"Tier 1 — Security: Supervisor egress router evaluates policy",c:"green",d:"Privacy class check → PII detection-and-redaction → local vs cloud decision. Confidential context never leaves the cluster."},
-{t:"Request enters AI Gateway (`Gateway API`-conformant proxy)",c:"cyan",d:"Authorino authenticates based on subscription (ext-authz). Limitador rate-limits based on token usage."},
-{t:"Tier 2 — Cost: Semantic Router classifies the request",c:"cyan",d:"Lightweight classifier selects cheapest capable model. Intent + complexity → model pool. Fallback escalates on low confidence."},
-{t:"Tier 3 — Efficiency: llm-d EPP selects optimal replica (`ext-proc`)",c:"blue",d:"EPP probes vLLM /metrics. Two modes: prefix-affinity (route to pod with cached KVs) + load-awareness (back-pressure management)."},
-{t:"If disaggregated: EPP selects `prefill` + `decode` workers separately",c:"blue",d:"Prefill pod processes prompt → returns KVXfer metadata. NIXL sidecar coordinates KV transfer. Decode pod pulls KVs → generates tokens."},
-{t:"vLLM worker runs inference on GPU — streams token response",c:"cyan"},
-{t:"KV cache management: offload to `CPU RAM` (local, global index) or `remote storage` for multi-turn reuse",c:"blue"},
-{t:"Response flows back: `vLLM → EPP → Gateway → Supervisor → Agent`",c:"green"},
-{t:"Every hop traced: `OTEL` spans across all 3 tiers + `MLflow` records latencies and token costs",c:"neutral"}
+{t:"Agent or user sends inference request (OpenAI-compatible `/v1/chat/completions`)",c:"amber",d:"Standard OpenAI SDK works out of the box — Python openai, LangChain, LlamaIndex. Model name in the request body routes to the right backend. API key authenticates the caller."},
+{t:"Request hits the MaaS Gateway (`Gateway API` + Kuadrant + Authorino + Limitador)",c:"cyan",d:"Built on Red Hat Connectivity Link Operator. Gateway API-conformant proxy in openshift-ingress namespace. Authorino handles auth (API key or OIDC). Limitador enforces token limits per subscription."},
+{t:"Authorino authenticates: API key validated against PostgreSQL-backed lifecycle store",c:"blue",d:"Users create API keys via dashboard or CLI. Keys can be permanent or time-limited. Each key is tied to a MaaSSubscription which defines group → models → token limits. External OIDC also supported."},
+{t:"Limitador checks subscription quota: token rate limits per model per group",c:"blue",d:"MaaSSubscription CRs define configurable token limits. Priority levels determine which subscription applies when a user belongs to multiple groups. Usage tracked for cost attribution and showback."},
+{t:"Gateway routes to model backend — self-hosted (llm-d/vLLM) or external provider",c:"cyan",d:"Self-hosted: llm-d distributed inference or vLLM runtime, registered via MaaSModelRef CR. External: AWS Bedrock, Azure OpenAI, Google Vertex AI through ExternalProvider + ExternalModel CRs. Same governance for both."},
+{t:"For external models: multi-provider API passthrough preserves native format",c:"cyan",d:"Anthropic Messages API, OpenAI Responses API routed without format translation. Preserves prompt caching, extended thinking, provider-specific features. AI coding tools connect to one MaaS URL, switch models mid-session via body-based routing."},
+{t:"For self-hosted: Tier 2 Semantic Router selects cheapest capable model",c:"cyan",d:"Lightweight intent classifier: complexity → model pool (e.g., Nemotron-mini vs full Llama). Fallback escalates on low confidence."},
+{t:"Tier 3: llm-d EPP selects optimal vLLM replica (`ext-proc`)",c:"blue",d:"Probes vLLM /metrics. Prefix-affinity: route to pod with cached KVs (95% hit rate). Load-awareness: back-pressure management. If disaggregated: selects separate prefill + decode workers via NIXL sidecar."},
+{t:"vLLM worker runs inference on GPU — tokens stream back through the gateway",c:"neutral",d:"KV cache offload to CPU RAM or remote storage for multi-turn reuse. Response: vLLM → EPP → Gateway → caller. Token consumption metered against subscription quota."},
+{t:"Observability: token consumption, request counts, and rate-limit violations tracked",c:"purple",d:"MaaS observability dashboard shows per-subscription metrics. Export usage data in CSV for cost attribution and showback reporting. OTEL spans across all tiers. Prometheus + Grafana integration."}
 ],m:[
 {v:"95%",l:"KV cache hit rate (prefix-aware, 24 replicas)"},
-{v:"$1.2/M",l:"Output tokens (vs $25/M Opus, $15/M Sonnet)"},
-{v:"900",l:"Tokens/sec/GPU (B200)"},
-{v:"2.2%",l:"Sandbox overhead of E2E latency"}
+{v:"$1.2/M",l:"Self-hosted output tokens (vs $25/M Opus)"},
+{v:"OpenAI",l:"/v1/chat/completions compatible"},
+{v:"Multi",l:"Self-hosted + external providers, one gateway"}
 ]},
 
 F02:{t:"Tool call authorization flow",src:"Blog §Tool governance; Agentic deep dive slides 16-17",
