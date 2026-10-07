@@ -193,7 +193,7 @@ g[data-flow]::after{content:''}
   backdrop-filter:blur(4px)}
 .modal-backdrop.open{display:flex;animation:fadeIn .2s ease}
 .modal-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;
-  width:100%;max-width:660px;overflow:hidden;animation:modalIn .25s ease}
+  width:100%;max-width:1060px;overflow:hidden;animation:modalIn .25s ease}
 @keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
 .modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;
   border-bottom:1px solid var(--border);gap:12px}
@@ -1038,42 +1038,125 @@ const ownerMap={green:'Execution',blue:'Control Plane',cyan:'Supervisor',amber:'
 function showFlow(id){
   const f=F[id];if(!f)return;
   const modal=document.getElementById('modal');
+  const steps=f.steps;const n=steps.length;
+
+  // Build horizontal SVG path
+  const gap=Math.min(90,900/n);const startX=30;const y=50;
+  const positions=steps.map((_,i)=>({x:startX+i*gap,y}));
+  let pathD='M'+positions[0].x+' '+y;
+  for(let i=1;i<n;i++) pathD+=' L'+positions[i].x+' '+y;
+  const svgW=positions[n-1].x+40;
+
   let html=`<div class="modal-card">
     <div class="modal-hdr"><h3>${f.t}</h3><span class="src">${id}</span><button class="modal-close" onclick="closeFlow()">&times;</button></div>
-    <div class="modal-body">`;
-  f.steps.forEach((s,i)=>{
-    const clr=colorMap[s.c]||colorMap.neutral;
-    const nextClr=f.steps[i+1]?colorMap[f.steps[i+1].c]||colorMap.neutral:clr;
-    const owner=ownerMap[s.c]||'';
-    // Extract code blocks (text between backticks)
-    let text=s.t;let code='';
-    const codeMatch=text.match(/`([^`]+)`/);
-    if(codeMatch){text=text.replace(codeMatch[0],'');code=codeMatch[1];}
-    // Check for branch indicators
-    const isAllow=text.includes('ALLOW')||text.includes('If both pass');
-    const isDeny=text.includes('DENY')||text.includes('fail closed')||text.includes('blocked');
+    <div style="padding:12px 16px;overflow-x:auto;border-bottom:1px solid var(--border)">
+      <svg id="mSvg" viewBox="0 0 ${svgW} 90" width="100%" style="min-width:${Math.min(svgW,700)}px;display:block">
+        <path d="${pathD}" fill="none" stroke="var(--border)" stroke-width="2" stroke-linecap="round"/>
+        <path id="mPathA" d="${pathD}" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round"
+          stroke-dasharray="9999" stroke-dashoffset="9999"/>`;
 
-    html+=`<div class="step" style="--step-color:${clr};--step-next:${nextClr}">
-      <div class="step-n" style="background:${clr}">${i+1}</div>
-      <div class="step-body" style="border-left-color:${clr}">
-        <div class="step-text">${text}${owner?`<span class="step-owner" style="background:${clr}20;color:${clr}">${owner}</span>`:''}</div>
-        ${code?`<code class="step-code">${code}</code>`:''}
-        ${s.d?`<div class="step-detail">${s.d}</div>`:''}
-        ${isAllow&&isDeny?`<div class="step-branch"><div class="step-allow">✓ ALLOW → credential injected, request forwarded</div><div class="step-deny">✗ DENY → blocked, OCSF event logged</div></div>`:''}
-      </div></div>`;
+  steps.forEach((s,i)=>{
+    const clr=colorMap[s.c]||colorMap.neutral;
+    const px=positions[i].x;
+    html+=`<g class="j-node" style="cursor:pointer" onclick="mGoTo(${i})">
+      <circle cx="${px}" cy="${y}" r="14" fill="var(--surface)" stroke="${clr}" stroke-width="2" class="mRing" data-clr="${clr}"/>
+      <text x="${px}" y="${y+4}" text-anchor="middle" font-size="9" font-weight="700" fill="var(--t1)" font-family="system-ui,sans-serif" pointer-events="none">${i+1}</text>
+      <text x="${px}" y="${y+26}" text-anchor="middle" font-size="7" fill="var(--t2)" font-family="system-ui,sans-serif" pointer-events="none">${(s.t.replace(/`[^`]+`/g,'').split('—')[0]||'').trim().substring(0,12)}</text>
+    </g>`;
   });
-  html+=`</div>`;
+  html+=`</svg></div>
+    <div id="mDetail" class="j-detail" style="margin:12px 16px;border-left:3px solid var(--blue)">
+      <h3 id="mTitle"></h3>
+      <div class="j-comp" id="mComp"></div>
+      <div class="j-desc" id="mDesc"></div>
+    </div>`;
   if(f.m){
     html+=`<div class="modal-metrics">`;
     f.m.forEach(m=>{html+=`<div class="metric"><span class="metric-val">${m.v}</span><span class="metric-lbl">${m.l}</span></div>`;});
     html+=`</div>`;
   }
-  html+=`<div class="modal-ft"><p>Source: ${f.src}</p></div></div>`;
+  html+=`<div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-top:1px solid var(--border)">
+    <button onclick="mPrev()" style="background:var(--surface);border:1px solid var(--border);color:var(--t1);border-radius:6px;padding:4px 14px;font-size:12px;cursor:pointer;font-family:system-ui,sans-serif">◀ Prev</button>
+    <div id="mDots" style="display:flex;gap:4px;align-items:center"></div>
+    <button onclick="mNext()" style="background:var(--surface);border:1px solid var(--border);color:var(--t1);border-radius:6px;padding:4px 14px;font-size:12px;cursor:pointer;font-family:system-ui,sans-serif">Next ▶</button>
+    <button onclick="mTogglePlay()" id="mPlayBtn" style="background:var(--blue-d);border:1px solid var(--blue);color:var(--blue);border-radius:6px;padding:4px 14px;font-size:12px;cursor:pointer;font-family:system-ui,sans-serif">▶ Play</button>
+  </div>
+  <div class="modal-ft"><p>Source: ${f.src}</p></div></div>`;
+
   modal.innerHTML=html;
   modal.classList.add('open');
   document.addEventListener('keydown',escHandler);
+
+  // Build dots
+  const dotsEl=document.getElementById('mDots');
+  steps.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='s-dot';d.style.cssText='width:6px;height:6px;border-radius:50%;border:1.5px solid var(--t3);cursor:pointer;transition:all .2s';
+    d.addEventListener('click',()=>mGoTo(i));
+    dotsEl.appendChild(d);
+  });
+
+  window._mSteps=steps;window._mPositions=positions;window._mCur=0;window._mTimer=null;
+  mGoTo(0);
 }
-function closeFlow(){document.getElementById('modal').classList.remove('open');document.removeEventListener('keydown',escHandler)}
+
+function mGoTo(idx){
+  const steps=window._mSteps;if(!steps)return;
+  const s=steps[idx];window._mCur=idx;
+  const clr=colorMap[s.c]||colorMap.neutral;
+
+  // Parse code blocks
+  let title=s.t;let code='';
+  const cm=title.match(/`([^`]+)`/);
+  if(cm){code=cm[1];title=title.replace(cm[0],'');}
+
+  document.getElementById('mTitle').innerHTML=`<span class="j-badge" style="background:${clr};color:#fff">${idx+1}</span> ${title}${ownerMap[s.c]?` <span class="step-owner" style="background:${clr}20;color:${clr}">${ownerMap[s.c]}</span>`:''}`;
+  document.getElementById('mComp').innerHTML=(code?`<code class="step-code" style="display:inline-block;margin-bottom:4px">${code}</code>`:'')+
+    (s.d?`<div style="color:var(--t2);font-size:.78rem;line-height:1.5;margin-top:4px">${s.d}</div>`:'');
+  document.getElementById('mDesc').textContent='';
+  document.getElementById('mDetail').style.borderLeftColor=clr;
+
+  // Update SVG nodes
+  document.querySelectorAll('#mSvg .mRing').forEach((c,i)=>{
+    const nodeClr=c.dataset.clr;
+    if(i<idx){c.setAttribute('fill',nodeClr);c.setAttribute('stroke-width','2');}
+    else if(i===idx){c.setAttribute('fill',nodeClr);c.setAttribute('stroke-width','3');c.setAttribute('r','16');}
+    else{c.setAttribute('fill','var(--surface)');c.setAttribute('stroke-width','2');c.setAttribute('r','14');}
+  });
+
+  // Animate path progress
+  const pathA=document.getElementById('mPathA');
+  if(pathA){
+    const len=pathA.getTotalLength();
+    pathA.style.strokeDasharray=len;
+    pathA.style.strokeDashoffset=String(len-len*(idx/(steps.length-1||1)));
+    pathA.style.transition='stroke-dashoffset .4s ease';
+  }
+
+  // Update dots
+  document.querySelectorAll('#mDots .s-dot').forEach((d,i)=>{
+    d.style.background=i<idx?'var(--t3)':i===idx?'var(--blue)':'transparent';
+    d.style.borderColor=i===idx?'var(--blue)':'var(--t3)';
+    d.style.transform=i===idx?'scale(1.4)':'scale(1)';
+  });
+}
+function mPrev(){if(window._mCur>0)mGoTo(window._mCur-1)}
+function mNext(){if(window._mCur<(window._mSteps||[]).length-1)mGoTo(window._mCur+1)}
+function mTogglePlay(){
+  const btn=document.getElementById('mPlayBtn');
+  if(window._mTimer){clearInterval(window._mTimer);window._mTimer=null;btn.textContent='▶ Play';return;}
+  btn.textContent='⏸ Pause';
+  if(window._mCur>=(window._mSteps||[]).length-1)mGoTo(0);
+  window._mTimer=setInterval(()=>{
+    if(window._mCur<(window._mSteps||[]).length-1)mNext();
+    else{clearInterval(window._mTimer);window._mTimer=null;document.getElementById('mPlayBtn').textContent='▶ Play';}
+  },2500);
+}
+function closeFlow(){
+  document.getElementById('modal').classList.remove('open');
+  document.removeEventListener('keydown',escHandler);
+  if(window._mTimer){clearInterval(window._mTimer);window._mTimer=null;}
+}
 function escHandler(e){if(e.key==='Escape')closeFlow()}
 
 /* Tab switching with URL hash */
