@@ -73,14 +73,27 @@ html{scroll-behavior:smooth;--s:1}
 @media(min-width:1920px){html{--s:1.3}}
 html.presentation{--s:1.45}
 html.presentation .hero .sub,html.presentation .legend,html.presentation .hero h1{display:none}
-html.presentation .hero{padding:4px 24px 2px}
+html.presentation .hero{padding:2px 24px 0}
+html.presentation .info-btn{display:none}
 html.presentation footer{display:none}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
   background:var(--bg);color:var(--t1);line-height:1.6;overflow-x:hidden;transition:background .3s,color .3s}
-.hero{padding:12px 24px 8px;text-align:center;
-  border-bottom:1px solid var(--border-s);transition:background .3s}
-.hero h1{font-size:calc(1.2rem * var(--s));font-weight:700;letter-spacing:-.02em;margin-bottom:2px}
-.hero .sub{color:var(--t2);font-size:calc(.75rem * var(--s));max-width:640px;margin:0 auto;line-height:1.4}
+.hero{padding:6px 24px 4px;text-align:center;
+  border-bottom:1px solid var(--border-s);transition:background .3s;display:flex;align-items:center;justify-content:center;gap:8px}
+.hero h1{font-size:calc(1.1rem * var(--s));font-weight:700;letter-spacing:-.02em;margin:0}
+/* Info popover */
+.info-btn{width:calc(22px * var(--s));height:calc(22px * var(--s));border-radius:50%;border:1.5px solid var(--t3);
+  background:transparent;color:var(--t3);font-size:calc(12px * var(--s));font-weight:700;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;transition:all .2s;font-family:system-ui,sans-serif;flex-shrink:0}
+.info-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-d)}
+.info-pop{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:8px;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:calc(14px * var(--s));
+  width:min(500px,90vw);z-index:15;box-shadow:0 8px 24px rgba(0,0,0,.3);animation:fadeIn .2s ease}
+.info-pop.open{display:block}
+.info-pop p{font-size:calc(.8rem * var(--s));color:var(--t2);line-height:1.5;margin-bottom:8px}
+.info-pop .legend{margin-top:8px;justify-content:flex-start;gap:calc(10px * var(--s))}
+.info-pop .legend-item{font-size:calc(9px * var(--s))}
+.info-pop .tip{font-size:calc(.75rem * var(--s));color:var(--t1);font-weight:500;margin-top:6px}
 .legend{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:6px}
 .legend-item{display:flex;align-items:center;gap:3px;font-size:calc(10px * var(--s));color:var(--t2)}
 .legend-dot{width:calc(8px * var(--s));height:calc(8px * var(--s));border-radius:2px;flex-shrink:0}
@@ -250,15 +263,19 @@ html.presentation .modal-card{max-width:95vw}
 <button class="pres-toggle" id="presBtn" title="Toggle presentation mode">⛶</button>
 <button class="theme-toggle" id="themeBtn" title="Toggle light/dark mode">☀️</button>
 
-<div class="hero">
+<div class="hero" style="position:relative">
   <h1>Agentic AI Platform Architecture</h1>
-  <p class="sub">Security, governance, and inference routing for autonomous agents at scale — from process isolation to silicon. <strong style="color:var(--t1)">Click any ↗ box</strong> for the detailed flow.</p>
-  <div class="legend">
-    <span class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>Control / security plane</span>
-    <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>Execution</span>
-    <span class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span>Skills (instructions)</span>
-    <span class="legend-item"><span class="legend-dot" style="background:var(--cyan)"></span>Inference plane</span>
-    <span class="legend-item"><span class="legend-dot" style="background:var(--neutral)"></span>Platform / external</span>
+  <button class="info-btn" id="infoBtn" onclick="document.getElementById('infoPop').classList.toggle('open')" aria-label="About this page">i</button>
+  <div class="info-pop" id="infoPop">
+    <p>Security, governance, and inference routing for autonomous agents at scale — from process isolation to silicon.</p>
+    <p class="tip">Click any ↗ box in the diagrams for a step-by-step technical flow.</p>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>Control plane</span>
+      <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>Execution</span>
+      <span class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span>Skills</span>
+      <span class="legend-item"><span class="legend-dot" style="background:var(--cyan)"></span>Inference</span>
+      <span class="legend-item"><span class="legend-dot" style="background:var(--neutral)"></span>Platform</span>
+    </div>
   </div>
 </div>
 <nav class="tabs" role="tablist">
@@ -1690,6 +1707,12 @@ function togglePres(){
 presBtn.addEventListener('click',togglePres);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.documentElement.classList.contains('presentation')){
   document.documentElement.classList.remove('presentation');presBtn.textContent='⛶';}});
+
+/* Close info popover on outside click */
+document.addEventListener('click',e=>{
+  const pop=document.getElementById('infoPop');
+  if(pop.classList.contains('open')&&!pop.contains(e.target)&&e.target.id!=='infoBtn')pop.classList.remove('open');
+});
 
 /* Theme toggle */
 const html=document.documentElement,toggle=document.getElementById('themeBtn');
