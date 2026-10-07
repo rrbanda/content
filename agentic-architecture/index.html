@@ -816,172 +816,44 @@ g[data-flow]::after{content:''}
 <!-- ═══════════ HOW SANDBOXING WORKS ═══════════ -->
 <section class="section" id="sandboxing">
   <h2>How Agent Sandboxing Works</h2>
-  <p class="desc">Step through the handoff between three systems — OpenShell Gateway, Agent Sandbox Operator, and the Supervisor — to see exactly how an agent goes from a CLI command to an isolated, policy-enforced runtime. Click each step or use the controls.</p>
+  <p class="desc">Step through the handoff between OpenShell Gateway, Agent Sandbox Operator, and the Supervisor. Click any node or hit Play.</p>
 
-  <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
-    <!-- Left: step flow -->
-    <div style="flex:1;min-width:340px">
-      <div class="sb-flow" id="sbFlow">
+  <div class="journey-svg">
+    <svg id="sbSvg" viewBox="0 0 1160 180" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="sbGlow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <path id="sbPathBg" class="j-path" d=""/>
+      <path id="sbPathActive" class="j-path-active" d=""/>
+      <g id="sbTraveler" style="opacity:0">
+        <circle r="6" fill="var(--blue)" opacity=".9" filter="url(#sbGlow)"/>
+        <circle r="3" fill="#fff" opacity=".8"/>
+        <animateMotion id="sbMotion" dur="18s" repeatCount="indefinite"><mpath href="#sbPathActive"/></animateMotion>
+      </g>
+      <circle r="4" fill="var(--blue)" opacity=".3" filter="url(#sbGlow)">
+        <animateMotion dur="18s" repeatCount="indefinite" begin="0.4s"><mpath href="#sbPathActive"/></animateMotion>
+      </circle>
+      <g id="sbNodes"></g>
+    </svg>
+  </div>
 
-        <div class="sb-step active" data-sb="0" onclick="sbGo(0)">
-          <div class="sb-line"></div>
-          <div class="sb-num">1</div>
-          <div class="sb-content">
-            <h4>User creates a sandbox <span class="sb-owner" style="background:var(--neutral-d);color:var(--neutral)">CLI / SDK</span></h4>
-            <p><code>openshell sandbox create --from my-image:latest --provider claude-code -- claude</code></p>
-            <div class="sb-detail">The trailing command (<code>claude</code>) becomes the sandbox's canonical main process. <code>--provider</code> attaches credentials. <code>--from</code> selects the container image. Without <code>--from</code>, defaults to <code>nvcr.io/nvidia/base/ubuntu:24.04</code>.</div>
-          </div>
-        </div>
-
-        <div class="sb-step" data-sb="1" onclick="sbGo(1)">
-          <div class="sb-line"></div>
-          <div class="sb-num">2</div>
-          <div class="sb-content">
-            <h4>Gateway validates and plans <span class="sb-owner" style="background:var(--blue-d);color:var(--blue)">OpenShell Gateway</span></h4>
-            <p>The control plane for all OpenShell operations. Receives the gRPC/mTLS request.</p>
-            <div class="sb-detail">Resolves the effective policy (global → sandbox → image → default). Runs the Z3 prover to verify no risky configurations. Encrypts and stores credentials (AES-256-GCM, KEK-wrapped). Mints an Ed25519-signed JWT for the sandbox session. Resolves provider profiles and endpoint bindings.</div>
-          </div>
-        </div>
-
-        <div class="sb-step" data-sb="2" onclick="sbGo(2)">
-          <div class="sb-line"></div>
-          <div class="sb-num">3</div>
-          <div class="sb-content">
-            <h4>Sandbox CR created <span class="sb-owner" style="background:var(--blue-d);color:var(--blue)">OpenShell Gateway</span></h4>
-            <p>Gateway writes a <code>Sandbox</code> custom resource (<code>agents.x-k8s.io/v1beta1</code>) with OpenShell annotations.</p>
-            <div class="sb-detail">On Kubernetes: CR includes <code>openshell.ai/sandbox-id</code>, <code>openshell.ai/sandbox-name</code>, and <code>openshell.ai/managed-by: openshell</code> labels. On Docker/Podman: gateway creates the container directly — no CR or operator involved. Both paths produce the same result.</div>
-          </div>
-        </div>
-
-        <div class="sb-step" data-sb="3" onclick="sbGo(3)">
-          <div class="sb-line"></div>
-          <div class="sb-num">4</div>
-          <div class="sb-content">
-            <h4>Operator reconciles CR → Pod <span class="sb-owner" style="background:var(--green-d);color:var(--green)">Agent Sandbox Operator</span></h4>
-            <p>The operator watches for Sandbox CRs and reconciles each into a pod specification.</p>
-            <div class="sb-detail">Pod spec includes: init container <code>openshell-supervisor-install</code> (copies supervisor binary to shared emptyDir), init container <code>workspace-init</code> (prepares /sandbox), projected ServiceAccount token (1h TTL), security context with SYS_ADMIN + NET_ADMIN (for supervisor only). If a <code>SandboxWarmPool</code> CR exists, claims a pre-provisioned pod instead — cold start 16.4s → warm start 247ms.</div>
-          </div>
-        </div>
-
-        <div class="sb-step" data-sb="4" onclick="sbGo(4)">
-          <div class="sb-line"></div>
-          <div class="sb-num">5</div>
-          <div class="sb-content">
-            <h4>Supervisor starts as PID 1 <span class="sb-owner" style="background:var(--cyan-d);color:var(--cyan)">OpenShell Supervisor</span></h4>
-            <p>The main container's entrypoint is the OpenShell supervisor — the security data plane.</p>
-            <div class="sb-detail">Runs <code>/opt/openshell/bin/openshell-sandbox --workdir /sandbox</code>. Connects outbound to the Gateway over mTLS gRPC. Authenticates with the projected ServiceAccount token. Gateway streams policy, credentials, and configuration to the supervisor over this session.</div>
-          </div>
-        </div>
-
-        <div class="sb-step" data-sb="5" onclick="sbGo(5)">
-          <div class="sb-line"></div>
-          <div class="sb-num">6</div>
-          <div class="sb-content">
-            <h4>Kernel isolation applied <span class="sb-owner" style="background:var(--cyan-d);color:var(--cyan)">OpenShell Supervisor</span></h4>
-            <p>Three kernel-level security primitives locked in — irreversible once applied.</p>
-            <div class="sb-detail"><strong>Landlock LSM:</strong> filesystem scoping — explicit path allowlist. Even root cannot loosen it after process start. <strong>seccomp-BPF (USER_NOTIF):</strong> intercepts connect(), bind(), sendmsg(). Every outbound connection mediated by the supervisor. <strong>Network namespace + OPA proxy:</strong> per-binary, per-destination policy. nftables catch any bypass attempt. Filesystem and process settings are fixed; network policies can be hot-reloaded while running.</div>
-          </div>
-        </div>
-
-        <div class="sb-step" data-sb="6" onclick="sbGo(6)">
-          <div class="sb-line"></div>
-          <div class="sb-num">7</div>
-          <div class="sb-content">
-            <h4>Credentials replaced with placeholders <span class="sb-owner" style="background:var(--cyan-d);color:var(--cyan)">OpenShell Supervisor</span></h4>
-            <p>Every credential becomes an opaque placeholder in the agent's environment.</p>
-            <div class="sb-detail">The agent sees <code>$ANTHROPIC_API_KEY</code> = an opaque token, not the real key. When the agent sends a request containing the placeholder, the proxy resolves it at the last moment — only if both (1) network policy allows the binary+destination AND (2) the provider profile authorizes the credential at that endpoint. Supports: header, Basic auth, query param, URL path, request body (opt-in), WebSocket (opt-in), AWS SigV4. Unknown or expired placeholders <strong>fail closed</strong> — never forwarded upstream.</div>
-          </div>
-        </div>
-
-        <div class="sb-step" data-sb="7" onclick="sbGo(7)">
-          <div class="sb-line"></div>
-          <div class="sb-num">8</div>
-          <div class="sb-content">
-            <h4>Agent launched capability-free <span class="sb-owner" style="background:var(--amber-d);color:var(--amber)">Agent Process</span></h4>
-            <p>Supervisor drops ALL capabilities, then spawns the agent as a child process.</p>
-            <div class="sb-detail">The agent runs with zero Linux capabilities. It loads skills, assembles the system prompt (16.9× expansion), and begins the ReAct loop. Every outbound network call is intercepted by seccomp, evaluated by OPA/Rego, and either allowed (with credential injection) or denied (with OCSF v1.8.0 audit event). The agent cannot override the policy because it lives outside the process it constrains. Sandbox reaches <strong>Ready</strong> phase.</div>
-          </div>
-        </div>
-
-        <div class="sb-step" data-sb="8" onclick="sbGo(8)">
-          <div class="sb-num">9</div>
-          <div class="sb-content">
-            <h4>Every decision audited <span class="sb-owner" style="background:var(--purple-d);color:var(--purple)">OCSF + OTEL + MLflow</span></h4>
-            <p>The full lifecycle is traced end-to-end — every allow, every deny, every tool call.</p>
-            <div class="sb-detail">OCSF v1.8.0 structured events: NetworkActivity, HttpActivity, ProcessActivity, ConfigStateChange, DetectionFinding. OTEL spans across the full request path. MLflow Tracing records agent steps, tool calls, prompts, outputs, latencies, and costs. Prometheus metrics on port 9090. All exportable to SIEM (Splunk/Elastic). Production traces become evaluation datasets — continuous improvement.</div>
-          </div>
-        </div>
+  <div class="j-detail" id="sbDetail" style="border-left:3px solid var(--blue)">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+      <div style="flex:1">
+        <h3 id="sbTitle"></h3>
+        <div class="j-comp" id="sbComp"></div>
+        <div class="j-desc" id="sbDesc"></div>
+        <div class="j-metric" id="sbMetric"></div>
       </div>
-
-      <div class="sb-controls">
-        <button onclick="sbPrev()">◀ Prev</button>
-        <button onclick="sbNext()">Next ▶</button>
-        <button class="sb-play" onclick="sbTogglePlay()" id="sbPlayBtn">▶ Play</button>
-      </div>
+      <button id="sbResumeBtn" onclick="sbResume()" style="display:none;background:var(--blue-d);border:1px solid var(--blue);color:var(--blue);border-radius:6px;padding:5px 14px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:system-ui,sans-serif">▶ Resume</button>
     </div>
+  </div>
 
-    <!-- Right: live architecture diagram showing who owns what -->
-    <div style="flex-shrink:0;width:340px;position:sticky;top:60px">
-      <div style="border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);padding:12px;transition:all .3s">
-        <svg viewBox="0 0 310 400" width="100%" xmlns="http://www.w3.org/2000/svg">
-          <text x="155" y="16" text-anchor="middle" fill="var(--t2)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Who owns what</text>
-
-          <!-- CLI -->
-          <rect id="sbD0" x="90" y="24" width="130" height="28" rx="4" fill="var(--nc)" stroke="var(--ns)" stroke-width="1" opacity=".3"/>
-          <text x="155" y="42" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">CLI / SDK</text>
-
-          <!-- Arrow -->
-          <line x1="155" y1="52" x2="155" y2="62" stroke="var(--t3)" stroke-width="1"/>
-
-          <!-- Gateway -->
-          <rect id="sbD1" x="40" y="64" width="230" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1" opacity=".3"/>
-          <text x="155" y="82" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">OpenShell Gateway</text>
-          <text x="155" y="94" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">policy · credentials · JWT · audit · Z3 prover</text>
-          <text x="155" y="108" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">gRPC/mTLS · ~60mc / ~122 MiB</text>
-
-          <line x1="155" y1="116" x2="155" y2="126" stroke="var(--t3)" stroke-width="1"/>
-          <text x="165" y="123" fill="var(--t3)" font-size="6.5" font-family="system-ui,sans-serif">Sandbox CR</text>
-
-          <!-- Operator -->
-          <rect id="sbD3" x="40" y="128" width="230" height="40" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1" opacity=".3"/>
-          <text x="155" y="146" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Agent Sandbox Operator</text>
-          <text x="155" y="158" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">CR → pod · warm pools · SSH routing · lifecycle only</text>
-
-          <line x1="155" y1="168" x2="155" y2="178" stroke="var(--t3)" stroke-width="1"/>
-          <text x="165" y="175" fill="var(--t3)" font-size="6.5" font-family="system-ui,sans-serif">Pod</text>
-
-          <!-- Pod boundary -->
-          <rect x="20" y="182" width="270" height="176" rx="6" fill="none" stroke="var(--es)" stroke-width="1.5" stroke-dasharray="4 2"/>
-          <text x="30" y="196" fill="var(--es)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Sandbox Pod</text>
-
-          <!-- Supervisor -->
-          <rect id="sbD4" x="30" y="200" width="250" height="44" rx="4" fill="var(--ic)" stroke="var(--is)" stroke-width="1" opacity=".3"/>
-          <text x="155" y="218" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">OpenShell Supervisor (PID 1)</text>
-          <text x="155" y="232" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">Landlock · seccomp · OPA proxy · cred injection</text>
-
-          <!-- Kernel locks -->
-          <rect id="sbD5" x="30" y="250" width="80" height="24" rx="3" fill="var(--pc)" stroke="var(--ps)" stroke-width=".5" opacity=".3"/>
-          <text x="70" y="266" text-anchor="middle" fill="var(--ps)" font-size="7" font-weight="600" font-family="system-ui,sans-serif">Landlock</text>
-          <rect id="sbD5b" x="115" y="250" width="80" height="24" rx="3" fill="var(--pc)" stroke="var(--ps)" stroke-width=".5" opacity=".3"/>
-          <text x="155" y="266" text-anchor="middle" fill="var(--ps)" font-size="7" font-weight="600" font-family="system-ui,sans-serif">seccomp</text>
-          <rect id="sbD5c" x="200" y="250" width="80" height="24" rx="3" fill="var(--pc)" stroke="var(--ps)" stroke-width=".5" opacity=".3"/>
-          <text x="240" y="266" text-anchor="middle" fill="var(--ps)" font-size="7" font-weight="600" font-family="system-ui,sans-serif">OPA/Rego</text>
-
-          <!-- Cred placeholder -->
-          <rect id="sbD6" x="30" y="280" width="250" height="22" rx="3" fill="var(--nc)" stroke="var(--ns)" stroke-width=".5" opacity=".3"/>
-          <text x="155" y="295" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">$API_KEY = opaque placeholder (real key injected at egress)</text>
-
-          <!-- Agent -->
-          <rect id="sbD7" x="50" y="308" width="210" height="38" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width="1" opacity=".3"/>
-          <text x="155" y="324" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Agent (capability-free)</text>
-          <text x="155" y="338" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">skills loaded · ReAct loop · zero privileges</text>
-
-          <!-- Audit bar -->
-          <rect id="sbD8" x="20" y="368" width="270" height="22" rx="3" fill="var(--pc)" stroke="var(--ps)" stroke-width=".5" opacity=".3"/>
-          <text x="155" y="383" text-anchor="middle" fill="var(--ps)" font-size="7.5" font-family="system-ui,sans-serif">OCSF + OTEL + MLflow — every decision traced</text>
-        </svg>
-      </div>
-    </div>
+  <div class="stepper">
+    <button onclick="sbPrev()">◀ Prev</button>
+    <div class="s-dots" id="sbDots"></div>
+    <button onclick="sbNext()">Next ▶</button>
+    <button class="play-btn" onclick="sbTogglePlay()" id="sbPlayBtn">▶ Play</button>
   </div>
 </section>
 
@@ -1477,55 +1349,199 @@ const jObserver=new MutationObserver(()=>{
 });
 jObserver.observe(document.getElementById('journey'),{attributes:true,attributeFilter:['class']});
 
-/* ── Sandbox flow stepper ── */
-let sbCur=0,sbTimer=null;
-const sbHighlightMap={
-  0:['sbD0'],
-  1:['sbD1'],
-  2:['sbD1'],
-  3:['sbD3'],
-  4:['sbD4'],
-  5:['sbD5','sbD5b','sbD5c'],
-  6:['sbD6'],
-  7:['sbD7'],
-  8:['sbD8']
-};
-function sbGo(idx){
-  sbCur=idx;
-  document.querySelectorAll('.sb-step').forEach((s,i)=>{
-    s.classList.remove('active');
-    s.classList.toggle('visited',i<idx);
-    if(i===idx)s.classList.add('active');
-  });
-  // Highlight diagram components
-  Object.values(sbHighlightMap).flat().forEach(id=>{
-    const el=document.getElementById(id);
-    if(el)el.setAttribute('opacity','.15');
-  });
-  (sbHighlightMap[idx]||[]).forEach(id=>{
-    const el=document.getElementById(id);
-    if(el)el.setAttribute('opacity','1');
-  });
-  // Also light up all previous steps in diagram
-  for(let i=0;i<idx;i++){
-    (sbHighlightMap[i]||[]).forEach(id=>{
-      const el=document.getElementById(id);
-      if(el)el.setAttribute('opacity','.5');
-    });
-  }
+/* ── Sandbox flow stepper (horizontal, matches journey) ── */
+const SB=[
+{l:"CLI",c:"var(--neutral)",comp:"CLI / SDK",plane:"User",
+ w:"User creates a sandbox",
+ d:"openshell sandbox create --from my-image:latest --provider claude-code -- claude. The trailing command becomes the canonical main process. --provider attaches credentials. Default image: nvcr.io/nvidia/base/ubuntu:24.04.",m:""},
+{l:"Gateway",c:"var(--blue)",comp:"OpenShell Gateway — control plane",plane:"Control",
+ w:"Gateway validates policy and encrypts credentials",
+ d:"Receives gRPC/mTLS request. Resolves effective policy (global → sandbox → image → default). Runs Z3 prover to verify no risky configs. Encrypts credentials (AES-256-GCM, KEK-wrapped). Mints Ed25519-signed JWT. Resolves provider profiles and endpoint bindings.",m:"~60mc / ~122 MiB"},
+{l:"Sandbox CR",c:"var(--blue)",comp:"OpenShell Gateway writes the resource",plane:"Control",
+ w:"Gateway writes a Sandbox CR (K8s) or creates container directly (Docker/Podman)",
+ d:"On Kubernetes: writes agents.x-k8s.io/v1beta1 Sandbox CR with openshell.ai/ labels. On Docker/Podman: creates the container directly — no CR, no operator. MicroVM: creates a lightweight VM. All paths produce the same result: a runtime with the supervisor binary injected.",m:""},
+{l:"Operator",c:"var(--green)",comp:"Agent Sandbox Operator (K8s path)",plane:"Control",
+ w:"Operator reconciles the CR into a pod with init containers",
+ d:"Red Hat-distributed operator in agent-sandbox-system namespace. Watches Sandbox CRs, reconciles each into a pod. Init container copies supervisor binary to shared emptyDir. Workspace-init prepares /sandbox. SandboxWarmPool CRs pre-provision pods. On Docker/Podman this step is skipped — gateway created the container directly.",m:"Cold: 16.4s → Warm: 247ms"},
+{l:"PID 1",c:"var(--cyan)",comp:"OpenShell Supervisor starts as PID 1",plane:"Execution",
+ w:"Supervisor starts — the security data plane begins",
+ d:"Main container entrypoint: /opt/openshell/bin/openshell-sandbox --workdir /sandbox. Connects outbound to Gateway over mTLS gRPC. Authenticates with projected ServiceAccount token (1h TTL). Gateway streams policy, credentials, and configuration over this session.",m:""},
+{l:"Landlock",c:"var(--purple)",comp:"Landlock LSM — irreversible filesystem isolation",plane:"Kernel",
+ w:"Filesystem scoped — even root cannot loosen it",
+ d:"Applies explicit path allowlist via Landlock LSM. Irreversible after process start — not even root can widen access. The filesystem_policy section in the sandbox YAML controls which paths are readable and writable. Fixed at startup; cannot be hot-reloaded.",m:""},
+{l:"seccomp",c:"var(--purple)",comp:"seccomp-BPF (USER_NOTIF) + OPA/Rego proxy",plane:"Kernel",
+ w:"Every outbound connection intercepted and policy-checked",
+ d:"seccomp-BPF filter intercepts connect(), bind(), sendmsg(). Supervisor resolves calling binary via /proc/pid/exe — records hash on first use (TOFU), denies if binary changes. OPA/Rego evaluates: {destination host:port, binary identity, L7 rules}. Per-binary, per-endpoint. Network policies CAN be hot-reloaded while running. nftables catch any bypass attempt.",m:""},
+{l:"Creds",c:"var(--cyan)",comp:"Credential placeholders — two auth boundaries",plane:"Execution",
+ w:"Every credential becomes an opaque placeholder — real keys injected at egress only",
+ d:"Agent sees $ANTHROPIC_API_KEY = opaque token, not the real key. Two independent boundaries must BOTH pass: (1) network policy allows binary + destination, (2) provider profile authorizes credential at this host:port:path. Supports: header, Basic auth, query param, URL path, request body (opt-in), WebSocket (opt-in), SigV4. Unknown/expired placeholders fail closed — never forwarded.",m:""},
+{l:"Agent",c:"var(--amber)",comp:"Agent process — capability-free",plane:"Execution",
+ w:"Supervisor drops ALL capabilities, spawns agent as child — zero privileges",
+ d:"Agent runs with zero Linux capabilities. Loads skills, assembles system prompt (16.9× expansion), begins ReAct loop. Every outbound call intercepted by seccomp, evaluated by OPA, allowed (with cred injection) or denied (with OCSF event). Policy lives outside the process — agent cannot override it. Sandbox reaches Ready phase.",m:"16.9× prompt expansion"},
+{l:"Audit",c:"var(--purple)",comp:"OCSF + OTEL + MLflow — every decision",plane:"Cross-cutting",
+ w:"Full lifecycle traced — every allow, deny, tool call, and latency recorded",
+ d:"OCSF v1.8.0: NetworkActivity, HttpActivity, ProcessActivity, ConfigStateChange, DetectionFinding. OTEL spans across the full path. MLflow Tracing: agent steps, tool calls, prompts, outputs, latencies, costs. Prometheus on port 9090. All exportable to SIEM. Production traces become eval datasets.",m:""}
+];
+
+const sbPositions=[
+  {x:40,y:90},{x:160,y:90},{x:290,y:90},{x:420,y:90},{x:540,y:90},
+  {x:660,y:60},{x:770,y:60},{x:880,y:60},
+  {x:770,y:140},{x:1100,y:90}
+];
+
+let sbCur=0,sbTimer=null,sbPaused=false,sbSyncTimer=null;
+
+function sbBuildPath(){
+  const p=sbPositions;
+  let d='M'+p[0].x+' '+p[0].y;
+  for(let i=1;i<=4;i++) d+=' L'+p[i].x+' '+p[i].y;
+  d+=' C'+p[4].x+' '+(p[4].y-40)+' '+p[5].x+' '+p[5].y+' '+p[5].x+' '+p[5].y;
+  d+=' L'+p[6].x+' '+p[6].y;
+  d+=' L'+p[7].x+' '+p[7].y;
+  d+=' C'+(p[7].x+30)+' '+p[7].y+' '+(p[7].x+30)+' '+p[8].y+' '+p[8].x+' '+p[8].y;
+  d+=' L'+p[9].x+' '+p[9].y;
+  return d;
 }
-function sbPrev(){if(sbCur>0)sbGo(sbCur-1)}
-function sbNext(){if(sbCur<8)sbGo(sbCur+1)}
+
+function sbInit(){
+  const mainPath=sbBuildPath();
+  document.getElementById('sbPathBg').setAttribute('d',mainPath);
+  document.getElementById('sbPathActive').setAttribute('d',mainPath);
+  const activePath=document.getElementById('sbPathActive');
+  const totalLen=activePath.getTotalLength();
+  activePath.style.strokeDasharray=totalLen;
+  activePath.style.strokeDashoffset=totalLen;
+
+  const nodesG=document.getElementById('sbNodes');
+  SB.forEach((s,i)=>{
+    const pos=sbPositions[i];
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.classList.add('j-node');
+    g.addEventListener('click',()=>{sbPauseFn();sbGoTo(i);});
+    g.setAttribute('role','button');g.setAttribute('tabindex','0');
+    g.setAttribute('aria-label','Step '+(i+1)+': '+s.l);
+    g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();sbPauseFn();sbGoTo(i);}});
+
+    const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.classList.add('ring');
+    circle.setAttribute('cx',String(pos.x));circle.setAttribute('cy',String(pos.y));
+    circle.setAttribute('r','16');circle.setAttribute('fill','var(--surface)');
+    circle.setAttribute('stroke',s.c);circle.setAttribute('stroke-width','2');
+    g.appendChild(circle);
+
+    const txt=document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x',String(pos.x));txt.setAttribute('y',String(pos.y+4));
+    txt.setAttribute('text-anchor','middle');txt.setAttribute('font-size','9');
+    txt.setAttribute('font-weight','700');txt.setAttribute('fill','var(--t1)');
+    txt.setAttribute('font-family','system-ui,sans-serif');txt.setAttribute('pointer-events','none');
+    txt.textContent=String(i+1);
+    g.appendChild(txt);
+
+    const label=document.createElementNS('http://www.w3.org/2000/svg','text');
+    label.classList.add('j-label');
+    label.setAttribute('x',String(pos.x));
+    label.setAttribute('y',String(pos.y+(i>=5&&i<=7?-22:24)));
+    label.textContent=s.l;
+    g.appendChild(label);
+    nodesG.appendChild(g);
+  });
+
+  // Upper row label
+  const ul=document.createElementNS('http://www.w3.org/2000/svg','text');
+  ul.setAttribute('x','715');ul.setAttribute('y','38');ul.setAttribute('text-anchor','middle');
+  ul.setAttribute('font-size','7.5');ul.setAttribute('fill','var(--t3)');
+  ul.setAttribute('font-family','system-ui,sans-serif');ul.textContent='Kernel isolation';
+  nodesG.appendChild(ul);
+
+  const dotsC=document.getElementById('sbDots');
+  dotsC.innerHTML='';
+  SB.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='s-dot';d.addEventListener('click',()=>{sbPauseFn();sbGoTo(i);});
+    dotsC.appendChild(d);
+  });
+
+  // Start auto-sync
+  sbStartSync();
+  sbGoTo(0);
+}
+
+function sbGoTo(idx){
+  sbCur=idx;
+  const s=SB[idx];
+  document.getElementById('sbTitle').innerHTML='<span class="j-badge" style="background:'+s.c+';color:#fff">'+(idx+1)+'</span> '+s.w;
+  document.getElementById('sbComp').textContent=s.comp+' — '+s.plane;
+  document.getElementById('sbDesc').textContent=s.d;
+  document.getElementById('sbMetric').textContent=s.m;
+  document.getElementById('sbDetail').style.borderLeftColor=s.c;
+
+  document.querySelectorAll('#sbNodes .j-node').forEach((n,i)=>{
+    const circle=n.querySelector('.ring');
+    n.classList.toggle('active',i===idx);
+    if(i<idx){circle.setAttribute('fill',SB[i].c);circle.setAttribute('stroke-width','2');}
+    else if(i===idx){circle.setAttribute('fill',SB[i].c);circle.setAttribute('stroke-width','3');}
+    else{circle.setAttribute('fill','var(--surface)');circle.setAttribute('stroke-width','2');}
+  });
+
+  const activePath=document.getElementById('sbPathActive');
+  const totalLen=activePath.getTotalLength();
+  activePath.style.strokeDashoffset=String(totalLen-totalLen*(idx/(SB.length-1)));
+
+  document.querySelectorAll('#sbDots .s-dot').forEach((d,i)=>{
+    d.className='s-dot'+(i<idx?' visited':'')+(i===idx?' current':'');
+  });
+}
+
+function sbStartSync(){
+  if(sbSyncTimer)return;
+  const dur=18000;const start=performance.now();
+  document.querySelector('#sandboxing .journey-svg')?.querySelector('#sbTraveler')?.style.setProperty('opacity','1');
+  sbPaused=false;
+  function sync(){
+    if(!sbPaused){
+      const elapsed=(performance.now()-start)%dur;
+      const stageIdx=Math.min(Math.floor(elapsed/dur*SB.length),SB.length-1);
+      if(stageIdx!==sbCur)sbGoTo(stageIdx);
+    }
+    sbSyncTimer=requestAnimationFrame(sync);
+  }
+  sbSyncTimer=requestAnimationFrame(sync);
+}
+function sbStopSync(){if(sbSyncTimer){cancelAnimationFrame(sbSyncTimer);sbSyncTimer=null;}}
+function sbPauseFn(){
+  sbPaused=true;
+  document.getElementById('sbSvg').pauseAnimations();
+  document.getElementById('sbResumeBtn').style.display='inline-block';
+}
+function sbResume(){
+  sbPaused=false;
+  document.getElementById('sbSvg').unpauseAnimations();
+  document.getElementById('sbResumeBtn').style.display='none';
+}
+function sbPrev(){if(sbCur>0){sbPauseFn();sbGoTo(sbCur-1);}}
+function sbNext(){if(sbCur<SB.length-1){sbPauseFn();sbGoTo(sbCur+1);}}
 function sbTogglePlay(){
   const btn=document.getElementById('sbPlayBtn');
   if(sbTimer){clearInterval(sbTimer);sbTimer=null;btn.textContent='▶ Play';return;}
   btn.textContent='⏸ Pause';
-  if(sbCur>=8)sbGo(0);
+  if(sbCur>=SB.length-1)sbGoTo(0);
   sbTimer=setInterval(()=>{
-    if(sbCur<8)sbNext();
-    else{clearInterval(sbTimer);sbTimer=null;btn.textContent='▶ Play';}
+    if(sbCur<SB.length-1){sbPauseFn();sbGoTo(sbCur+1);sbResume();}
+    else{clearInterval(sbTimer);sbTimer=null;document.getElementById('sbPlayBtn').textContent='▶ Play';}
   },3000);
 }
+
+// Init when tab shown
+const sbObserver=new MutationObserver(()=>{
+  const el=document.getElementById('sandboxing');
+  if(el.classList.contains('active')){
+    if(!document.getElementById('sbSvg').dataset.init){
+      document.getElementById('sbSvg').dataset.init='1';sbInit();
+    }
+    sbStartSync();
+  } else {sbStopSync();}
+});
+sbObserver.observe(document.getElementById('sandboxing'),{attributes:true,attributeFilter:['class']});
 
 /* Theme toggle */
 const html=document.documentElement,toggle=document.getElementById('themeBtn');
