@@ -120,11 +120,11 @@ html.presentation .section{max-width:100%;padding:calc(2px * var(--s)) 28px calc
 /* Section info - moved to tab tooltips */
 .section h2{font-size:calc(1.1rem * var(--s));font-weight:600;margin-bottom:calc(4px * var(--s))}
 .section .desc{display:none}
-.tab{padding:calc(5px * var(--s)) calc(16px * var(--s));border-radius:5px;border:1px solid transparent;
-  background:transparent;color:var(--t2);cursor:pointer;font-size:calc(12px * var(--s));font-weight:500;transition:all .2s;
+.tab{padding:calc(5px * var(--s)) calc(16px * var(--s));border-radius:5px;border:1px solid var(--border-s);
+  background:var(--surface);color:var(--t2);cursor:pointer;font-size:calc(12px * var(--s));font-weight:500;transition:all .2s;
   position:relative}
-.tab:hover{color:var(--t1);background:var(--surface)}
-.tab.active{color:var(--t1);background:var(--blue-d);border-color:var(--blue-s)}
+.tab:hover{color:var(--t1);background:var(--raised);border-color:var(--border);transform:translateY(-1px)}
+.tab.active{color:var(--t1);background:var(--blue-d);border-color:var(--blue);font-weight:600}
 /* Tab tooltip on hover */
 .tab-tip{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:calc(10px * var(--s)) calc(14px * var(--s));
