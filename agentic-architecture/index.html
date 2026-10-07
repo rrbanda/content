@@ -329,16 +329,16 @@ g[data-flow]::after{content:''}
       <text x="254" y="200" fill="var(--ks)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Skills loaded by the harness</text>
       <text x="430" y="200" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">instruction files — tell the agent WHEN and HOW to use each tool. No compute.</text>
 
-      <g class="box"><rect x="254" y="208" width="200" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+      <g class="box" data-flow="F10"><rect x="254" y="208" width="200" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
         <text x="354" y="224" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Incident triage</text>
         <text x="354" y="236" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">escalate or auto-fix? which tool to call?</text></g>
-      <g class="box"><rect x="460" y="208" width="210" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+      <g class="box" data-flow="F10"><rect x="460" y="208" width="210" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
         <text x="565" y="224" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Code review checklist</text>
         <text x="565" y="236" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">scan → test → open PR → request review</text></g>
-      <g class="box"><rect x="254" y="250" width="200" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+      <g class="box" data-flow="F10"><rect x="254" y="250" width="200" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
         <text x="354" y="266" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Data analysis workflow</text>
         <text x="354" y="278" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">query → transform → summarize → chart</text></g>
-      <g class="box"><rect x="460" y="250" width="210" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+      <g class="box" data-flow="F10"><rect x="460" y="250" width="210" height="36" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
         <text x="565" y="266" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Research &amp; summarize</text>
         <text x="565" y="278" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">search → retrieve → cite → draft report</text></g>
 
@@ -1026,6 +1026,24 @@ steps:[
 {t:"All three streams merge: every hop lands in the same traceable trail",c:"neutral"},
 {t:"Export: `Prometheus` (port 9090), `Jaeger/Tempo` (traces), SIEM (`Splunk/Elastic` via OCSF JSON)",c:"neutral"},
 {t:"Production traces become new eval cases — feeds the continuous improvement loop back to `EvalHub`",c:"blue"}
+]},
+
+F10:{t:"How skills drive agent actions",src:"Blog §Job placement; Agentic deep dive slides 4-5, 19; OpenShell docs: sandboxes/overview",
+steps:[
+{t:"Harness starts and scans for skill instruction files in the sandbox workspace",c:"green",d:"Skills are YAML/Markdown files with schema bindings — they define WHAT to do and WHEN to call tools. No compute of their own."},
+{t:"Each skill declares: goal conditions, tool schemas it references, and step-by-step instructions",c:"amber",d:"Example: an incident triage skill declares when to escalate vs auto-fix, which diagnostic tools to call, and in what order."},
+{t:"Skills are injected into the system prompt alongside tool schemas and conversation context",c:"amber",d:"This is the 16.9× prompt expansion — ~83 user tokens become 8,135 total. Skills account for a significant portion of injected context."},
+{t:"Model reads the assembled prompt — skill instructions guide its reasoning about which tool to call",c:"cyan",d:"The skill is progressive disclosure: the model doesn't see all tools at once. Skills narrow the scope to relevant tools for the current goal."},
+{t:"Model selects a tool call based on skill instructions — harness formats the `MCP call`",c:"cyan"},
+{t:"Tool call goes through the full enforcement chain: `seccomp → OPA/Rego → MCP Gateway → MCP server`",c:"green",d:"The skill told the agent WHAT to call. OpenShell controls WHETHER the call is allowed. The MCP server is the callable endpoint. The backend is the compute."},
+{t:"MCP server invokes the service backend — the actual compute (query engine, solver, API)",c:"neutral",d:"Three separate things: skill (instruction) → MCP server (tool endpoint) → service backend (compute). Three lifecycles, three enforcement points."},
+{t:"Tool result returned to harness — skill instructions guide what to do with the result",c:"amber",d:"Skill may say: if result contains error, retry with different parameters. If result is partial, call a second tool. If complete, summarize."},
+{t:"Agent follows skill's next-step logic: call another tool, loop, or produce final answer",c:"green"},
+{t:"All skill-driven actions traced in `MLflow` — which skill was active, which tool was called, what result came back",c:"purple",d:"MLflow Tracing captures the skill context alongside tool calls, enabling evaluation of whether the skill's instructions produced the right behavior."}
+],m:[
+{v:"16.9×",l:"Prompt expansion (skills + tools + context)"},
+{v:"3",l:"Nouns: skill → MCP server → backend"},
+{v:"0",l:"Compute in the skill itself"}
 ]}
 };
 
