@@ -407,8 +407,8 @@ html.presentation .modal-card{max-width:95vw}
 
       <g class="box" data-flow="F01"><rect x="702" y="108" width="225" height="48" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="108" width="3" height="48" rx="1" fill="var(--is)"/>
         <text x="814" y="128" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">AI Gateway (MaaS)</text>
-        <text x="814" y="141" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">OpenResponses · OGX</text>
-        <text x="814" y="151" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">auth · quota · guardrails</text></g>
+        <text x="814" y="141" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Kuadrant · Authorino · Limitador</text>
+        <text x="814" y="151" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">subscription-based quota · API keys · external providers</text></g>
       <g class="box"><rect x="938" y="108" width="210" height="48" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
         <text x="1043" y="128" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">External LLM (optional)</text>
         <text x="1043" y="142" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">disguised queries only</text></g>
@@ -1336,9 +1336,9 @@ const JStages=[
 {id:"S06",l:"Reason",c:"var(--cyan)",comp:"Inference request → Supervisor Tier 1",plane:"Execution → Inference",
  w:"Agent thinks — sends inference request through enforcement chain",
  d:"Supervisor egress router: policy check → PII detection-and-redaction if external → confidential context never leaves cluster. Routes to AI Gateway for in-cluster inference.",m:""},
-{id:"S07",l:"AI GW",c:"var(--cyan)",comp:"AI Gateway (MaaS) — Authorino + Limitador",plane:"Inference",
- w:"Governed front door: auth, rate limit, guardrails",
- d:"Gateway API-conformant proxy. Authorino authenticates by subscription (ext-authz). Limitador rate-limits by token usage. NeMo Guardrails screens input (prompt injection, PII, toxicity).",m:""},
+{id:"S07",l:"AI GW",c:"var(--cyan)",comp:"AI Gateway (MaaS) — Kuadrant + Authorino + Limitador",plane:"Inference",
+ w:"MaaS gateway: subscription-based governance for model access",
+ d:"Gateway API-conformant proxy built on Red Hat Connectivity Link (Kuadrant). Authorino authenticates via API key (PostgreSQL-backed lifecycle) or external OIDC. MaaSSubscription CRs define which groups get quota for which models with configurable token limits. Limitador enforces those limits per request. Same gateway governs self-hosted models (llm-d/vLLM via MaaSModelRef) and external providers (Bedrock, Azure OpenAI, Vertex AI via ExternalProvider CR). Multi-provider API passthrough routes Anthropic and OpenAI Responses API formats without translation. NeMo Guardrails screens input for prompt injection and PII.",m:""},
 {id:"S08",l:"Router",c:"var(--cyan)",comp:"Semantic Router — Tier 2 (Cost)",plane:"Inference",
  w:"Classifier picks the cheapest capable model",
  d:"Lightweight classifier: intent + complexity → model pool (e.g., Nemotron-mini vs full Llama). Fallback escalates on low confidence. Adds latency — measured trade-off.",m:""},
@@ -1778,8 +1778,8 @@ const UC=[
  w:"Agent calls the OMS Connector tool — MCP Gateway checks identity, supervisor injects credential",
  d:"seccomp intercepts connect(). Binary identity verified (SHA-256 TOFU). OPA policy: this agent can reach oms-api.internal:443 with GET only. MCP Gateway checks SVID token claims. Supervisor injects the OMS API key into the request header. Real key never visible to agent. Returns 847 APAC equity positions as JSON.",m:"GET only — POST blocked by L7 policy"},
 {l:"Reason",c:"var(--cyan)",comp:"Model analyzes positions, skill says: compute VaR next",plane:"Inference",
- w:"Model sends 847 positions to the risk calculator — Tier 1 routes to in-cluster model",
- d:"Supervisor Tier 1: positions contain client data → must stay in-cluster (PII policy). AI Gateway: Authorino authenticates, Limitador tracks token usage. Semantic Router selects the quantitative model. llm-d EPP routes to the replica with the warmest KV cache. Model reasons: 'I have positions. The playbook says to compute VaR next.'",m:"Tier 1 keeps client data in-cluster"},
+ w:"Model sends 847 positions to the risk calculator — MaaS subscription governs access",
+ d:"Supervisor Tier 1: positions contain client data → must stay in-cluster (PII policy). AI Gateway: the analyst's group has a MaaSSubscription granting quota for the quantitative model with token limits. Authorino validates the API key against that subscription. Limitador checks remaining token budget. Semantic Router selects the quantitative model. llm-d EPP routes to the replica with the warmest KV cache. Model reasons: 'I have positions. The playbook says to compute VaR next.'",m:"Tier 1 keeps client data in-cluster"},
 {l:"Risk",c:"var(--green)",comp:"Risk Calculator tool → Monte Carlo engine on GPU",plane:"Tool call",
  w:"Agent calls the Risk Calculator — dispatched as a GPU batch job with scoped RBAC",
  d:"This is a platform-invoked service (not MCP) because it's a GPU batch computation, not a model-selected API call. Scoped RBAC limits the agent to submitting risk jobs only — it cannot create arbitrary workloads. The Monte Carlo engine runs 10,000 scenarios on the quant cluster GPUs. Returns: 1-day 99% VaR = $12.4M, plus per-position Greeks.",m:"Platform path — own admission control, not MCP"},
