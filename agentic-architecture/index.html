@@ -467,22 +467,6 @@ html.presentation .modal-card{max-width:95vw}
       <text x="590" y="584" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Cross-cutting controls: Workload Identity · Tool Authorization (MCP Gateway) · Inference Guardrails · Pre-production Testing</text>
     </svg>
   </div>
-
-  <details class="example">
-    <summary>Concrete example — 5G Core Health Agent (three nouns, one scenario)</summary>
-    <ul style="margin-top:8px">
-      <li><strong>Skill</strong> — triage runbook telling the agent when and how to call tools. Loaded by the harness. No compute.</li>
-      <li><strong>MCP server</strong> — Data-Mesh-Map Builder advertising schemas for correlating logs, traces, and metrics per CNF. Fronted by the MCP Gateway.</li>
-      <li><strong>Service backend</strong> — the query engine (GPU or CPU) the MCP server sits in front of. Three things, three lifecycles, three enforcement points.</li>
-    </ul>
-  </details>
-
-  <div class="info-grid">
-    <div class="info-card"><h3><span class="dot" style="background:var(--amber)"></span>Skill = what to do</h3><p>Instruction files loaded by the harness. A skill tells the agent when to call a tool, in what order, and what to do with the result. No compute — just the playbook.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--neutral)"></span>MCP tool server = what to call</h3><p>A callable endpoint (GitHub, Jira, database, custom API) running in a separate process. The only thing the MCP Gateway authorizes — by agent identity, never by prompt content.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--cyan)"></span>Service backend = the compute</h3><p>The actual work behind the tool server — a query engine, an optimization solver, a search index. Swapping a backend is an endpoint change, not a redesign.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--blue)"></span>Two paths, one trace</h3><p>Model-selected tools go through the MCP Gateway (identity-checked). Platform services like inference and batch carry their own admission control. Both paths land in the same OTEL trace.</p></div>
-  </div>
 </section>
 
 <!-- ═══════════ SECURITY RINGS ═══════════ -->
