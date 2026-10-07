@@ -113,8 +113,8 @@ html.presentation .pres-toggle{background:var(--blue-d);border-color:var(--blue)
   background:transparent;color:var(--t2);cursor:pointer;font-size:calc(12px * var(--s));font-weight:500;transition:all .2s}
 .tab:hover{color:var(--t1);background:var(--surface)}
 .tab.active{color:var(--t1);background:var(--blue-d);border-color:var(--blue-s)}
-.section{display:none;padding:calc(6px * var(--s)) 24px calc(12px * var(--s));max-width:1600px;margin:0 auto}
-html.presentation .section{max-width:100%;padding:calc(4px * var(--s)) 32px calc(8px * var(--s))}
+.section{display:none;padding:calc(4px * var(--s)) 20px calc(8px * var(--s));max-width:1600px;margin:0 auto}
+html.presentation .section{max-width:100%;padding:calc(2px * var(--s)) 28px calc(4px * var(--s))}
 .section.active{display:block;animation:fadeIn .3s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 /* Section info - moved to tab tooltips */
@@ -132,7 +132,7 @@ html.presentation .section{max-width:100%;padding:calc(4px * var(--s)) 32px calc
   font-size:calc(.78rem * var(--s));color:var(--t2);line-height:1.5;font-weight:400;white-space:normal;text-align:left;pointer-events:none}
 .tab:hover .tab-tip{display:block;animation:fadeIn .15s ease}
 .diagram-wrap{border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);
-  overflow-x:auto;padding:calc(20px * var(--s));background-image:radial-gradient(circle,var(--border)22 1px,transparent 1px);
+  overflow-x:auto;padding:calc(12px * var(--s));background-image:radial-gradient(circle,var(--border)22 1px,transparent 1px);
   background-size:24px 24px;transition:all .3s}
 .diagram-wrap svg{display:block;margin:0 auto}
 .box{transition:filter .15s}.box:hover{filter:brightness(1.15);cursor:default}.box text{pointer-events:none}
@@ -151,7 +151,6 @@ html.presentation .section{max-width:100%;padding:calc(4px * var(--s)) 32px calc
 .example summary{cursor:pointer;font-size:calc(.85rem * var(--s));font-weight:600;color:var(--cyan);list-style:none;display:flex;align-items:center;gap:6px}
 .example summary::before{content:'▸';transition:transform .2s}
 .example[open] summary::before{transform:rotate(90deg)}
-footer{text-align:center;padding:20px 24px;color:var(--t3);font-size:11px;border-top:1px solid var(--border-s);margin-top:24px;transition:all .3s}
 /* ── Journey stepper ─────────────────────────────────── */
 .journey-svg{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);padding:calc(24px * var(--s)) 12px calc(10px * var(--s));transition:all .3s}
 .j-node{cursor:pointer;transition:transform .2s}
@@ -213,6 +212,7 @@ footer{text-align:center;padding:20px 24px;color:var(--t3);font-size:11px;border
 .sb-controls button.sb-play{background:var(--blue-d);border-color:var(--blue);color:var(--blue)}
 @media(max-width:900px){.sb-visual{display:none!important}}
 footer a{color:var(--blue);text-decoration:none}footer a:hover{text-decoration:underline}
+
 /* ── Clickable SVG boxes ────────────────────────────── */
 g[data-flow]{cursor:pointer}
 g[data-flow] rect:first-child{transition:all .2s}
@@ -966,10 +966,6 @@ html.presentation .modal-card{max-width:95vw}
   </div>
 </section>
 
-<footer>
-  <p>Based on <a href="https://developers.redhat.com/articles/2026/07/20/architect-open-blueprint-cloud-native-ai-agents" target="_blank" rel="noopener">Architect an open blueprint for cloud-native AI agents</a> (Red Hat Developer, July 2026)</p>
-  <p style="margin-top:4px">Components: <a href="https://github.com/NVIDIA/OpenShell" target="_blank" rel="noopener">OpenShell</a> · <a href="https://github.com/Kuadrant/mcp-gateway" target="_blank" rel="noopener">MCP Gateway</a> · <a href="https://llm-d.ai" target="_blank" rel="noopener">llm-d</a> · <a href="https://kubernetes-sigs.github.io/agent-sandbox/" target="_blank" rel="noopener">agent-sandbox SIG</a></p>
-</footer>
 
 <!-- Modal -->
 <div class="modal-backdrop" id="modal" onclick="if(event.target===this)closeFlow()"></div>
