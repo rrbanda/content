@@ -1124,21 +1124,23 @@ steps:[
 {t:"asago (AI Safety And Governance Orchestration) translates governance policies into test scenarios",c:"neutral",d:"Open-source community project: Red Hat, NVIDIA, Microsoft, IBM Research, MIT Lincoln Lab, Alan Turing Institute. Automates: policy → scenarios → red teaming/eval jobs on EvalHub → recommendations → deployable controls (K8s CRs/ConfigMaps) → retest. Auditable, traceable workflow from policy to production."}
 ]},
 
-F09:{t:"ReAct loop and harness internals",src:"Agentic deep dive slides 2-5; Blog §A new workload class",
+F09:{t:"ReAct loop and harness internals",src:"OpenClaw docs; Hermes Agent docs; Agentic deep dive slides 2-5; Blog §A new workload class; PSAP benchmarks",
 steps:[
-{t:"Harness receives goal/prompt from user or orchestrator",c:"green"},
-{t:"System prompt assembled: `instructions + skills + context + tool_schemas`",c:"amber",d:"Prompt expansion: ~83 user tokens → 7,867–8,135 total input tokens (16–17× expansion)."},
-{t:"Model reasons about the next action (Reason step)",c:"cyan"},
-{t:"If tool call needed: harness formats MCP call via supervisor proxy (Act step)",c:"green"},
-{t:"Tool result returned to harness, added to conversation context (Observe step)",c:"green"},
-{t:"Loop repeats: `reason → act → observe` until goal met or limits reached",c:"amber",d:"Limits: step count, token budget, cost cap, timeout. 40%+ of sessions run full auto-approve."},
-{t:"Integration mode 1: `openshell sandbox create -- claude` (whole-agent, no code changes)",c:"blue"},
-{t:"Integration mode 2: `harness.use_plugin('openshell')` (per tool call, sub-agent, or session)",c:"blue"},
-{t:"Harness options: OpenClaw, Hermes, LangGraph, LangChain Deep Agents, custom",c:"neutral"}
+{t:"Harness receives goal/prompt from user, orchestrator, or messaging platform",c:"green",d:"Hermes: CLI, Telegram, Discord, Slack, WhatsApp, Teams, and 20+ platforms via messaging gateway. OpenClaw: chat UI or CLI. The harness is the agent runtime — it owns the ReAct loop, memory, and tool dispatch."},
+{t:"System prompt assembled: instructions + skills + context + tool schemas",c:"amber",d:"Prompt expansion: ~83 user tokens → 7,867–8,135 total input tokens (16–17× expansion). Skills loaded via progressive disclosure (~3k for list, full body on demand). Tool schemas describe available MCP tools."},
+{t:"Model reasons about the next action (Reason step)",c:"cyan",d:"The model reads the assembled prompt — skill instructions guide its reasoning about which tool to call. Hermes: built-in memory system injects key facts from prior sessions automatically."},
+{t:"If tool call needed: harness formats MCP request via supervisor proxy (Act step)",c:"green",d:"Tool call flows through OpenShell enforcement: sandbox proxy intercepts → supervisor checks policy → credentials injected → request forwarded. The harness doesn't bypass the sandbox boundary."},
+{t:"Tool result returned to harness, added to conversation context (Observe step)",c:"green",d:"Result added to context window. Skill instructions guide interpretation: retry on error, call follow-up tool on partial result, summarize on completion."},
+{t:"Loop repeats: reason → act → observe until goal met or limits reached",c:"amber",d:"Limits: step count, token budget, cost cap, timeout. 40%+ of sessions run full auto-approve. Hermes: agent can spawn isolated subagents for parallel workstreams."},
+{t:"Agent can create skills from experience — procedural memory for future reuse",c:"green",d:"Hermes: self-improving learning loop — creates skills from experience, improves them during use. OpenClaw: agent writes SKILL.md to workspace. This is the agent getting smarter over time."},
+{t:"Integration mode 1: whole-agent sandbox (`openshell sandbox create -- claude`)",c:"blue",d:"The entire harness + agent runs inside the sandbox. No code changes. OpenShell provides the isolated runtime."},
+{t:"Integration mode 2: per-tool sandbox (`harness.use_plugin('openshell')`)",c:"blue",d:"Harness runs outside, individual tool calls or sub-agents run in sandboxed environments. Fine-grained isolation."},
+{t:"Harness options: OpenClaw, Hermes, LangGraph, LangChain Deep Agents, custom",c:"neutral",d:"OpenClaw: agentskills.io-compatible host with chat UI. Hermes: self-improving agent by Nous Research. NemoClaw: OpenClaw + OpenShell + VSS plugin pre-configured. Any harness works — OpenShell is harness-agnostic."}
 ],m:[
 {v:"16.9×",l:"Prompt expansion (with OpenShell)"},
 {v:"+268",l:"Input tokens added by sandbox context"},
-{v:"3",l:"Sandboxing patterns supported"}
+{v:"3",l:"Sandboxing patterns supported"},
+{v:"20+",l:"Messaging platforms (Hermes)"}
 ]},
 
 F11:{t:"Observability pipeline",src:"OpenShell docs; AGENTS.md §Sandbox Logging; MLflow Tracing docs",
@@ -1153,22 +1155,23 @@ steps:[
 {t:"Production traces become new eval cases — feeds the continuous improvement loop back to `EvalHub`",c:"blue"}
 ]},
 
-F10:{t:"How skills drive agent actions",src:"Blog §Job placement; Agentic deep dive slides 4-5, 19; OpenShell docs: sandboxes/overview",
+F10:{t:"How skills drive agent actions",src:"OpenClaw docs/skills; Hermes Agent docs/skills; NemoClaw developer guide; Blog §Job placement",
 steps:[
-{t:"Harness starts and scans for skill instruction files in the sandbox workspace",c:"green",d:"Skills are YAML/Markdown files with schema bindings — they define WHAT to do and WHEN to call tools. No compute of their own."},
-{t:"Each skill declares: goal conditions, tool schemas it references, and step-by-step instructions",c:"amber",d:"Example: an incident triage skill declares when to escalate vs auto-fix, which diagnostic tools to call, and in what order."},
-{t:"Skills are injected into the system prompt alongside tool schemas and conversation context",c:"amber",d:"This is the 16.9× prompt expansion — ~83 user tokens become 8,135 total. Skills account for a significant portion of injected context."},
-{t:"Model reads the assembled prompt — skill instructions guide its reasoning about which tool to call",c:"cyan",d:"The skill is progressive disclosure: the model doesn't see all tools at once. Skills narrow the scope to relevant tools for the current goal."},
-{t:"Model selects a tool call based on skill instructions — harness formats the `MCP call`",c:"cyan"},
-{t:"Tool call goes through the full enforcement chain: `seccomp → OPA/Rego → MCP Gateway → MCP server`",c:"green",d:"The skill told the agent WHAT to call. OpenShell controls WHETHER the call is allowed. The MCP server is the callable endpoint. The backend is the compute."},
-{t:"MCP server invokes the service backend — the actual compute (query engine, solver, API)",c:"neutral",d:"Three separate things: skill (instruction) → MCP server (tool endpoint) → service backend (compute). Three lifecycles, three enforcement points."},
-{t:"Tool result returned to harness — skill instructions guide what to do with the result",c:"amber",d:"Skill may say: if result contains error, retry with different parameters. If result is partial, call a second tool. If complete, summarize."},
-{t:"Agent follows skill's next-step logic: call another tool, loop, or produce final answer",c:"green"},
-{t:"All skill-driven actions traced in `MLflow` — which skill was active, which tool was called, what result came back",c:"purple",d:"MLflow Tracing captures the skill context alongside tool calls, enabling evaluation of whether the skill's instructions produced the right behavior."}
+{t:"Agent harness discovers skill files from workspace roots at session start",c:"green",d:"Skills are Markdown instruction files (SKILL.md + optional references/, templates/, scripts/). OpenClaw discovers SKILL.md under configured roots up to 6 levels deep. Priority: workspace skills > project .agents/skills > personal > managed > bundled. Hermes uses ~/.hermes/skills/. NemoClaw installs skills into the sandbox workspace via its OpenClaw plugin."},
+{t:"Progressive disclosure: only a compact skills list is loaded initially (~3k tokens)",c:"amber",d:"Level 0: skills_list() returns [{name, description, category}...]. Level 1: skill_view(name) loads the full SKILL.md only when the agent decides it needs that skill. Level 2: skill_view(name, path) loads a specific reference file. Zero tokens until actually needed."},
+{t:"Skills filtered at load time — only eligible skills enter the agent's context",c:"amber",d:"OpenClaw filters on metadata.openclaw: required binaries (bins), environment variables (env), config paths, OS platform. A skill with missing dependencies is silently excluded. Hermes uses category-based organization."},
+{t:"When a task matches, the agent loads the full skill into conversation context",c:"cyan",d:"The SKILL.md body contains step-by-step instructions, tool schemas it references, goal conditions, and error-handling logic. Reference files (API docs, examples) loaded on demand via skill_view(name, path). This is part of the 16.9× prompt expansion."},
+{t:"Skill instructions guide the agent's reasoning: WHAT to call, WHEN, and in what ORDER",c:"cyan",d:"Three nouns — the skill is the instruction (no compute). The MCP server is the callable tool endpoint. The service backend is the actual compute. The skill narrows scope to relevant tools for the current goal — progressive disclosure, not all-tools-at-once."},
+{t:"Agent selects a tool call based on skill logic → harness formats the MCP request",c:"green",d:"Tool call goes through the full enforcement chain: sandbox proxy → supervisor policy check → MCP Gateway → MCP server → service backend. The skill told the agent WHAT to call. OpenShell controls WHETHER the call is allowed."},
+{t:"Tool result returned — skill instructions guide what to do next",c:"amber",d:"Skills encode conditional logic: if error → retry with different parameters. If partial result → call a second tool. If complete → summarize. This is procedural memory — step-by-step know-how, not just facts."},
+{t:"Agent can CREATE and UPDATE skills from experience — self-improving procedural memory",c:"green",d:"Hermes: skill_manage tool (create, patch, edit, delete). OpenClaw: agent writes to skills/ directory. When the agent figures out a non-trivial workflow, it saves the approach as a skill for future reuse. Skills improve through use — instructions become more accurate, edge cases documented."},
+{t:"Skill bundles group multiple skills under one command for multi-skill workflows",c:"neutral",d:"Hermes bundles: tiny YAML files that load several skills at once. OpenClaw: workspace .agents/skills/ for project-specific skill sets. NemoClaw: VSS plugin pre-installs domain skills into sandbox."},
+{t:"All skill-driven actions traced in MLflow — which skill was active, which tool called, what result",c:"purple",d:"MLflow Tracing captures skill context alongside tool calls. Production traces become new eval cases. Skills are the bridge between human intent and agent behavior — the traceable, auditable instruction layer."}
 ],m:[
-{v:"16.9×",l:"Prompt expansion (skills + tools + context)"},
-{v:"3",l:"Nouns: skill → MCP server → backend"},
-{v:"0",l:"Compute in the skill itself"}
+{v:"3 levels",l:"Progressive disclosure (list → body → refs)"},
+{v:"3 nouns",l:"Skill → MCP server → backend"},
+{v:"0",l:"Compute in the skill itself"},
+{v:"Self",l:"Agent creates + improves skills"}
 ]}
 };
 
