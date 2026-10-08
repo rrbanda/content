@@ -310,27 +310,46 @@ html.presentation .modal-card{max-width:95vw}
         <marker id="a1c" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--is)"/></marker>
       </defs>
 
-      <!-- ═══ BAND 1: CONTROL PLANE ═══ -->
-      <g class="box"><rect x="16" y="6" width="260" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="16" y="6" width="3" height="36" rx="1" fill="var(--ss)"/>
-        <text x="146" y="22" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Agent Blueprint / GitOps</text>
-        <text x="146" y="36" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Helm · NemoClaw</text></g>
-      <g class="box" data-flow="F03"><rect x="290" y="6" width="260" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="290" y="6" width="3" height="36" rx="1" fill="var(--ss)"/>
-        <text x="420" y="22" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Sandbox Control Plane</text>
-        <text x="420" y="36" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">OpenShell Gateway</text></g>
-      <g class="box" data-flow="F03"><rect x="564" y="6" width="260" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="564" y="6" width="3" height="36" rx="1" fill="var(--ss)"/>
-        <text x="694" y="22" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Sandbox CRD + Controller</text>
-        <text x="694" y="36" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">K8s agent-sandbox SIG</text></g>
-      <g class="box" data-flow="F05"><rect x="838" y="6" width="260" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="838" y="6" width="3" height="36" rx="1" fill="var(--ss)"/>
-        <text x="968" y="22" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Workload Identity</text>
-        <text x="968" y="36" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">SPIFFE / SPIRE</text></g>
+      <!-- ═══ BAND 1: CONTROL PLANE (left-to-right lifecycle) ═══ -->
+      <!-- Step 1: Declare -->
+      <g class="box"><rect x="16" y="6" width="200" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="16" y="6" width="3" height="36" rx="1" fill="var(--ss)"/>
+        <text x="116" y="22" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Blueprint</text>
+        <text x="116" y="35" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">declare what to deploy</text></g>
 
-      <!-- Control arrows -->
-      <line x1="420" y1="42" x2="420" y2="60" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
-      <text x="426" y="54" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">policy</text>
-      <line x1="660" y1="42" x2="545" y2="60" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
-      <text x="596" y="53" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">1 Pod / CR</text>
-      <line x1="968" y1="42" x2="860" y2="60" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
-      <text x="912" y="53" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">SVIDs</text>
+      <!-- Arrow: blueprint → gateway -->
+      <line x1="216" y1="24" x2="234" y2="24" stroke="var(--ss)" stroke-width="1.5" marker-end="url(#a1b)"/>
+
+      <!-- Step 2: Gateway writes CR -->
+      <g class="box" data-flow="F03"><rect x="238" y="6" width="260" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="238" y="6" width="3" height="36" rx="1" fill="var(--ss)"/>
+        <text x="368" y="22" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">OpenShell Gateway</text>
+        <text x="368" y="35" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">control plane — writes Sandbox CR</text></g>
+
+      <!-- Arrow: gateway → operator (writes CR) -->
+      <line x1="498" y1="24" x2="516" y2="24" stroke="var(--ss)" stroke-width="1.5" marker-end="url(#a1b)"/>
+      <text x="507" y="18" fill="var(--t3)" font-size="6.5" font-family="system-ui,sans-serif">CR</text>
+
+      <!-- Step 3: Operator reconciles -->
+      <g class="box" data-flow="F03"><rect x="520" y="6" width="260" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="520" y="6" width="3" height="36" rx="1" fill="var(--ss)"/>
+        <text x="650" y="22" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Sandbox Operator</text>
+        <text x="650" y="35" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">reconciles CR → one pod</text></g>
+
+      <!-- Arrow: operator → pod (creates pod) -->
+      <line x1="650" y1="42" x2="500" y2="60" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
+      <text x="568" y="53" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">pod</text>
+
+      <!-- Step 4: Identity (issues to gateway + pods) -->
+      <g class="box" data-flow="F05"><rect x="794" y="6" width="260" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="794" y="6" width="3" height="36" rx="1" fill="var(--ss)"/>
+        <text x="924" y="22" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Workload Identity</text>
+        <text x="924" y="35" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">SPIFFE / SPIRE</text></g>
+
+      <!-- Identity arrows: to gateway and to pod -->
+      <line x1="794" y1="24" x2="782" y2="24" stroke="var(--t3)" stroke-width="1" stroke-dasharray="3 2"/>
+      <line x1="924" y1="42" x2="820" y2="60" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
+      <text x="870" y="53" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">SVIDs</text>
+
+      <!-- Gateway arrow down to pod: policy + credentials -->
+      <line x1="368" y1="42" x2="420" y2="60" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
+      <text x="388" y="54" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">policy + creds</text>
 
       <!-- ═══ BAND 2: EXECUTION ═══ -->
 
