@@ -135,6 +135,7 @@ html.presentation .section{max-width:100%;padding:calc(2px * var(--s)) 28px calc
   overflow-x:auto;padding:calc(12px * var(--s));background-image:radial-gradient(circle,var(--border)22 1px,transparent 1px);
   background-size:24px 24px;transition:all .3s}
 .diagram-wrap svg,.journey-svg svg{display:block;margin:0 auto;overflow:visible}
+.diagram-wrap rect,.journey-svg rect{shape-rendering:crispEdges}
 .box{transition:filter .15s}.box:hover{filter:brightness(1.15);cursor:default}.box text{pointer-events:none}
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(calc(240px * var(--s)),1fr));gap:calc(10px * var(--s));margin-top:calc(12px * var(--s))}
 .info-card{background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);padding:calc(14px * var(--s));transition:all .3s}
@@ -365,8 +366,8 @@ html.presentation .modal-card{max-width:95vw}
       <text x="510" y="206" fill="var(--ss)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">tool calls →</text>
 
       <!-- MCP Gateway: y=196, h=34, bottom=230 -->
-      <g class="box" data-flow="F02"><rect x="600" y="196" width="484" height="34" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/>
-        <text x="842" y="217" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">MCP Gateway</text></g>
+      <g class="box" data-flow="F02"><rect x="600" y="196" width="480" height="34" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/>
+        <text x="840" y="217" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">MCP Gateway</text></g>
 
       <!-- Arrow 5+6: MCP GW→sub-boxes. Line end 6px before boxes at y=254 -->
       <line x1="720" y1="230" x2="720" y2="248" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
@@ -376,8 +377,8 @@ html.presentation .modal-card{max-width:95vw}
       <g class="box"><rect x="600" y="254" width="240" height="28" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
         <text x="720" y="272" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">MCP tool servers</text></g>
       <!-- Backends: y=254 -->
-      <g class="box"><rect x="844" y="254" width="240" height="28" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="964" y="272" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Service backends</text></g>
+      <g class="box"><rect x="844" y="254" width="236" height="28" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="962" y="272" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Service backends</text></g>
 
       <!-- ═══ INFERENCE PATH (bottom) ═══ -->
       <!-- Arrow 7: Pod→AI GW. Line end 6px before box at y=310 -->
@@ -405,9 +406,9 @@ html.presentation .modal-card{max-width:95vw}
         <text x="186" y="434" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Semantic routing (Tier 2)</text></g>
       <g class="box" data-flow="F01"><rect x="370" y="416" width="340" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
         <text x="540" y="434" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Inference Scheduler (Tier 3)</text></g>
-      <g class="box" data-flow="F01"><rect x="724" y="416" width="360" height="28" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="904" y="430" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">External LLM Providers</text>
-        <text x="904" y="441" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">Bedrock · Azure · Vertex AI</text></g>
+      <g class="box" data-flow="F01"><rect x="724" y="416" width="356" height="28" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="902" y="430" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">External LLM Providers</text>
+        <text x="902" y="441" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">Bedrock · Azure · Vertex AI</text></g>
 
       <!-- Arrow 12: Tiers→Workers. Line end 6px before box at y=468 -->
       <line x1="186" y1="444" x2="186" y2="462" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
