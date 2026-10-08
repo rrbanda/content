@@ -304,7 +304,7 @@ html.presentation .modal-card{max-width:95vw}
 <section class="section active" id="blueprint">
 
   <div class="diagram-wrap">
-    <svg viewBox="0 0 1160 420" width="100%" style="min-width:900px" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 1160 386" width="100%" style="min-width:900px" xmlns="http://www.w3.org/2000/svg">
       <defs><marker id="a1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--t3)"/></marker>
         <marker id="a1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--ss)"/></marker>
         <marker id="a1c" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--is)"/></marker>
@@ -379,11 +379,11 @@ html.presentation .modal-card{max-width:95vw}
         <text x="565" y="98" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Sandbox Supervisor</text>
         <text x="565" y="112" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">OpenShell (PID 1) · egress proxy</text></g>
 
-      <!-- Arrows FROM Supervisor to both paths -->
-      <line x1="460" y1="100" x2="224" y2="97" stroke="var(--ss)" stroke-width="2" marker-end="url(#a1b)"/>
-      <text x="330" y="92" fill="var(--ss)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">tool calls ←</text>
-      <line x1="670" y1="100" x2="694" y2="92" stroke="var(--is)" stroke-width="2" marker-end="url(#a1c)"/>
-      <text x="680" y="88" fill="var(--is)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">→ inference</text>
+      <!-- Arrows FROM Supervisor to both paths — OUTSIDE the boxes, not overlapping -->
+      <line x1="460" y1="105" x2="224" y2="97" stroke="var(--ss)" stroke-width="2" marker-end="url(#a1b)"/>
+      <text x="280" y="92" fill="var(--ss)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">← tool calls</text>
+      <line x1="670" y1="105" x2="694" y2="92" stroke="var(--is)" stroke-width="2" marker-end="url(#a1c)"/>
+      <text x="690" y="86" fill="var(--is)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">inference →</text>
 
       <line x1="349" y1="118" x2="349" y2="130" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
 
@@ -434,26 +434,26 @@ html.presentation .modal-card{max-width:95vw}
         <text x="1036" y="238" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">every hop traced end-to-end</text></g>
 
       <!-- ═══ BAND 3: CROSS-CUTTING BAR ═══ -->
-      <rect x="14" y="268" width="1130" height="22" rx="4" fill="var(--pc)" stroke="var(--ps)" stroke-width="1"/>
-      <text x="572" y="283" text-anchor="middle" fill="var(--ps)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Credentials (placeholders, injected at egress) · Agent-as-a-Service (OGX Responses API) · Tracing (MLflow · OTEL · OCSF v1.8.0)</text>
+      <rect x="14" y="260" width="1130" height="20" rx="4" fill="var(--pc)" stroke="var(--ps)" stroke-width="1"/>
+      <text x="572" y="274" text-anchor="middle" fill="var(--ps)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">Credentials (placeholders, injected at egress) · Agent-as-a-Service (OGX) · Tracing (MLflow · OTEL · OCSF v1.8.0)</text>
 
       <!-- ═══ BAND 4: PLATFORM STACK ═══ -->
-      <rect x="14" y="300" width="1130" height="22" rx="4" fill="var(--band)" stroke="var(--ss)" stroke-width="1.5"/>
-      <rect x="14" y="300" width="4" height="22" rx="2" fill="var(--ss)"/>
-      <text x="572" y="311" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Kubernetes / OpenShift</text>
-      <text x="572" y="320" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">agent-sandbox · kata + confidential containers · Gateway API · NetworkPolicy</text>
+      <rect x="14" y="288" width="1130" height="20" rx="4" fill="var(--band)" stroke="var(--ss)" stroke-width="1.5"/>
+      <rect x="14" y="288" width="4" height="20" rx="2" fill="var(--ss)"/>
+      <text x="572" y="298" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">Kubernetes / OpenShift</text>
+      <text x="572" y="307" text-anchor="middle" fill="var(--t2)" font-size="6.5" font-family="system-ui,sans-serif">agent-sandbox · kata + confidential containers · Gateway API · NetworkPolicy</text>
 
-      <rect x="14" y="328" width="1130" height="22" rx="4" fill="var(--band)" stroke="var(--es)" stroke-width="1.5"/>
-      <rect x="14" y="328" width="4" height="22" rx="2" fill="var(--es)"/>
-      <text x="572" y="339" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Linux kernel</text>
-      <text x="572" y="348" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">SELinux · seccomp · Landlock · netns — activated by the supervisor</text>
+      <rect x="14" y="314" width="1130" height="20" rx="4" fill="var(--band)" stroke="var(--es)" stroke-width="1.5"/>
+      <rect x="14" y="314" width="4" height="20" rx="2" fill="var(--es)"/>
+      <text x="572" y="324" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">Linux kernel</text>
+      <text x="572" y="333" text-anchor="middle" fill="var(--t2)" font-size="6.5" font-family="system-ui,sans-serif">SELinux · seccomp · Landlock · netns — activated by the supervisor</text>
 
-      <rect x="14" y="356" width="1130" height="22" rx="4" fill="var(--band)" stroke="var(--ns)" stroke-width="1.5"/>
-      <rect x="14" y="356" width="4" height="22" rx="2" fill="var(--ns)"/>
-      <text x="572" y="367" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Accelerated infrastructure</text>
-      <text x="572" y="376" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">NVIDIA CUDA · AMD ROCm · Intel Gaudi · Google TPU · CPU</text>
+      <rect x="14" y="340" width="1130" height="20" rx="4" fill="var(--band)" stroke="var(--ns)" stroke-width="1.5"/>
+      <rect x="14" y="340" width="4" height="20" rx="2" fill="var(--ns)"/>
+      <text x="572" y="350" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">Accelerated infrastructure</text>
+      <text x="572" y="359" text-anchor="middle" fill="var(--t2)" font-size="6.5" font-family="system-ui,sans-serif">NVIDIA CUDA · AMD ROCm · Intel Gaudi · Google TPU · CPU</text>
 
-      <text x="572" y="396" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Cross-cutting: Workload Identity · Tool Authorization · Inference Guardrails</text>
+      <text x="572" y="376" text-anchor="middle" fill="var(--t1)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Cross-cutting: Workload Identity · Tool Authorization · Inference Guardrails</text>
     </svg>
   </div>
 </section>
