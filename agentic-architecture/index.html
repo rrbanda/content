@@ -371,21 +371,18 @@ html.presentation .modal-card{max-width:95vw}
       <rect x="262" y="198" width="210" height="60" rx="5" fill="none" stroke="var(--es)" stroke-width="1.5" stroke-dasharray="4 2"/>
       <text x="268" y="208" fill="var(--es)" font-size="6" font-weight="700" font-family="system-ui,sans-serif" letter-spacing=".3">SANDBOX · NETWORK ISOLATED</text>
 
-      <!-- Agent: untrusted workload — dark box matching official SVG -->
+      <!-- Agent: untrusted workload — loads skills -->
       <g class="box" data-flow="F09"><rect x="268" y="214" width="198" height="38" rx="4" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
-        <text x="367" y="229" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="700" font-family="system-ui,sans-serif">Agent</text>
-        <text x="367" y="242" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">untrusted workload</text></g>
+        <text x="367" y="228" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="700" font-family="system-ui,sans-serif">Agent</text>
+        <text x="367" y="240" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">untrusted workload · loads skills</text></g>
 
       <!-- Deny all egress rule -->
-      <text x="367" y="268" text-anchor="middle" fill="var(--t3)" font-size="6" font-style="italic" font-family="system-ui,sans-serif">deny all egress except to the supervisor</text>
+      <text x="367" y="264" text-anchor="middle" fill="var(--t3)" font-size="6" font-style="italic" font-family="system-ui,sans-serif">deny all egress except to the supervisor</text>
 
-      <!-- Skills: loaded by agent inside sandbox -->
-      <text x="268" y="260" fill="var(--ks)" font-size="7" font-weight="600" font-family="system-ui,sans-serif">Skills</text>
-      <text x="295" y="260" fill="var(--t3)" font-size="6.5" font-family="system-ui,sans-serif">instruction files</text>
-      <g class="box" data-flow="F10"><rect x="268" y="264" width="96" height="18" rx="3" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
-        <text x="316" y="276" text-anchor="middle" fill="var(--t1)" font-size="7" font-weight="600" font-family="system-ui,sans-serif">Triage · Review</text></g>
-      <g class="box" data-flow="F10"><rect x="370" y="264" width="96" height="18" rx="3" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
-        <text x="418" y="276" text-anchor="middle" fill="var(--t1)" font-size="7" font-weight="600" font-family="system-ui,sans-serif">Analysis · Research</text></g>
+      <!-- Skills: shown as small tags inside the runtime, associated with the agent -->
+      <g class="box" data-flow="F10"><rect x="268" y="270" width="96" height="16" rx="3" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+        <text x="316" y="281" text-anchor="middle" fill="var(--ks)" font-size="7" font-weight="600" font-family="system-ui,sans-serif">Skills</text></g>
+      <text x="370" y="281" fill="var(--t3)" font-size="6.5" font-family="system-ui,sans-serif">instruction files — no compute</text>
       <!-- Runtime bottom = 286 -->
 
       <!-- ═══ TOOL PATH (right) ═══ -->
