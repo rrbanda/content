@@ -385,42 +385,42 @@ html.presentation .modal-card{max-width:95vw}
       <text x="464" y="308" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">Tracing: MLflow · OpenTelemetry · OCSF v1.8.0 across every layer</text>
 
       <!-- INFERENCE PLANE (right) -->
-      <line x1="674" y1="114" x2="698" y2="100" stroke="var(--t3)" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#a1)"/>
-      <text x="684" y="96" fill="var(--t3)" font-size="6.5" font-family="system-ui,sans-serif">external</text>
-      <line x1="674" y1="120" x2="698" y2="140" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
-      <text x="684" y="138" fill="var(--t3)" font-size="6.5" font-family="system-ui,sans-serif">self-hosted</text>
+      <line x1="674" y1="114" x2="698" y2="100" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
+      <line x1="674" y1="120" x2="698" y2="114" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
 
-      <g class="box" data-flow="F01"><rect x="702" y="84" width="225" height="36" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="84" width="3" height="36" rx="1" fill="var(--is)"/>
-        <text x="814" y="100" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">AI Gateway (MaaS)</text>
-        <text x="814" y="114" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Kuadrant · Authorino · Limitador</text></g>
-      <g class="box"><rect x="938" y="84" width="210" height="36" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="1043" y="100" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">External LLM Providers</text>
-        <text x="1043" y="114" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Bedrock · Azure · Vertex AI</text></g>
+      <g class="box" data-flow="F01"><rect x="702" y="84" width="446" height="36" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="84" width="3" height="36" rx="1" fill="var(--is)"/>
+        <text x="925" y="100" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">AI Gateway (MaaS)</text>
+        <text x="925" y="114" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Kuadrant · Authorino · Limitador — single entry point for self-hosted + external</text></g>
 
-      <line x1="814" y1="120" x2="814" y2="128" stroke="var(--t3)" stroke-width=".8" marker-end="url(#a1)"/>
+      <line x1="925" y1="120" x2="925" y2="128" stroke="var(--t3)" stroke-width=".8" marker-end="url(#a1)"/>
 
       <!-- Guardrails at the inference boundary — between gateway and model -->
       <g class="box" data-flow="F07"><rect x="702" y="130" width="446" height="28" rx="5" fill="var(--pc)" stroke="var(--ps)" stroke-width="1"/><rect x="702" y="130" width="3" height="28" rx="1" fill="var(--ps)"/>
         <text x="925" y="148" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Inference Guardrails — input screening ↓ · output screening ↑</text></g>
 
       <line x1="814" y1="158" x2="814" y2="166" stroke="var(--t3)" stroke-width=".8" marker-end="url(#a1)"/>
+      <line x1="1043" y1="158" x2="1043" y2="166" stroke="var(--t3)" stroke-width=".8" marker-end="url(#a1)"/>
 
       <g class="box" data-flow="F01"><rect x="702" y="168" width="225" height="32" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="168" width="3" height="32" rx="1" fill="var(--is)"/>
         <text x="814" y="188" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Semantic routing (Tier 2)</text></g>
-      <g class="box" data-flow="F01"><rect x="938" y="168" width="210" height="32" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="938" y="168" width="3" height="32" rx="1" fill="var(--is)"/>
-        <text x="1043" y="188" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Inference Scheduler (Tier 3)</text></g>
+      <g class="box" data-flow="F01"><rect x="938" y="168" width="210" height="32" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="1043" y="182" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">External LLM Providers</text>
+        <text x="1043" y="195" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">Bedrock · Azure · Vertex AI</text></g>
 
       <line x1="814" y1="200" x2="814" y2="208" stroke="var(--t3)" stroke-width=".8" marker-end="url(#a1)"/>
-      <g class="box" data-flow="F01"><rect x="702" y="210" width="225" height="36" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="210" width="3" height="36" rx="1" fill="var(--is)"/>
-        <text x="814" y="228" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Model Workers</text>
-        <text x="814" y="241" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">NIM / TensorRT-LLM · vLLM</text></g>
+      <g class="box" data-flow="F01"><rect x="702" y="210" width="225" height="32" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="210" width="3" height="32" rx="1" fill="var(--is)"/>
+        <text x="814" y="230" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Inference Scheduler (Tier 3)</text></g>
 
-      <!-- Audit & Tracing and Pre-prod Testing at bottom of inference column -->
-      <g class="box" data-flow="F11"><rect x="938" y="210" width="210" height="36" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="1043" y="228" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Audit &amp; Tracing</text>
-        <text x="1043" y="241" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">MLflow · OTEL · OCSF</text></g>
-      <g class="box" data-flow="F08"><rect x="938" y="252" width="210" height="30" rx="5" fill="var(--xc)" stroke="var(--xs)" stroke-width="1"/><rect x="938" y="252" width="3" height="30" rx="1" fill="var(--xs)"/>
-        <text x="1043" y="271" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Pre-production Testing</text></g>
+      <line x1="814" y1="242" x2="814" y2="250" stroke="var(--t3)" stroke-width=".8" marker-end="url(#a1)"/>
+      <g class="box" data-flow="F01"><rect x="702" y="252" width="225" height="32" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="702" y="252" width="3" height="32" rx="1" fill="var(--is)"/>
+        <text x="814" y="272" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Model Workers (vLLM · NIM)</text></g>
+
+      <!-- Audit & Tracing and Pre-prod Testing -->
+      <g class="box" data-flow="F11"><rect x="938" y="210" width="210" height="32" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="1043" y="224" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Audit &amp; Tracing</text>
+        <text x="1043" y="237" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">MLflow · OTEL · OCSF</text></g>
+      <g class="box" data-flow="F08"><rect x="938" y="252" width="210" height="32" rx="5" fill="var(--xc)" stroke="var(--xs)" stroke-width="1"/><rect x="938" y="252" width="3" height="32" rx="1" fill="var(--xs)"/>
+        <text x="1043" y="272" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Pre-production Testing</text></g>
 
       <!-- MCP GATEWAY -->
       <line x1="464" y1="316" x2="464" y2="332" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
