@@ -305,9 +305,9 @@ html.presentation .modal-card{max-width:95vw}
 
   <div class="diagram-wrap">
     <svg viewBox="0 0 1160 386" width="100%" style="min-width:900px" xmlns="http://www.w3.org/2000/svg">
-      <defs><marker id="a1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--t3)"/></marker>
-        <marker id="a1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--ss)"/></marker>
-        <marker id="a1c" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--is)"/></marker>
+      <defs><marker id="a1" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="var(--t3)"/></marker>
+        <marker id="a1b" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="var(--ss)"/></marker>
+        <marker id="a1c" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="var(--is)"/></marker>
       </defs>
 
       <!-- ═══ BAND 1: CONTROL PLANE (left-to-right lifecycle) ═══ -->
@@ -316,40 +316,35 @@ html.presentation .modal-card{max-width:95vw}
         <text x="116" y="22" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Blueprint</text>
         <text x="116" y="35" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">declare what to deploy</text></g>
 
-      <!-- Arrow: blueprint → gateway -->
-      <line x1="216" y1="24" x2="234" y2="24" stroke="var(--ss)" stroke-width="1.5" marker-end="url(#a1b)"/>
+      <!-- Arrow: blueprint → gateway (clean rounded) -->
+      <path d="M216,24 L230,24" stroke="var(--ss)" stroke-width="2.5" fill="none" stroke-linecap="round" marker-end="url(#a1b)"/>
 
       <!-- Step 2: Gateway writes CR -->
       <g class="box" data-flow="F03"><rect x="238" y="6" width="260" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="238" y="6" width="3" height="36" rx="1" fill="var(--ss)"/>
         <text x="368" y="22" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">OpenShell Gateway</text>
         <text x="368" y="35" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">control plane — writes Sandbox CR</text></g>
 
-      <!-- Arrow: gateway → operator (writes CR) -->
-      <line x1="498" y1="24" x2="516" y2="24" stroke="var(--ss)" stroke-width="1.5" marker-end="url(#a1b)"/>
-      <text x="507" y="18" fill="var(--t3)" font-size="6.5" font-family="system-ui,sans-serif">CR</text>
+      <!-- Arrow: gateway → operator (clean rounded, labeled CR) -->
+      <path d="M498,24 L512,24" stroke="var(--ss)" stroke-width="2.5" fill="none" stroke-linecap="round" marker-end="url(#a1b)"/>
 
       <!-- Step 3: Operator reconciles -->
       <g class="box" data-flow="F03"><rect x="520" y="6" width="260" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="520" y="6" width="3" height="36" rx="1" fill="var(--ss)"/>
         <text x="650" y="22" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Sandbox Operator</text>
         <text x="650" y="35" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">reconciles CR → one pod</text></g>
 
-      <!-- Arrow: operator → pod (creates pod) -->
-      <line x1="650" y1="42" x2="500" y2="60" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
-      <text x="568" y="53" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">pod</text>
+      <!-- Arrow: operator → pod (curved down) -->
+      <path d="M650,42 C650,52 500,50 500,60" stroke="var(--t3)" stroke-width="1.5" fill="none" stroke-linecap="round" marker-end="url(#a1)"/>
 
       <!-- Step 4: Identity (issues to gateway + pods) -->
       <g class="box" data-flow="F05"><rect x="794" y="6" width="260" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="794" y="6" width="3" height="36" rx="1" fill="var(--ss)"/>
         <text x="924" y="22" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Workload Identity</text>
         <text x="924" y="35" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">SPIFFE / SPIRE</text></g>
 
-      <!-- Identity arrows: to gateway and to pod -->
-      <line x1="794" y1="24" x2="782" y2="24" stroke="var(--t3)" stroke-width="1" stroke-dasharray="3 2"/>
-      <line x1="924" y1="42" x2="820" y2="60" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
-      <text x="870" y="53" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">SVIDs</text>
+      <!-- Identity arrow: curved down to pod -->
+      <path d="M924,42 C924,52 820,50 820,60" stroke="var(--t3)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="4 2" marker-end="url(#a1)"/>
 
-      <!-- Gateway arrow down to pod: policy + credentials -->
-      <line x1="368" y1="42" x2="420" y2="60" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
-      <text x="388" y="54" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">policy + creds</text>
+      <!-- Gateway arrow: curved down to pod -->
+      <path d="M368,42 C368,52 420,50 420,60" stroke="var(--t3)" stroke-width="1.5" fill="none" stroke-linecap="round" marker-end="url(#a1)"/>
 
       <!-- ═══ BAND 2: EXECUTION ═══ -->
 
@@ -379,11 +374,11 @@ html.presentation .modal-card{max-width:95vw}
         <text x="565" y="98" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Sandbox Supervisor</text>
         <text x="565" y="112" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">OpenShell (PID 1) · egress proxy</text></g>
 
-      <!-- Arrows FROM Supervisor to both paths — OUTSIDE the boxes, not overlapping -->
-      <line x1="460" y1="105" x2="224" y2="97" stroke="var(--ss)" stroke-width="2" marker-end="url(#a1b)"/>
-      <text x="280" y="92" fill="var(--ss)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">← tool calls</text>
-      <line x1="670" y1="105" x2="694" y2="92" stroke="var(--is)" stroke-width="2" marker-end="url(#a1c)"/>
-      <text x="690" y="86" fill="var(--is)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">inference →</text>
+      <!-- Arrows FROM Supervisor to both paths — smooth curves, clear labels -->
+      <path d="M460,100 C380,100 280,97 224,97" stroke="var(--ss)" stroke-width="2.5" fill="none" stroke-linecap="round" marker-end="url(#a1b)"/>
+      <text x="310" y="90" fill="var(--ss)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">← tool calls</text>
+      <path d="M670,100 C680,96 690,92 694,92" stroke="var(--is)" stroke-width="2.5" fill="none" stroke-linecap="round" marker-end="url(#a1c)"/>
+      <text x="698" y="86" fill="var(--is)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">inference →</text>
 
       <line x1="349" y1="118" x2="349" y2="130" stroke="var(--t3)" stroke-width="1" marker-end="url(#a1)"/>
 
