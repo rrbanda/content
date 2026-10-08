@@ -313,14 +313,14 @@ html.presentation .modal-card{max-width:95vw}
 
       <!-- ═══ AGENTIC STACK (left) ═══ -->
       <!-- Blueprint: y=6, h=32, bottom=38 -->
-      <g class="box"><rect x="16" y="6" width="460" height="32" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
+      <g class="box"><rect x="20" y="6" width="460" height="32" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
         <text x="246" y="26" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Agent Blueprint</text></g>
 
       <!-- Arrow 1: Blueprint→Gateway. Line end 6px before box at y=62 -->
       <line x1="246" y1="38" x2="246" y2="56" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
 
       <!-- Gateway: y=62, h=36, bottom=98 -->
-      <g class="box" data-flow="F03"><rect x="16" y="62" width="310" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
+      <g class="box" data-flow="F03"><rect x="20" y="62" width="310" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
         <text x="171" y="78" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">OpenShell Gateway</text>
         <text x="171" y="92" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">control plane — writes Sandbox CR</text></g>
       <g class="box" data-flow="F05"><rect x="340" y="62" width="136" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
@@ -332,14 +332,14 @@ html.presentation .modal-card{max-width:95vw}
       <line x1="171" y1="98" x2="171" y2="116" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
 
       <!-- Operator: y=122, h=32, bottom=154 -->
-      <g class="box" data-flow="F03"><rect x="16" y="122" width="460" height="32" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
+      <g class="box" data-flow="F03"><rect x="20" y="122" width="460" height="32" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
         <text x="246" y="142" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Sandbox Operator — reconciles CR → one pod</text></g>
 
       <!-- Arrow 3: Operator→Pod. Line end 6px before pod at y=178 -->
       <line x1="246" y1="154" x2="246" y2="172" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
 
       <!-- Pod boundary: y=178, h=100, bottom=278 -->
-      <rect x="16" y="178" width="460" height="100" rx="6" fill="none" stroke="var(--es)" stroke-width="1.5" stroke-dasharray="5 3"/>
+      <rect x="20" y="178" width="460" height="100" rx="6" fill="none" stroke="var(--es)" stroke-width="1.5" stroke-dasharray="5 3"/>
       <text x="26" y="191" fill="var(--es)" font-size="8" font-weight="700" font-family="system-ui,sans-serif">Agent Pod</text>
       <text x="100" y="191" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">one per Sandbox CR</text>
 
@@ -387,14 +387,14 @@ html.presentation .modal-card{max-width:95vw}
       <text x="258" y="296" fill="var(--is)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">inference ↓</text>
 
       <!-- AI Gateway: y=310, h=32, bottom=342 -->
-      <g class="box" data-flow="F01"><rect x="16" y="310" width="1068" height="32" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
+      <g class="box" data-flow="F01"><rect x="20" y="310" width="1060" height="32" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
         <text x="550" y="330" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">AI Gateway (MaaS) — Kuadrant · Authorino · Limitador</text></g>
 
       <!-- Arrow 8: AI GW→Guardrails. Line end 6px before box at y=366 -->
       <line x1="550" y1="342" x2="550" y2="360" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
 
       <!-- Guardrails: y=366, h=26, bottom=392 -->
-      <g class="box" data-flow="F07"><rect x="16" y="366" width="1068" height="26" rx="5" fill="var(--pc)" stroke="var(--ps)" stroke-width="1"/>
+      <g class="box" data-flow="F07"><rect x="20" y="366" width="1060" height="26" rx="5" fill="var(--pc)" stroke="var(--ps)" stroke-width="1"/>
         <text x="550" y="383" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Guardrails — input screening ↓ · output screening ↑</text></g>
 
       <!-- Arrows 9-11: Guardrails→tiers. Line end 6px before boxes at y=416 -->
@@ -403,7 +403,7 @@ html.presentation .modal-card{max-width:95vw}
       <line x1="904" y1="392" x2="904" y2="410" stroke="var(--t3)" stroke-width="0.6" stroke-linecap="round" marker-end="url(#a1)"/>
 
       <!-- Tier boxes: y=416 -->
-      <g class="box" data-flow="F01"><rect x="16" y="416" width="340" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
+      <g class="box" data-flow="F01"><rect x="20" y="416" width="340" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
         <text x="186" y="434" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Semantic routing (Tier 2)</text></g>
       <g class="box" data-flow="F01"><rect x="370" y="416" width="340" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
         <text x="540" y="434" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Inference Scheduler (Tier 3)</text></g>
@@ -415,13 +415,13 @@ html.presentation .modal-card{max-width:95vw}
       <line x1="186" y1="444" x2="186" y2="462" stroke="var(--t3)" stroke-width="0.6" stroke-linecap="round" marker-end="url(#a1)"/>
 
       <!-- Model Workers: y=468 -->
-      <g class="box" data-flow="F01"><rect x="16" y="468" width="694" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
+      <g class="box" data-flow="F01"><rect x="20" y="468" width="690" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
         <text x="363" y="486" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Model Workers (vLLM · NIM)</text></g>
 
       <!-- ═══ PLATFORM BARS ═══ -->
-      <g class="box" data-flow="F11"><rect x="16" y="506" width="1068" height="16" rx="3" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+      <g class="box" data-flow="F11"><rect x="20" y="506" width="1060" height="16" rx="3" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
         <text x="550" y="517" text-anchor="middle" fill="var(--t1)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Audit &amp; Tracing — MLflow · OTEL · OCSF v1.8.0</text></g>
-      <rect x="16" y="526" width="1068" height="14" rx="3" fill="var(--band)" stroke="var(--ss)" stroke-width="1"/>
+      <rect x="20" y="526" width="1060" height="14" rx="3" fill="var(--band)" stroke="var(--ss)" stroke-width="1"/>
       <text x="550" y="536" text-anchor="middle" fill="var(--t1)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Kubernetes / OpenShift · Linux kernel</text>
     </svg>
   </div>
@@ -504,7 +504,7 @@ html.presentation .modal-card{max-width:95vw}
 
       <text x="20" y="24" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Three Inference Routing Tiers</text>
 
-      <rect x="16" y="40" width="110" height="52" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
+      <rect x="20" y="40" width="110" height="52" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
       <text x="71" y="62" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Pod</text>
       <text x="71" y="76" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">inference request</text>
 
@@ -541,7 +541,7 @@ html.presentation .modal-card{max-width:95vw}
       <text x="20" y="142" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Three Nouns, Three Enforcement Points</text>
       <text x="20" y="158" fill="var(--t3)" font-size="9" font-family="system-ui,sans-serif">A skill tells the agent what to call. An MCP server is the callable endpoint. A service backend is the compute behind it.</text>
 
-      <rect x="16" y="170" width="286" height="105" rx="6" fill="var(--kc)" stroke="var(--ks)" stroke-width="1"/>
+      <rect x="20" y="170" width="286" height="105" rx="6" fill="var(--kc)" stroke="var(--ks)" stroke-width="1"/>
       <text x="28" y="190" fill="var(--ks)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Skill (instruction file)</text>
       <text x="28" y="205" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Instruction files + schema bindings, loaded by harness</text>
       <text x="28" y="224" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Enforcement: none — no compute of its own</text>
@@ -567,7 +567,7 @@ html.presentation .modal-card{max-width:95vw}
 
       <line x1="16" y1="290" x2="904" y2="290" stroke="var(--border)" stroke-width=".5"/>
 
-      <rect x="16" y="302" width="436" height="34" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".5"/>
+      <rect x="20" y="302" width="436" height="34" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".5"/>
       <text x="28" y="318" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Traceable end-to-end</text>
       <text x="165" y="318" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">OTEL follows each request across all 3 tiers; MLflow records tool calls, latencies, costs</text>
       <text x="28" y="331" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">GenAI semantic conventions in development — plan for attribute changes</text>
@@ -577,7 +577,7 @@ html.presentation .modal-card{max-width:95vw}
       <text x="618" y="318" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Every hop speaks OpenAI-compatible or OpenResponses APIs</text>
       <text x="478" y="331" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Model behind the path can change without the agent noticing</text>
 
-      <rect x="16" y="346" width="890" height="24" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".5"/>
+      <rect x="20" y="346" width="890" height="24" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".5"/>
       <text x="28" y="363" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Fleet economics:</text>
       <text x="130" y="363" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Agent pods = CPU-only (common case). Expensive accelerators in pooled backends. Two independent scaling axes — neither purchase forces the other.</text>
     </svg>
