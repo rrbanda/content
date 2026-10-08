@@ -319,9 +319,9 @@ html.presentation .modal-card{max-width:95vw}
       <rect x="590" y="186" width="492" height="104" rx="10" fill="none" stroke="var(--ss)" stroke-width="1" stroke-dasharray="6 4" opacity=".35"/>
       <text x="596" y="182" fill="var(--ss)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" opacity=".5">TOOL EXECUTION</text>
 
-      <!-- Zone 3: Inference Path -->
+      <!-- Zone 3: Inference Path — move label to right side to avoid overlap with egress arrow -->
       <rect x="10" y="300" width="1074" height="200" rx="10" fill="none" stroke="var(--is)" stroke-width="1" stroke-dasharray="6 4" opacity=".35"/>
-      <text x="16" y="296" fill="var(--is)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" opacity=".5">INFERENCE ROUTING</text>
+      <text x="1074" y="296" fill="var(--is)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" opacity=".5" text-anchor="end">INFERENCE ROUTING</text>
 
       <!-- ═══ AGENTIC STACK (left) ═══ -->
       <!-- Blueprint: y=6, h=32, bottom=38 -->
@@ -425,35 +425,33 @@ html.presentation .modal-card{max-width:95vw}
         <text x="550" y="383" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Guardrails — input screening ↓ · output screening ↑</text></g>
 
       <!-- Arrows: Guardrails splits into two branches -->
-      <!-- Left branch: self-hosted (Guardrails → Semantic Router) -->
-      <line x1="300" y1="392" x2="300" y2="410" stroke="var(--is)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1c)"/>
-      <text x="180" y="406" fill="var(--is)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">self-hosted path</text>
-      <!-- Right branch: external (Guardrails → External LLM) -->
-      <line x1="880" y1="392" x2="880" y2="410" stroke="var(--ns)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1)"/>
-      <text x="790" y="406" fill="var(--ns)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">external path</text>
+      <line x1="270" y1="392" x2="270" y2="410" stroke="var(--is)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1c)"/>
+      <text x="120" y="406" fill="var(--is)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">self-hosted path</text>
+      <line x1="900" y1="392" x2="900" y2="410" stroke="var(--ns)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1)"/>
+      <text x="810" y="406" fill="var(--ns)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">external path</text>
 
-      <!-- Self-hosted pipeline: Tier 2 → Tier 3 (sequential, NOT parallel) -->
-      <g class="box" data-flow="F01a"><rect x="20" y="416" width="340" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
-        <text x="190" y="434" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Semantic Router (Tier 2)</text></g>
+      <!-- 3 EQUAL-WIDTH tier boxes: 346px each, 11px gaps -->
+      <!-- Tier 2: Semantic Router -->
+      <g class="box" data-flow="F01a"><rect x="20" y="416" width="346" height="32" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
+        <text x="193" y="430" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Semantic Router (Tier 2)</text>
+        <text x="193" y="442" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">vLLM model selection</text></g>
       <!-- Horizontal arrow: Tier 2 → Tier 3 -->
-      <line x1="360" y1="430" x2="368" y2="430" stroke="var(--is)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1c)"/>
-      <g class="box" data-flow="F01b"><rect x="374" y="416" width="336" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
-        <text x="542" y="434" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">llm-d EPP (Tier 3)</text></g>
-      <!-- Subtitles for clarity -->
-      <text x="190" y="450" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">vLLM model selection</text>
-      <text x="542" y="450" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">replica selection · KV cache affinity</text>
-
-      <!-- External branch: separate, not connected to Workers -->
-      <g class="box" data-flow="F01c"><rect x="724" y="416" width="356" height="28" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="902" y="434" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">External LLM Providers</text></g>
-      <text x="902" y="450" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">Bedrock · Azure · Vertex AI · body-based routing</text>
+      <line x1="366" y1="432" x2="374" y2="432" stroke="var(--is)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1c)"/>
+      <!-- Tier 3: llm-d EPP -->
+      <g class="box" data-flow="F01b"><rect x="377" y="416" width="346" height="32" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
+        <text x="550" y="430" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">llm-d EPP (Tier 3)</text>
+        <text x="550" y="442" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">replica selection · KV cache affinity</text></g>
+      <!-- External Providers -->
+      <g class="box" data-flow="F01c"><rect x="734" y="416" width="346" height="32" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="907" y="430" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">External LLM Providers</text>
+        <text x="907" y="442" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">Bedrock · Azure · Vertex AI · body-based routing</text></g>
 
       <!-- Arrow: Tier 3 → Workers (self-hosted only) -->
-      <line x1="542" y1="444" x2="542" y2="462" stroke="var(--is)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1c)"/>
+      <line x1="550" y1="448" x2="550" y2="462" stroke="var(--is)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1c)"/>
 
-      <!-- Model Workers: y=468 -->
-      <g class="box" data-flow="F01d"><rect x="20" y="468" width="690" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
-        <text x="363" y="486" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Model Workers (vLLM · NIM)</text></g>
+      <!-- Model Workers: FULL WIDTH to match AI Gateway -->
+      <g class="box" data-flow="F01d"><rect x="20" y="468" width="1060" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
+        <text x="550" y="486" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Model Workers (vLLM · NIM)</text></g>
 
       <!-- ═══ PLATFORM BARS ═══ -->
       <g class="box" data-flow="F11"><rect x="20" y="506" width="1060" height="16" rx="3" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
