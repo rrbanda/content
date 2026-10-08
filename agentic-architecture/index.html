@@ -353,36 +353,32 @@ html.presentation .modal-card{max-width:95vw}
       <g class="box" data-flow="F10"><rect x="272" y="218" width="238" height="22" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
         <text x="391" y="233" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Data analysis · Research</text></g>
 
-      <!-- ═══ TOOL PATH (right side) ═══ -->
-      <text x="568" y="44" fill="var(--ss)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">Tool call path</text>
+      <!-- ═══ TOOL PATH (right side, aligned with pod) ═══ -->
+      <text x="568" y="155" fill="var(--ss)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">Tool call path</text>
 
-      <!-- Arrow: Supervisor → MCP Gateway (curved through gap, never crosses boxes) -->
-      <path d="M510,183 C536,183 544,67 564,67" stroke="var(--ss)" stroke-width="2.5" fill="none" stroke-linecap="round" marker-end="url(#a1b)"/>
-      <text x="530" y="118" fill="var(--ss)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">tool</text>
-      <text x="526" y="128" fill="var(--ss)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">calls →</text>
+      <!-- Arrow: Supervisor → MCP Gateway (straight horizontal, same Y level) -->
+      <line x1="510" y1="183" x2="564" y2="183" stroke="var(--ss)" stroke-width="2.5" stroke-linecap="round" marker-end="url(#a1b)"/>
+      <text x="522" y="177" fill="var(--ss)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">tool calls →</text>
 
-      <g class="box" data-flow="F02"><rect x="568" y="50" width="516" height="34" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/><rect x="568" y="50" width="3" height="34" rx="1" fill="var(--ss)"/>
-        <text x="826" y="71" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">MCP Gateway</text></g>
+      <g class="box" data-flow="F02"><rect x="568" y="164" width="516" height="34" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/><rect x="568" y="164" width="3" height="34" rx="1" fill="var(--ss)"/>
+        <text x="826" y="185" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">MCP Gateway</text></g>
 
-      <path d="M826,84 L826,98" stroke="var(--t3)" stroke-width="1.5" fill="none" stroke-linecap="round" marker-end="url(#a1)"/>
+      <path d="M826,198 L826,210" stroke="var(--t3)" stroke-width="1.5" fill="none" stroke-linecap="round" marker-end="url(#a1)"/>
 
-      <g class="box"><rect x="568" y="102" width="516" height="32" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="826" y="122" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">MCP tool servers</text></g>
+      <g class="box"><rect x="568" y="214" width="250" height="30" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="693" y="233" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">MCP tool servers</text></g>
+      <g class="box"><rect x="834" y="214" width="250" height="30" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="959" y="233" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Service backends</text></g>
 
-      <path d="M826,134 L826,148" stroke="var(--t3)" stroke-width="1.5" fill="none" stroke-linecap="round" marker-end="url(#a1)"/>
-
-      <g class="box"><rect x="568" y="152" width="516" height="32" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="826" y="172" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Service backends</text></g>
-
-      <g class="box" data-flow="F11"><rect x="568" y="196" width="516" height="32" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="826" y="212" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Audit &amp; Tracing</text>
-        <text x="826" y="224" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">MLflow · OTEL · OCSF — every hop traced</text></g>
+      <g class="box" data-flow="F11"><rect x="568" y="6" width="516" height="32" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="826" y="22" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Audit &amp; Tracing</text>
+        <text x="826" y="34" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">MLflow · OTEL · OCSF — every hop traced</text></g>
 
       <!-- ═══ INFERENCE PATH (bottom, full width) ═══ -->
 
-      <!-- Arrow: Pod → AI Gateway (vertical, through clear gap) -->
+      <!-- Arrow: Pod → AI Gateway (clean vertical, label in gap) -->
       <path d="M266,244 L266,262" stroke="var(--is)" stroke-width="2.5" fill="none" stroke-linecap="round" marker-end="url(#a1c)"/>
-      <text x="278" y="258" fill="var(--is)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">inference ↓</text>
+      <text x="276" y="256" fill="var(--is)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">↓ inference</text>
 
       <g class="box" data-flow="F01"><rect x="16" y="266" width="1068" height="32" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="16" y="266" width="3" height="32" rx="1" fill="var(--is)"/>
         <text x="550" y="286" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">AI Gateway (MaaS) — Kuadrant · Authorino · Limitador</text></g>
