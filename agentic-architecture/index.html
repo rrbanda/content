@@ -312,7 +312,7 @@ html.presentation .modal-card{max-width:95vw}
 
       <!-- ═══ ZONE BOUNDARIES (dashed, behind all content) ═══ -->
       <!-- Zone 1: Agentic Stack -->
-      <rect x="10" y="0" width="482" height="286" rx="10" fill="none" stroke="var(--ss)" stroke-width="1" stroke-dasharray="6 4" opacity=".35"/>
+      <rect x="10" y="0" width="482" height="294" rx="10" fill="none" stroke="var(--ss)" stroke-width="1" stroke-dasharray="6 4" opacity=".35"/>
       <text x="16" y="-4" fill="var(--ss)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" opacity=".5">SECURE AGENT SANDBOX LIFECYCLE</text>
 
       <!-- Zone 2: Tool Path -->
@@ -351,33 +351,45 @@ html.presentation .modal-card{max-width:95vw}
       <!-- Arrow 3: Operator→Pod. Line end 6px before pod at y=178 -->
       <line x1="246" y1="154" x2="246" y2="172" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
 
-      <!-- Pod boundary: y=178, h=100, bottom=278 -->
-      <rect x="20" y="178" width="460" height="100" rx="6" fill="none" stroke="var(--es)" stroke-width="1.5" stroke-dasharray="5 3"/>
-      <text x="26" y="191" fill="var(--es)" font-size="8" font-weight="700" font-family="system-ui,sans-serif">Agent Pod</text>
-      <text x="100" y="191" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">one per Sandbox CR</text>
+      <!-- Pod boundary: y=178, h=108, bottom=286 — matches official NVIDIA architecture -->
+      <!-- OPENSHELL RUNTIME (DATA PLANE) — Supervisor governs from outside the sandbox -->
+      <rect x="20" y="178" width="460" height="108" rx="6" fill="none" stroke="var(--es)" stroke-width="1" stroke-dasharray="5 3"/>
+      <text x="26" y="191" fill="var(--es)" font-size="7.5" font-weight="700" font-family="system-ui,sans-serif">OPENSHELL RUNTIME</text>
+      <text x="140" y="191" fill="var(--t3)" font-size="6.5" font-family="system-ui,sans-serif">data plane — one per Sandbox CR</text>
 
-      <!-- Harness: y=196 -->
-      <g class="box" data-flow="F09"><rect x="26" y="196" width="218" height="34" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
-        <text x="135" y="211" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Harness</text>
-        <text x="135" y="224" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">loop · memory · skills · tool calls</text></g>
-      <!-- Supervisor: y=196 -->
-      <g class="box" data-flow="F04"><rect x="252" y="196" width="218" height="34" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
-        <text x="361" y="211" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Sandbox Supervisor</text>
-        <text x="361" y="224" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">OpenShell (PID 1) · egress proxy</text></g>
+      <!-- Supervisor: OUTSIDE the sandbox, governs the agent -->
+      <g class="box" data-flow="F04"><rect x="26" y="196" width="210" height="42" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/>
+        <text x="131" y="211" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Supervisor</text>
+        <text x="131" y="223" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">policy · credentials · proxy</text>
+        <text x="131" y="233" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">DNS · gateway session</text></g>
 
-      <!-- Skills: y=246 -->
-      <text x="26" y="244" fill="var(--ks)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">Skills</text>
-      <text x="56" y="244" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">instruction files — no compute</text>
-      <g class="box" data-flow="F10"><rect x="26" y="248" width="218" height="22" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
-        <text x="135" y="263" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Incident triage · Code review</text></g>
-      <g class="box" data-flow="F10"><rect x="252" y="248" width="218" height="22" rx="4" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
-        <text x="361" y="263" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Data analysis · Research</text></g>
-      <!-- Pod bottom = 278 -->
+      <!-- Mediated channel arrow: Supervisor ↔ Sandbox -->
+      <line x1="236" y1="217" x2="258" y2="217" stroke="var(--es)" stroke-width="1.2" stroke-linecap="round"/>
+      <text x="248" y="210" fill="var(--t3)" font-size="5.5" font-family="system-ui,sans-serif" text-anchor="middle">↔</text>
+
+      <!-- Sandbox boundary: INSIDE the runtime, contains ONLY the untrusted agent -->
+      <rect x="262" y="196" width="210" height="56" rx="5" fill="none" stroke="var(--es)" stroke-width="1.5" stroke-dasharray="4 2"/>
+      <text x="268" y="206" fill="var(--es)" font-size="6.5" font-weight="700" font-family="system-ui,sans-serif">SANDBOX</text>
+      <text x="310" y="206" fill="var(--t3)" font-size="6" font-family="system-ui,sans-serif">network isolated</text>
+
+      <!-- Agent Harness: INSIDE the sandbox — untrusted workload -->
+      <g class="box" data-flow="F09"><rect x="268" y="212" width="198" height="34" rx="4" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
+        <text x="367" y="226" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Agent</text>
+        <text x="367" y="238" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">untrusted workload · deny all egress</text></g>
+
+      <!-- Skills: loaded by agent inside sandbox -->
+      <text x="268" y="260" fill="var(--ks)" font-size="7" font-weight="600" font-family="system-ui,sans-serif">Skills</text>
+      <text x="295" y="260" fill="var(--t3)" font-size="6.5" font-family="system-ui,sans-serif">instruction files</text>
+      <g class="box" data-flow="F10"><rect x="268" y="264" width="96" height="18" rx="3" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+        <text x="316" y="276" text-anchor="middle" fill="var(--t1)" font-size="7" font-weight="600" font-family="system-ui,sans-serif">Triage · Review</text></g>
+      <g class="box" data-flow="F10"><rect x="370" y="264" width="96" height="18" rx="3" fill="var(--kc)" stroke="var(--ks)" stroke-width=".8"/>
+        <text x="418" y="276" text-anchor="middle" fill="var(--t1)" font-size="7" font-weight="600" font-family="system-ui,sans-serif">Analysis · Research</text></g>
+      <!-- Runtime bottom = 286 -->
 
       <!-- ═══ TOOL PATH (right) ═══ -->
-      <!-- Arrow 4: Supervisor→MCP GW. Starts outside pod boundary (x=480), ends before MCP GW (x=600) -->
-      <line x1="486" y1="213" x2="594" y2="213" stroke="var(--ss)" stroke-width="1.5" stroke-linecap="round" marker-end="url(#a1b)"/>
-      <text x="504" y="206" fill="var(--ss)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">tool calls →</text>
+      <!-- Arrow 4: Supervisor→MCP GW. Tool calls go THROUGH the supervisor -->
+      <line x1="236" y1="217" x2="594" y2="217" stroke="var(--ss)" stroke-width="1.5" stroke-linecap="round" marker-end="url(#a1b)"/>
+      <text x="490" y="210" fill="var(--ss)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">policy-approved egress →</text>
 
       <!-- MCP Gateway: y=196, h=34, bottom=230 -->
       <g class="box" data-flow="F02"><rect x="600" y="196" width="480" height="34" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/>
@@ -395,9 +407,9 @@ html.presentation .modal-card{max-width:95vw}
         <text x="962" y="272" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Service backends</text></g>
 
       <!-- ═══ INFERENCE PATH (bottom) ═══ -->
-      <!-- Arrow 7: Pod→AI GW. Line end 6px before box at y=310 -->
-      <line x1="246" y1="280" x2="246" y2="304" stroke="var(--is)" stroke-width="1.5" stroke-linecap="round" marker-end="url(#a1c)"/>
-      <text x="258" y="296" fill="var(--is)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">inference ↓</text>
+      <!-- Arrow 7: Runtime→AI GW. Inference goes THROUGH the supervisor -->
+      <line x1="131" y1="286" x2="131" y2="304" stroke="var(--is)" stroke-width="1.5" stroke-linecap="round" marker-end="url(#a1c)"/>
+      <text x="143" y="298" fill="var(--is)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">inference ↓</text>
 
       <!-- AI Gateway: y=310, h=32, bottom=342 -->
       <g class="box" data-flow="F01"><rect x="20" y="310" width="1060" height="32" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
