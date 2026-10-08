@@ -943,8 +943,8 @@ steps:[
 {t:"Agent or user sends inference request (OpenAI-compatible `/v1/chat/completions`)",c:"amber",d:"Standard OpenAI SDK works out of the box — Python openai, LangChain, LlamaIndex. Model name in the request body routes to the right backend. API key authenticates the caller."},
 {t:"Request hits the MaaS Gateway (`Gateway API` + Kuadrant + Authorino + Limitador)",c:"cyan",d:"Built on Red Hat Connectivity Link Operator. Gateway API-conformant proxy in openshift-ingress namespace. Authorino handles auth (API key or OIDC). Limitador enforces token limits per subscription."},
 {t:"Authorino authenticates: API key validated against PostgreSQL-backed lifecycle store",c:"blue",d:"Users create API keys via dashboard or CLI. Keys can be permanent or time-limited. Each key is tied to a MaaSSubscription which defines group → models → token limits. External OIDC also supported."},
-{t:"Limitador checks subscription quota: token rate limits per model per group",c:"blue",d:"MaaSSubscription CRs define configurable token limits. Priority levels determine which subscription applies when a user belongs to multiple groups. Usage tracked for cost attribution and showback."},
-{t:"Gateway routes to model backend — self-hosted (llm-d/vLLM) or external provider",c:"cyan",d:"Self-hosted: llm-d distributed inference or vLLM runtime, registered via MaaSModelRef CR. External: AWS Bedrock, Azure OpenAI, Google Vertex AI through ExternalProvider + ExternalModel CRs. Same governance for both."},
+{t:"Limitador checks subscription quota: token rate limits per model per group",c:"blue",d:"MaaSSubscription CRs define configurable token limits. Priority levels determine which subscription applies when a user belongs to multiple groups. Usage tracked for cost attribution and showback. MaaSAuthPolicy CRs authorize groups to access model endpoints. RHOAI 3.5 adds AITenant for multi-tenancy (TP) with dedicated gateway, identity realm, and namespace per tenant."},
+{t:"Gateway routes to model backend — self-hosted (llm-d/vLLM) or external provider",c:"cyan",d:"Self-hosted: llm-d distributed inference or vLLM runtime (TP: vLLMDeploymentOnMaaS flag), registered via MaaSModelRef CR. External: AWS Bedrock, Azure OpenAI, Google Vertex AI through ExternalProvider + ExternalModel CRs. Same governance for both."},
 {t:"For external models: multi-provider API passthrough preserves native format",c:"cyan",d:"Anthropic Messages API, OpenAI Responses API routed without format translation. Preserves prompt caching, extended thinking, provider-specific features. AI coding tools connect to one MaaS URL, switch models mid-session via body-based routing."},
 {t:"For self-hosted: Semantic Router classifies prompt and selects model (vLLM only)",c:"cyan",d:"Envoy ExtProc proxy classifies prompt signals: topic, complexity, PII, jailbreak. Routes to the best on-cluster vLLM backend (e.g., Qwen3-8B for reasoning, Granite 3.1-2B for simple). YAML-configured, no code changes. Does NOT apply to external providers — they use body-based routing."},
 {t:"Tier 3: llm-d EPP selects optimal vLLM replica (`ext-proc`)",c:"blue",d:"Probes vLLM /metrics. Prefix-affinity: route to pod with cached KVs (95% hit rate). Load-awareness: back-pressure management. If disaggregated: selects separate prefill + decode workers via NIXL sidecar."},
@@ -962,7 +962,7 @@ steps:[
 {t:"Agent harness reads skill instruction → decides to invoke an MCP tool",c:"amber"},
 {t:"Harness formats MCP call, sends through Sandbox Supervisor egress proxy",c:"green"},
 {t:"seccomp-BPF intercepts `connect()` syscall at kernel level",c:"green",d:"Supervisor resolves calling binary via /proc/pid/exe + SHA-256 hash verification (TOFU model)."},
-{t:"OPA/Rego policy evaluates: `{destination, binary_identity, L7_rules}`",c:"green",d:"Supports REST method+path, GraphQL, MCP tool names, JSON-RPC, native TCP, WebSocket protocols."},
+{t:"Sandbox network proxy evaluates: `{destination, binary_identity, L7_rules}`",c:"green",d:"Two-stage check per network-rules.mdx: (1) connection-level — matches destination host:port + binary path against policy rules. (2) If endpoint sets a protocol (rest, graphql, mcp, json-rpc, websocket), request-level inspection checks method, path, tool name, or operation."},
 {t:"If DENY: connection refused, OCSF NetworkActivity event logged. If ALLOW: request reaches MCP Gateway",c:"pink"},
 {t:"MCP Gateway at single endpoint — agent configured with `MCP_URL`",c:"blue",d:"Envoy + Kuadrant/Authorino. Authorization is by SVID token claims, never by prompt content."},
 {t:"Gateway forwards to correct MCP server from aggregated tool catalog",c:"neutral"},
@@ -1020,14 +1020,14 @@ F06:{t:"Per-binary network enforcement",src:"OpenShell docs: policies/network-ru
 steps:[
 {t:"Agent process calls `connect()` to establish a TCP connection",c:"amber"},
 {t:"`seccomp-BPF` filter intercepts the syscall (USER_NOTIF mode)",c:"green"},
-{t:"Supervisor resolves calling binary via `/proc/pid/exe`",c:"green"},
+{t:"Supervisor resolves calling binary via `/proc/pid/exe` (real path, not symlink)",c:"green",d:"Example: /usr/bin/python3 is a symlink to /usr/bin/python3.12 — OpenShell uses the real path. When a connection is denied, the log shows the path it identified."},
 {t:"SHA-256 hash computed — compared against TOFU record. Mismatch → deny immediately.",c:"green",d:"OpenShell records a hash of each executable the first time it takes part in a connection, and denies later connections if the file at that path changes."},
-{t:"OPA/Rego evaluates: `{destination host:port, binary identity, L7 rules}`",c:"green"},
-{t:"Example: `gh` can reach github.com:443 while `curl` is denied to the same host",c:"neutral",d:"A rule also applies to processes that a listed binary starts. A rule with an empty binaries list matches nothing."},
+{t:"Stage 1 — Connection check: destination host:port + binary identity matched against policy rules",c:"green",d:"Each rule in network_policies lists endpoints (host+port) and binaries (path). A rule allows every listed binary to reach every listed endpoint. No rule match → deny."},
+{t:"Stage 2 — Request inspection: if endpoint sets a `protocol`, each request is checked against L7 rules",c:"green",d:"Protocols: rest (method+path+query), websocket (upgrade + text messages), graphql (operation type+name+fields), mcp (method+tool name), json-rpc (method name), tcp (no request rules). Protocol omitted → any request allowed."},
+{t:"Example: `gh` can reach github.com:443 with GET, while `curl` is denied entirely",c:"neutral",d:"A rule also applies to processes that a listed binary starts. A rule with an empty binaries list matches nothing."},
 {t:"If ALLOW: proxy forwards, optionally injects credentials. If DENY: connection refused, OCSF logged",c:"pink"},
 {t:"`nftables` catch any attempt to bypass the proxy — raw sockets blocked by seccomp",c:"green"},
-{t:"Process ancestry tracked — subprocess inherits parent's identity constraints",c:"green"}
-],m:[
+{t:"Process ancestry tracked — subprocess inherits parent's identity constraints",c:"green"}],m:[
 {v:"L7",l:"REST, GraphQL, MCP, JSON-RPC, native TCP, WebSocket"},
 {v:"SHA-256",l:"Binary verification (TOFU)"},
 {v:"0",l:"Keys in agent environment"}
@@ -1036,13 +1036,13 @@ steps:[
 F07:{t:"Guardrails screening pipeline",src:"Agentic deep dive slides 26-28; NeMo Guardrails architecture",
 steps:[
 {t:"User or agent input arrives at the inference boundary",c:"amber"},
-{t:"TrustyAI Operator deploys NeMo Guardrails Server via `NeMo-Guardrails CR`",c:"blue",d:"Admin defines rails with oc create. Operator watches, deploys, and manages lifecycle."},
+{t:"TrustyAI Operator deploys NeMo Guardrails Server via `NemoGuardrails` CR",c:"blue",d:"Admin creates ConfigMap with config.yaml + Colang rails, then applies NemoGuardrails CR referencing it. TrustyAI component must be set to Managed in the DataScienceCluster. RHOAI 3.5: FMS Guardrails Orchestrator deprecated, NeMo Guardrails is the sole recommended framework."},
 {t:"Input detectors run in parallel: prompt injection, PII, toxicity, topic filter",c:"purple",d:"Internal detectors run in-process. External detectors called via API (regex, classifier, custom)."},
 {t:"If input blocked: request rejected before reaching model — saves inference cost. If passes: forwarded to model.",c:"pink"},
 {t:"Model generates response via `vLLM`",c:"cyan"},
 {t:"Output detectors screen response: harmful content, data leakage, off-policy generation",c:"purple"},
 {t:"If output blocked: response filtered or replaced. If passes: delivered to user/agent.",c:"pink"},
-{t:"All decisions logged — findings feed back into guardrail rules",c:"neutral"}
+{t:"All decisions logged — findings feed back into guardrail rules",c:"neutral",d:"RHOAI 3.5 adds NeMo Guardrails integration with MCP Gateway, enforcing rails on agent tool calls at the gateway layer. Define rails once, enforce consistently across tool calls."}
 ]},
 
 F08:{t:"Evaluation and red teaming pipeline",src:"Agentic deep dive slides 29-32, 36",
@@ -1053,11 +1053,11 @@ steps:[
 {t:"Detectors analyze outputs to determine if the attack succeeded",c:"pink"},
 {t:"Evaluators convert detector results into pass/fail metrics per risk taxonomy (OWASP Top-10)",c:"neutral"},
 {t:"Findings feed back into guardrail rules — attack catalog improves defenses",c:"amber"},
-{t:"Release gate: EvalHub runs the full eval suite against candidate version",c:"blue",d:"EvalHub server: REST API, OTEL metrics, provider registry, job orchestration, PostgreSQL/SQLite storage."},
+{t:"Release gate: EvalHub runs the full eval suite against candidate version",c:"blue",d:"EvalHub: evaluation orchestration service on RHOAI (deployed via TrustyAI Operator). REST API for submitting jobs, managing benchmark providers, tracking results in MLflow. Adapters wrap frameworks (lm_evaluation_harness). Jobs: pending→running→completed/failed. MCP server enables agents to self-evaluate before committing."},
 {t:"Pass/fail thresholds enforced — nothing ships below the bar",c:"blue"},
 {t:"Results stored as audit evidence linked to configuration version in MLflow",c:"neutral"},
 {t:"Production traces become new eval cases — continuous improvement loop",c:"cyan"},
-{t:"asago (Red Hat + NVIDIA) turns governance policies into risk scenarios and tests",c:"neutral"}
+{t:"asago (AI Safety And Governance Orchestration) translates governance policies into test scenarios",c:"neutral",d:"Open-source community project: Red Hat, NVIDIA, Microsoft, IBM Research, MIT Lincoln Lab, Alan Turing Institute. Automates: policy → scenarios → red teaming/eval jobs on EvalHub → recommendations → deployable controls (K8s CRs/ConfigMaps) → retest. Auditable, traceable workflow from policy to production."}
 ]},
 
 F09:{t:"ReAct loop and harness internals",src:"Agentic deep dive slides 2-5; Blog §A new workload class",
