@@ -889,32 +889,13 @@ html.presentation .modal-card{max-width:95vw}
 <!-- ═══════════ USE CASE: PORTFOLIO RISK AGENT ═══════════ -->
 <section class="section" id="usecase">
 
-  <!-- Scenario intro -->
-  <div style="background:var(--raised);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:var(--radius);padding:calc(14px * var(--s));margin-bottom:calc(12px * var(--s))">
-    <div style="font-size:calc(.95rem * var(--s));font-weight:600;color:var(--t1);margin-bottom:4px">The scenario</div>
-    <div style="font-size:calc(.85rem * var(--s));color:var(--t2);line-height:1.6">A risk analyst at an investment bank asks: <em style="color:var(--t1)">"Show me the overnight VaR for our Asia-Pacific equity book and flag any position that exceeds the single-name concentration limit."</em> The agent must pull live positions, compute risk metrics, check compliance rules, and produce a report — all without seeing real API keys or touching data it shouldn't.</div>
+  <!-- Compact scenario one-liner -->
+  <div style="display:flex;align-items:center;gap:calc(12px * var(--s));margin-bottom:calc(8px * var(--s));padding:calc(8px * var(--s)) calc(14px * var(--s));background:var(--raised);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:var(--radius)">
+    <div style="font-size:calc(.78rem * var(--s));font-weight:600;color:var(--blue);white-space:nowrap">SCENARIO</div>
+    <div style="font-size:calc(.82rem * var(--s));color:var(--t2);line-height:1.4">Risk analyst asks: <em style="color:var(--t1)">"Show me the overnight VaR for our APAC equity book and flag concentration limit breaches."</em> Agent pulls positions, computes risk, checks compliance — all sandboxed.</div>
   </div>
 
-  <!-- Three nouns mapped to the use case -->
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(calc(260px * var(--s)),1fr));gap:calc(10px * var(--s));margin-bottom:calc(14px * var(--s))">
-    <div style="background:var(--raised);border:1px solid var(--border);border-top:3px solid var(--amber);border-radius:var(--radius);padding:calc(14px * var(--s))">
-      <div style="font-size:calc(.75rem * var(--s));font-weight:600;color:var(--amber);margin-bottom:4px">SKILL = what to do</div>
-      <div style="font-size:calc(.92rem * var(--s));font-weight:600;color:var(--t1);margin-bottom:4px">Portfolio Risk Playbook</div>
-      <div style="font-size:calc(.8rem * var(--s));color:var(--t2);line-height:1.5">Instruction file loaded by the harness. Tells the agent: (1) pull current positions from the OMS, (2) calculate VaR using the risk engine, (3) check each position against concentration limits, (4) flag breaches and produce a summary. No compute — just the decision logic.</div>
-    </div>
-    <div style="background:var(--raised);border:1px solid var(--border);border-top:3px solid var(--cyan);border-radius:var(--radius);padding:calc(14px * var(--s))">
-      <div style="font-size:calc(.75rem * var(--s));font-weight:600;color:var(--cyan);margin-bottom:4px">MCP TOOL SERVERS = what to call</div>
-      <div style="font-size:calc(.92rem * var(--s));font-weight:600;color:var(--t1);margin-bottom:4px">Three tool endpoints</div>
-      <div style="font-size:calc(.8rem * var(--s));color:var(--t2);line-height:1.5"><strong style="color:var(--t1)">OMS Connector</strong> — reads positions, holdings, and trade history from the Order Management System.<br><strong style="color:var(--t1)">Risk Calculator</strong> — computes Value-at-Risk, Greeks, and stress scenarios.<br><strong style="color:var(--t1)">Compliance Checker</strong> — evaluates positions against regulatory limits and internal risk policies.</div>
-    </div>
-    <div style="background:var(--raised);border:1px solid var(--border);border-top:3px solid var(--neutral);border-radius:var(--radius);padding:calc(14px * var(--s))">
-      <div style="font-size:calc(.75rem * var(--s));font-weight:600;color:var(--neutral);margin-bottom:4px">SERVICE BACKENDS = the compute</div>
-      <div style="font-size:calc(.92rem * var(--s));font-weight:600;color:var(--t1);margin-bottom:4px">Behind each tool server</div>
-      <div style="font-size:calc(.8rem * var(--s));color:var(--t2);line-height:1.5"><strong style="color:var(--t1)">OMS API</strong> — internal REST service, returns JSON positions (read-only).<br><strong style="color:var(--t1)">Monte Carlo engine</strong> — GPU-accelerated risk computation on the quant cluster.<br><strong style="color:var(--t1)">Rules engine</strong> — evaluates regulatory rules (Basel, MiFID) stored in a policy database.</div>
-    </div>
-  </div>
-
-  <!-- Animated horizontal journey for this use case -->
+  <!-- Animated horizontal journey FIRST -->
   <div class="journey-svg">
     <svg id="ucSvg" viewBox="0 0 1160 180" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -953,15 +934,32 @@ html.presentation .modal-card{max-width:95vw}
     <button class="play-btn" onclick="ucTogglePlay()" id="ucPlayBtn">▶ Play</button>
   </div>
 
-  <!-- Security callout -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:calc(10px * var(--s));margin-top:calc(14px * var(--s))">
-    <div style="background:var(--raised);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:var(--radius);padding:calc(14px * var(--s))">
-      <div style="font-size:calc(.85rem * var(--s));font-weight:600;color:var(--green);margin-bottom:4px">What OpenShell enforces</div>
-      <div style="font-size:calc(.8rem * var(--s));color:var(--t2);line-height:1.55">The agent can read positions (GET) but cannot place trades (POST blocked by L7 policy). The risk calculator credential is injected only for the quant cluster endpoint — never visible to the agent. Every query is logged with OCSF audit events. A prompt injection trying to exfiltrate positions via curl is denied because curl isn't in the binary allowlist.</div>
+  <!-- Context cards BELOW the flow — compact grid -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(calc(200px * var(--s)),1fr));gap:calc(8px * var(--s));margin-top:calc(10px * var(--s))">
+    <div style="background:var(--raised);border:1px solid var(--border);border-top:2px solid var(--amber);border-radius:var(--radius);padding:calc(10px * var(--s))">
+      <div style="font-size:calc(.7rem * var(--s));font-weight:700;color:var(--amber)">SKILL</div>
+      <div style="font-size:calc(.78rem * var(--s));color:var(--t1);font-weight:600;margin:2px 0">Portfolio Risk Playbook</div>
+      <div style="font-size:calc(.72rem * var(--s));color:var(--t2);line-height:1.4">4-step instruction: pull positions → compute VaR → check limits → summarize</div>
     </div>
-    <div style="background:var(--raised);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:var(--radius);padding:calc(14px * var(--s))">
-      <div style="font-size:calc(.85rem * var(--s));font-weight:600;color:var(--purple);margin-bottom:4px">Two paths, one trace</div>
-      <div style="font-size:calc(.8rem * var(--s));color:var(--t2);line-height:1.55">OMS and compliance calls go through the MCP Gateway (model-selected, identity-checked). The risk computation is a GPU batch job dispatched via the platform with scoped RBAC (not MCP). Inference goes through the AI Gateway with Authorino + Limitador. All three paths land in the same OTEL trace — full audit lineage from analyst question to final report.</div>
+    <div style="background:var(--raised);border:1px solid var(--border);border-top:2px solid var(--cyan);border-radius:var(--radius);padding:calc(10px * var(--s))">
+      <div style="font-size:calc(.7rem * var(--s));font-weight:700;color:var(--cyan)">MCP TOOLS</div>
+      <div style="font-size:calc(.78rem * var(--s));color:var(--t1);font-weight:600;margin:2px 0">OMS · Risk Calc · Compliance</div>
+      <div style="font-size:calc(.72rem * var(--s));color:var(--t2);line-height:1.4">Three endpoints — identity-checked through MCP Gateway</div>
+    </div>
+    <div style="background:var(--raised);border:1px solid var(--border);border-top:2px solid var(--neutral);border-radius:var(--radius);padding:calc(10px * var(--s))">
+      <div style="font-size:calc(.7rem * var(--s));font-weight:700;color:var(--neutral)">BACKENDS</div>
+      <div style="font-size:calc(.78rem * var(--s));color:var(--t1);font-weight:600;margin:2px 0">REST API · Monte Carlo · Rules</div>
+      <div style="font-size:calc(.72rem * var(--s));color:var(--t2);line-height:1.4">OMS read-only, GPU risk engine, Basel/MiFID rules</div>
+    </div>
+    <div style="background:var(--raised);border:1px solid var(--border);border-top:2px solid var(--green);border-radius:var(--radius);padding:calc(10px * var(--s))">
+      <div style="font-size:calc(.7rem * var(--s));font-weight:700;color:var(--green)">OPENSHELL</div>
+      <div style="font-size:calc(.78rem * var(--s));color:var(--t1);font-weight:600;margin:2px 0">GET only · cred injection · audit</div>
+      <div style="font-size:calc(.72rem * var(--s));color:var(--t2);line-height:1.4">POST blocked, curl denied, every decision traced</div>
+    </div>
+    <div style="background:var(--raised);border:1px solid var(--border);border-top:2px solid var(--purple);border-radius:var(--radius);padding:calc(10px * var(--s))">
+      <div style="font-size:calc(.7rem * var(--s));font-weight:700;color:var(--purple)">TWO PATHS</div>
+      <div style="font-size:calc(.78rem * var(--s));color:var(--t1);font-weight:600;margin:2px 0">MCP + Platform → one trace</div>
+      <div style="font-size:calc(.72rem * var(--s));color:var(--t2);line-height:1.4">OMS/compliance via MCP GW, risk via RBAC, all in OTEL</div>
     </div>
   </div>
 </section>
