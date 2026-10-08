@@ -361,9 +361,9 @@ html.presentation .modal-card{max-width:95vw}
       <!-- Pod bottom = 278 -->
 
       <!-- ═══ TOOL PATH (right) ═══ -->
-      <!-- Arrow 4: Supervisor→MCP GW. Line end 6px before box at x=600 -->
-      <line x1="476" y1="213" x2="594" y2="213" stroke="var(--ss)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1b)"/>
-      <text x="510" y="206" fill="var(--ss)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">tool calls →</text>
+      <!-- Arrow 4: Supervisor→MCP GW. Starts outside pod boundary (x=480), ends before MCP GW (x=600) -->
+      <line x1="486" y1="213" x2="594" y2="213" stroke="var(--ss)" stroke-width="1.5" stroke-linecap="round" marker-end="url(#a1b)"/>
+      <text x="504" y="206" fill="var(--ss)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">tool calls →</text>
 
       <!-- MCP Gateway: y=196, h=34, bottom=230 -->
       <g class="box" data-flow="F02"><rect x="600" y="196" width="480" height="34" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/>
@@ -382,7 +382,7 @@ html.presentation .modal-card{max-width:95vw}
 
       <!-- ═══ INFERENCE PATH (bottom) ═══ -->
       <!-- Arrow 7: Pod→AI GW. Line end 6px before box at y=310 -->
-      <line x1="246" y1="278" x2="246" y2="304" stroke="var(--is)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1c)"/>
+      <line x1="246" y1="280" x2="246" y2="304" stroke="var(--is)" stroke-width="1.5" stroke-linecap="round" marker-end="url(#a1c)"/>
       <text x="258" y="296" fill="var(--is)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">inference ↓</text>
 
       <!-- AI Gateway: y=310, h=32, bottom=342 -->
