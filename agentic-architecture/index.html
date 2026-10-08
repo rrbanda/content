@@ -313,17 +313,17 @@ html.presentation .modal-card{max-width:95vw}
 
       <!-- ═══ AGENTIC STACK (left) ═══ -->
       <!-- Blueprint: y=6, h=32, bottom=38 -->
-      <g class="box"><rect x="16" y="6" width="460" height="32" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="16" y="6" width="3" height="32" rx="1" fill="var(--ss)"/>
+      <g class="box"><rect x="16" y="6" width="460" height="32" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
         <text x="246" y="26" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">Agent Blueprint</text></g>
 
       <!-- Arrow 1: Blueprint→Gateway. Line end 6px before box at y=62 -->
       <line x1="246" y1="38" x2="246" y2="56" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
 
       <!-- Gateway: y=62, h=36, bottom=98 -->
-      <g class="box" data-flow="F03"><rect x="16" y="62" width="310" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="16" y="62" width="3" height="36" rx="1" fill="var(--ss)"/>
+      <g class="box" data-flow="F03"><rect x="16" y="62" width="310" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
         <text x="171" y="78" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">OpenShell Gateway</text>
         <text x="171" y="92" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">control plane — writes Sandbox CR</text></g>
-      <g class="box" data-flow="F05"><rect x="340" y="62" width="136" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="340" y="62" width="3" height="36" rx="1" fill="var(--ss)"/>
+      <g class="box" data-flow="F05"><rect x="340" y="62" width="136" height="36" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
         <text x="408" y="78" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Workload Identity</text>
         <text x="408" y="92" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">SPIFFE / SPIRE</text></g>
       <line x1="326" y1="80" x2="340" y2="80" stroke="var(--t3)" stroke-width="1" stroke-dasharray="3 2"/>
@@ -332,7 +332,7 @@ html.presentation .modal-card{max-width:95vw}
       <line x1="171" y1="98" x2="171" y2="116" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
 
       <!-- Operator: y=122, h=32, bottom=154 -->
-      <g class="box" data-flow="F03"><rect x="16" y="122" width="460" height="32" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="16" y="122" width="3" height="32" rx="1" fill="var(--ss)"/>
+      <g class="box" data-flow="F03"><rect x="16" y="122" width="460" height="32" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
         <text x="246" y="142" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Sandbox Operator — reconciles CR → one pod</text></g>
 
       <!-- Arrow 3: Operator→Pod. Line end 6px before pod at y=178 -->
@@ -367,7 +367,7 @@ html.presentation .modal-card{max-width:95vw}
       <text x="510" y="206" fill="var(--ss)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">tool calls →</text>
 
       <!-- MCP Gateway: y=196, h=34, bottom=230 -->
-      <g class="box" data-flow="F02"><rect x="600" y="196" width="484" height="34" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/><rect x="600" y="196" width="3" height="34" rx="1" fill="var(--ss)"/>
+      <g class="box" data-flow="F02"><rect x="600" y="196" width="484" height="34" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/>
         <text x="842" y="217" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">MCP Gateway</text></g>
 
       <!-- Arrow 5+6: MCP GW→sub-boxes. Line end 6px before boxes at y=254 -->
@@ -387,14 +387,14 @@ html.presentation .modal-card{max-width:95vw}
       <text x="258" y="296" fill="var(--is)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">inference ↓</text>
 
       <!-- AI Gateway: y=310, h=32, bottom=342 -->
-      <g class="box" data-flow="F01"><rect x="16" y="310" width="1068" height="32" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="16" y="310" width="3" height="32" rx="1" fill="var(--is)"/>
+      <g class="box" data-flow="F01"><rect x="16" y="310" width="1068" height="32" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
         <text x="550" y="330" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">AI Gateway (MaaS) — Kuadrant · Authorino · Limitador</text></g>
 
       <!-- Arrow 8: AI GW→Guardrails. Line end 6px before box at y=366 -->
       <line x1="550" y1="342" x2="550" y2="360" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
 
       <!-- Guardrails: y=366, h=26, bottom=392 -->
-      <g class="box" data-flow="F07"><rect x="16" y="366" width="1068" height="26" rx="5" fill="var(--pc)" stroke="var(--ps)" stroke-width="1"/><rect x="16" y="366" width="3" height="26" rx="1" fill="var(--ps)"/>
+      <g class="box" data-flow="F07"><rect x="16" y="366" width="1068" height="26" rx="5" fill="var(--pc)" stroke="var(--ps)" stroke-width="1"/>
         <text x="550" y="383" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Guardrails — input screening ↓ · output screening ↑</text></g>
 
       <!-- Arrows 9-11: Guardrails→tiers. Line end 6px before boxes at y=416 -->
@@ -403,9 +403,9 @@ html.presentation .modal-card{max-width:95vw}
       <line x1="904" y1="392" x2="904" y2="410" stroke="var(--t3)" stroke-width="0.6" stroke-linecap="round" marker-end="url(#a1)"/>
 
       <!-- Tier boxes: y=416 -->
-      <g class="box" data-flow="F01"><rect x="16" y="416" width="340" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="16" y="416" width="3" height="28" rx="1" fill="var(--is)"/>
+      <g class="box" data-flow="F01"><rect x="16" y="416" width="340" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
         <text x="186" y="434" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Semantic routing (Tier 2)</text></g>
-      <g class="box" data-flow="F01"><rect x="370" y="416" width="340" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="370" y="416" width="3" height="28" rx="1" fill="var(--is)"/>
+      <g class="box" data-flow="F01"><rect x="370" y="416" width="340" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
         <text x="540" y="434" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Inference Scheduler (Tier 3)</text></g>
       <g class="box" data-flow="F01"><rect x="724" y="416" width="360" height="28" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
         <text x="904" y="430" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">External LLM Providers</text>
@@ -415,7 +415,7 @@ html.presentation .modal-card{max-width:95vw}
       <line x1="186" y1="444" x2="186" y2="462" stroke="var(--t3)" stroke-width="0.6" stroke-linecap="round" marker-end="url(#a1)"/>
 
       <!-- Model Workers: y=468 -->
-      <g class="box" data-flow="F01"><rect x="16" y="468" width="694" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="16" y="468" width="3" height="28" rx="1" fill="var(--is)"/>
+      <g class="box" data-flow="F01"><rect x="16" y="468" width="694" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
         <text x="363" y="486" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Model Workers (vLLM · NIM)</text></g>
 
       <!-- ═══ PLATFORM BARS ═══ -->
@@ -457,19 +457,19 @@ html.presentation .modal-card{max-width:95vw}
       <text x="590" y="38" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Cross-cutting Controls</text>
       <text x="590" y="54" fill="var(--t3)" font-size="9" font-family="system-ui,sans-serif">Apply across all three rings</text>
 
-      <g class="box" data-flow="F05"><rect x="590" y="68" width="290" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/><rect x="590" y="68" width="3" height="52" rx="1" fill="var(--ss)"/>
+      <g class="box" data-flow="F05"><rect x="590" y="68" width="290" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
         <text x="600" y="86" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">1. Workload Identity</text>
         <text x="600" y="99" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">SPIFFE SVIDs replace static keys</text>
         <text x="600" y="111" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Leaked workspace contains nothing durable to steal</text></g>
-      <g class="box" data-flow="F02"><rect x="590" y="130" width="290" height="52" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/><rect x="590" y="130" width="3" height="52" rx="1" fill="var(--is)"/>
+      <g class="box" data-flow="F02"><rect x="590" y="130" width="290" height="52" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
         <text x="600" y="148" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">2. Tool Authorization</text>
         <text x="600" y="161" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">MCP Gateway authorizes by token claims</text>
         <text x="600" y="173" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Never from prompt content — infrastructure, not model</text></g>
-      <g class="box" data-flow="F07"><rect x="590" y="192" width="290" height="52" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/><rect x="590" y="192" width="3" height="52" rx="1" fill="var(--es)"/>
+      <g class="box" data-flow="F07"><rect x="590" y="192" width="290" height="52" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
         <text x="600" y="210" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">3. Inference Guardrails</text>
         <text x="600" y="223" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">TrustyAI + NeMo Guardrails</text>
         <text x="600" y="235" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Input/output screening at the inference boundary</text></g>
-      <g class="box" data-flow="F08"><rect x="590" y="254" width="290" height="52" rx="5" fill="var(--xc)" stroke="var(--xs)" stroke-width="1"/><rect x="590" y="254" width="3" height="52" rx="1" fill="var(--xs)"/>
+      <g class="box" data-flow="F08"><rect x="590" y="254" width="290" height="52" rx="5" fill="var(--xc)" stroke="var(--xs)" stroke-width="1"/>
         <text x="600" y="272" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">4. Pre-production Testing</text>
         <text x="600" y="285" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Garak 120+ probes · EvalHub release gates</text>
         <text x="600" y="297" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Adversarial scanning in CI/CD before promotion</text></g>
