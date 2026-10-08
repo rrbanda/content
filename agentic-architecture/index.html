@@ -396,22 +396,32 @@ html.presentation .modal-card{max-width:95vw}
       <g class="box" data-flow="F07"><rect x="20" y="366" width="1060" height="26" rx="5" fill="var(--pc)" stroke="var(--ps)" stroke-width="1"/>
         <text x="550" y="383" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Guardrails — input screening ↓ · output screening ↑</text></g>
 
-      <!-- Arrows 9-11: Guardrails→tiers. Line end 6px before boxes at y=416 -->
-      <line x1="186" y1="392" x2="186" y2="410" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
-      <line x1="540" y1="392" x2="540" y2="410" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
-      <line x1="904" y1="392" x2="904" y2="410" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
+      <!-- Arrows: Guardrails splits into two branches -->
+      <!-- Left branch: self-hosted (Guardrails → Semantic Router) -->
+      <line x1="300" y1="392" x2="300" y2="410" stroke="var(--is)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1c)"/>
+      <text x="180" y="406" fill="var(--is)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">self-hosted path</text>
+      <!-- Right branch: external (Guardrails → External LLM) -->
+      <line x1="880" y1="392" x2="880" y2="410" stroke="var(--ns)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1)"/>
+      <text x="790" y="406" fill="var(--ns)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">external path</text>
 
-      <!-- Tier boxes: y=416 -->
+      <!-- Self-hosted pipeline: Tier 2 → Tier 3 (sequential, NOT parallel) -->
       <g class="box" data-flow="F01"><rect x="20" y="416" width="340" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
-        <text x="186" y="434" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Semantic routing (Tier 2)</text></g>
-      <g class="box" data-flow="F01"><rect x="370" y="416" width="340" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
-        <text x="540" y="434" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Inference Scheduler (Tier 3)</text></g>
-      <g class="box" data-flow="F01"><rect x="724" y="416" width="356" height="28" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="902" y="430" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">External LLM Providers</text>
-        <text x="902" y="441" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">Bedrock · Azure · Vertex AI</text></g>
+        <text x="190" y="434" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Semantic Router (Tier 2)</text></g>
+      <!-- Horizontal arrow: Tier 2 → Tier 3 -->
+      <line x1="360" y1="430" x2="368" y2="430" stroke="var(--is)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1c)"/>
+      <g class="box" data-flow="F01"><rect x="374" y="416" width="336" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
+        <text x="542" y="434" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">llm-d EPP (Tier 3)</text></g>
+      <!-- Subtitles for clarity -->
+      <text x="190" y="450" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">vLLM model selection</text>
+      <text x="542" y="450" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">replica selection · KV cache affinity</text>
 
-      <!-- Arrow 12: Tiers→Workers. Line end 6px before box at y=468 -->
-      <line x1="186" y1="444" x2="186" y2="462" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
+      <!-- External branch: separate, not connected to Workers -->
+      <g class="box" data-flow="F01"><rect x="724" y="416" width="356" height="28" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="902" y="434" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">External LLM Providers</text></g>
+      <text x="902" y="450" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">Bedrock · Azure · Vertex AI · body-based routing</text>
+
+      <!-- Arrow: Tier 3 → Workers (self-hosted only) -->
+      <line x1="542" y1="444" x2="542" y2="462" stroke="var(--is)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1c)"/>
 
       <!-- Model Workers: y=468 -->
       <g class="box" data-flow="F01"><rect x="20" y="468" width="690" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
@@ -936,7 +946,7 @@ steps:[
 {t:"Limitador checks subscription quota: token rate limits per model per group",c:"blue",d:"MaaSSubscription CRs define configurable token limits. Priority levels determine which subscription applies when a user belongs to multiple groups. Usage tracked for cost attribution and showback."},
 {t:"Gateway routes to model backend — self-hosted (llm-d/vLLM) or external provider",c:"cyan",d:"Self-hosted: llm-d distributed inference or vLLM runtime, registered via MaaSModelRef CR. External: AWS Bedrock, Azure OpenAI, Google Vertex AI through ExternalProvider + ExternalModel CRs. Same governance for both."},
 {t:"For external models: multi-provider API passthrough preserves native format",c:"cyan",d:"Anthropic Messages API, OpenAI Responses API routed without format translation. Preserves prompt caching, extended thinking, provider-specific features. AI coding tools connect to one MaaS URL, switch models mid-session via body-based routing."},
-{t:"For self-hosted: Tier 2 Semantic Router selects cheapest capable model",c:"cyan",d:"Lightweight intent classifier: complexity → model pool (e.g., Nemotron-mini vs full Llama). Fallback escalates on low confidence."},
+{t:"For self-hosted: Semantic Router classifies prompt and selects model (vLLM only)",c:"cyan",d:"Envoy ExtProc proxy classifies prompt signals: topic, complexity, PII, jailbreak. Routes to the best on-cluster vLLM backend (e.g., Qwen3-8B for reasoning, Granite 3.1-2B for simple). YAML-configured, no code changes. Does NOT apply to external providers — they use body-based routing."},
 {t:"Tier 3: llm-d EPP selects optimal vLLM replica (`ext-proc`)",c:"blue",d:"Probes vLLM /metrics. Prefix-affinity: route to pod with cached KVs (95% hit rate). Load-awareness: back-pressure management. If disaggregated: selects separate prefill + decode workers via NIXL sidecar."},
 {t:"vLLM worker runs inference on GPU — tokens stream back through the gateway",c:"neutral",d:"KV cache offload to CPU RAM or remote storage for multi-turn reuse. Response: vLLM → EPP → Gateway → caller. Token consumption metered against subscription quota."},
 {t:"Observability: token consumption, request counts, and rate-limit violations tracked",c:"purple",d:"MaaS observability dashboard shows per-subscription metrics. Export usage data in CSV for cost attribution and showback reporting. OTEL spans across all tiers. Prometheus + Grafana integration."}
