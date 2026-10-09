@@ -534,87 +534,87 @@ html.presentation .modal-card{max-width:95vw}
 <!-- ═══════════ INFERENCE & SKILLS ═══════════ -->
 <section class="section" id="inference">
   <div class="diagram-wrap">
-    <svg viewBox="-2 -2 924 384" overflow="visible" width="100%" style="min-width:700px" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="-2 -2 924 330" overflow="visible" width="100%" style="min-width:700px" xmlns="http://www.w3.org/2000/svg">
       <defs><marker id="a3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--t3)"/></marker></defs>
 
-      <text x="20" y="24" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Three Inference Routing Tiers</text>
+      <text x="20" y="20" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Three Inference Routing Tiers</text>
 
-      <rect x="20" y="40" width="110" height="52" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
-      <text x="71" y="62" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Pod</text>
-      <text x="71" y="76" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">inference request</text>
+      <rect x="20" y="34" width="110" height="44" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
+      <text x="71" y="53" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Pod</text>
+      <text x="71" y="65" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">inference request</text>
 
-      <line x1="126" y1="66" x2="156" y2="66" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
+      <line x1="126" y1="56" x2="156" y2="56" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
 
-      <g class="box" data-flow="F06"><rect x="160" y="36" width="210" height="60" rx="6" fill="var(--ec)" stroke="var(--es)" stroke-width="1.5"/>
-      <text x="265" y="54" text-anchor="middle" fill="var(--es)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 1 — Security</text>
-      <text x="265" y="66" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Sandbox egress router (in supervisor)</text>
-      <text x="265" y="78" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Where may this query go?</text>
-      <text x="265" y="90" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Policy · privacy class · PII masking · local vs cloud</text></g>
+      <g class="box" data-flow="F06"><rect x="160" y="31" width="210" height="51" rx="6" fill="var(--ec)" stroke="var(--es)" stroke-width="1.5"/>
+      <text x="265" y="46" text-anchor="middle" fill="var(--es)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 1 — Security</text>
+      <text x="265" y="56" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Sandbox egress router (in supervisor)</text>
+      <text x="265" y="66" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Where may this query go?</text>
+      <text x="265" y="76" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Policy · privacy class · PII masking · local vs cloud</text></g>
 
-      <line x1="370" y1="66" x2="400" y2="66" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
+      <line x1="370" y1="56" x2="400" y2="56" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
 
-      <g class="box" data-flow="F01a"><rect x="404" y="36" width="210" height="60" rx="6" fill="var(--ic)" stroke="var(--is)" stroke-width="1.5"/>
-      <text x="509" y="54" text-anchor="middle" fill="var(--is)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 2 — Cost</text>
-      <text x="509" y="66" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">vLLM Semantic Router / AI Gateway</text>
-      <text x="509" y="78" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Which model should serve it?</text>
-      <text x="509" y="90" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Intent classification · cost · reasoning on/off</text></g>
+      <g class="box" data-flow="F01a"><rect x="404" y="31" width="210" height="51" rx="6" fill="var(--ic)" stroke="var(--is)" stroke-width="1.5"/>
+      <text x="509" y="46" text-anchor="middle" fill="var(--is)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 2 — Cost</text>
+      <text x="509" y="56" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">vLLM Semantic Router / AI Gateway</text>
+      <text x="509" y="66" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Which model should serve it?</text>
+      <text x="509" y="76" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Intent classification · cost · reasoning on/off</text></g>
 
-      <line x1="614" y1="66" x2="644" y2="66" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
+      <line x1="614" y1="56" x2="644" y2="56" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
 
-      <g class="box" data-flow="F01b"><rect x="648" y="36" width="210" height="60" rx="6" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.5"/>
-      <text x="753" y="54" text-anchor="middle" fill="var(--ss)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 3 — Efficiency</text>
-      <text x="753" y="66" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">llm-d Router / EPP (Gateway API ext.)</text>
-      <text x="753" y="78" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Which replica serves it?</text>
-      <text x="753" y="90" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">KV cache locality · load · prefill/decode</text></g>
+      <g class="box" data-flow="F01b"><rect x="648" y="31" width="210" height="51" rx="6" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.5"/>
+      <text x="753" y="46" text-anchor="middle" fill="var(--ss)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 3 — Efficiency</text>
+      <text x="753" y="56" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">llm-d Router / EPP (Gateway API ext.)</text>
+      <text x="753" y="66" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Which replica serves it?</text>
+      <text x="753" y="76" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">KV cache locality · load · prefill/decode</text></g>
 
-      <line x1="858" y1="66" x2="880" y2="66" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
-      <rect x="884" y="48" width="22" height="36" rx="3" fill="var(--nc)"/>
-      <text x="895" y="72" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">⬡</text>
+      <line x1="858" y1="56" x2="880" y2="56" stroke="var(--t3)" stroke-width="1.5" marker-end="url(#a3)"/>
+      <rect x="884" y="41" width="22" height="31" rx="3" fill="var(--nc)"/>
+      <text x="895" y="61" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">⬡</text>
 
-      <line x1="20" y1="118" x2="904" y2="118" stroke="var(--border)" stroke-width=".8"/>
+      <line x1="20" y1="100" x2="904" y2="100" stroke="var(--border)" stroke-width=".8"/>
 
-      <text x="20" y="142" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Three Nouns, Three Enforcement Points</text>
-      <text x="20" y="158" fill="var(--t3)" font-size="9" font-family="system-ui,sans-serif">A skill tells the agent what to call. An MCP server is the callable endpoint. A service backend is the compute behind it.</text>
+      <text x="20" y="121" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Three Nouns, Three Enforcement Points</text>
+      <text x="20" y="134" fill="var(--t3)" font-size="9" font-family="system-ui,sans-serif">A skill tells the agent what to call. An MCP server is the callable endpoint. A service backend is the compute behind it.</text>
 
-      <rect x="20" y="170" width="286" height="105" rx="6" fill="var(--kc)" stroke="var(--ks)" stroke-width="1"/>
-      <text x="28" y="190" fill="var(--ks)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Skill (instruction file)</text>
-      <text x="28" y="205" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Instruction files + schema bindings, loaded by harness</text>
-      <text x="28" y="224" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Enforcement: none — no compute of its own</text>
-      <text x="28" y="241" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Progressive disclosure lives here: tells the agent</text>
-      <text x="28" y="254" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">when and how to use each tool</text>
-      <text x="28" y="268" fill="var(--t2)" font-size="7.5" font-style="italic" font-family="system-ui,sans-serif">Example: triage runbook, research plan, ETL workflow</text>
+      <rect x="20" y="144" width="286" height="89" rx="6" fill="var(--kc)" stroke="var(--ks)" stroke-width="1"/>
+      <text x="28" y="162" fill="var(--ks)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Skill (instruction file)</text>
+      <text x="28" y="174" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Instruction files + schema bindings, loaded by harness</text>
+      <text x="28" y="190" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Enforcement: none — no compute of its own</text>
+      <text x="28" y="205" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Progressive disclosure lives here: tells the agent</text>
+      <text x="28" y="216" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">when and how to use each tool</text>
+      <text x="28" y="228" fill="var(--t2)" font-size="7.5" font-style="italic" font-family="system-ui,sans-serif">Example: triage runbook, research plan, ETL workflow</text>
 
-      <rect x="316" y="170" width="286" height="105" rx="6" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
-      <text x="328" y="190" fill="var(--is)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">MCP server (tool)</text>
-      <text x="328" y="205" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Callable endpoint with advertised schema</text>
-      <text x="328" y="224" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Enforcement: MCP Gateway + egress policy</text>
-      <text x="328" y="241" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Separate process. This is the only thing the</text>
-      <text x="328" y="254" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">MCP Gateway fronts and claims-checks</text>
-      <text x="328" y="268" fill="var(--t2)" font-size="7.5" font-style="italic" font-family="system-ui,sans-serif">Example: Data-Mesh-Map Builder, GitHub, Jira</text>
+      <rect x="316" y="144" width="286" height="89" rx="6" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
+      <text x="328" y="162" fill="var(--is)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">MCP server (tool)</text>
+      <text x="328" y="174" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Callable endpoint with advertised schema</text>
+      <text x="328" y="190" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Enforcement: MCP Gateway + egress policy</text>
+      <text x="328" y="205" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Separate process. This is the only thing the</text>
+      <text x="328" y="216" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">MCP Gateway fronts and claims-checks</text>
+      <text x="328" y="228" fill="var(--t2)" font-size="7.5" font-style="italic" font-family="system-ui,sans-serif">Example: Data-Mesh-Map Builder, GitHub, Jira</text>
 
-      <rect x="616" y="170" width="290" height="105" rx="6" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-      <text x="628" y="190" fill="var(--ns)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Service backend (compute)</text>
-      <text x="628" y="205" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">The actual compute the MCP server wraps</text>
-      <text x="628" y="224" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Enforcement: per-backend (RBAC, admission)</text>
-      <text x="628" y="241" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">GPU or CPU, any cluster, SaaS, or batch job.</text>
-      <text x="628" y="254" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Swapping = endpoint + policy change, not redesign</text>
-      <text x="628" y="268" fill="var(--t2)" font-size="7.5" font-style="italic" font-family="system-ui,sans-serif">Example: optimization engine, query engine, Slurm job</text>
+      <rect x="616" y="144" width="290" height="89" rx="6" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+      <text x="628" y="162" fill="var(--ns)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Service backend (compute)</text>
+      <text x="628" y="174" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">The actual compute the MCP server wraps</text>
+      <text x="628" y="190" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Enforcement: per-backend (RBAC, admission)</text>
+      <text x="628" y="205" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">GPU or CPU, any cluster, SaaS, or batch job.</text>
+      <text x="628" y="216" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Swapping = endpoint + policy change, not redesign</text>
+      <text x="628" y="228" fill="var(--t2)" font-size="7.5" font-style="italic" font-family="system-ui,sans-serif">Example: optimization engine, query engine, Slurm job</text>
 
-      <line x1="20" y1="290" x2="904" y2="290" stroke="var(--border)" stroke-width=".8"/>
+      <line x1="20" y1="246" x2="904" y2="246" stroke="var(--border)" stroke-width=".8"/>
 
-      <rect x="20" y="302" width="436" height="34" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".8"/>
-      <text x="28" y="318" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Traceable end-to-end</text>
-      <text x="165" y="318" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">OTEL follows each request across all 3 tiers; MLflow records tool calls, latencies, costs</text>
-      <text x="28" y="331" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">GenAI semantic conventions in development — plan for attribute changes</text>
+      <rect x="20" y="257" width="436" height="29" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".8"/>
+      <text x="28" y="270" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Traceable end-to-end</text>
+      <text x="165" y="270" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">OTEL follows each request across all 3 tiers; MLflow records tool calls, latencies, costs</text>
+      <text x="28" y="281" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">GenAI semantic conventions in development — plan for attribute changes</text>
 
-      <rect x="466" y="302" width="440" height="34" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".8"/>
-      <text x="478" y="318" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Decoupled at every hop</text>
-      <text x="618" y="318" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Every hop speaks OpenAI-compatible or OpenResponses APIs</text>
-      <text x="478" y="331" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Model behind the path can change without the agent noticing</text>
+      <rect x="466" y="257" width="440" height="29" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".8"/>
+      <text x="478" y="270" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Decoupled at every hop</text>
+      <text x="618" y="270" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Every hop speaks OpenAI-compatible or OpenResponses APIs</text>
+      <text x="478" y="281" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Model behind the path can change without the agent noticing</text>
 
-      <rect x="20" y="346" width="890" height="24" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".8"/>
-      <text x="28" y="363" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Fleet economics:</text>
-      <text x="130" y="363" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Agent pods = CPU-only (common case). Expensive accelerators in pooled backends. Two independent scaling axes — neither purchase forces the other.</text>
+      <rect x="20" y="294" width="890" height="20" rx="4" fill="var(--band)" stroke="var(--band-s)" stroke-width=".8"/>
+      <text x="28" y="309" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Fleet economics:</text>
+      <text x="130" y="309" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Agent pods = CPU-only (common case). Expensive accelerators in pooled backends. Two independent scaling axes — neither purchase forces the other.</text>
     </svg>
   </div>
   <div class="info-grid">
