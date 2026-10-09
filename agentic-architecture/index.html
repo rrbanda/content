@@ -966,11 +966,11 @@ html.presentation .modal-card{max-width:95vw}
 const F={
 F01:{t:"AI Gateway (MaaS): subscription-based model governance",src:"RHOAI 3.5 MaaS docs",
 steps:[
-{t:"Inference request arrives at MaaS Gateway (OpenAI-compatible `/v1/chat/completions`)",c:"cyan",d:"Built on Red Hat Connectivity Link Operator (Kuadrant). Gateway API-conformant proxy. Authorino handles auth (API key or OIDC). Limitador enforces token limits per subscription."},
-{t:"Authorino authenticates: API key validated against PostgreSQL-backed lifecycle store",c:"blue",d:"Keys can be permanent or time-limited. Each tied to a MaaSSubscription (group → models → token limits). MaaSAuthPolicy CRs authorize groups. RHOAI 3.5 adds AITenant for multi-tenancy (TP)."},
-{t:"Limitador checks subscription quota: token rate limits per model per group",c:"blue",d:"MaaSSubscription CRs define configurable token limits with priority levels. Usage tracked for cost attribution and showback."},
-{t:"Gateway decides routing path based on model name in request body",c:"cyan",d:"Self-hosted: MaaSModelRef CR → llm-d or vLLM runtime (TP: vLLMDeploymentOnMaaS flag). External: ExternalProvider + ExternalModel CRs → Bedrock, Azure OpenAI, Vertex AI. Same governance for both paths."},
-{t:"Observability: token consumption, request counts, and rate-limit violations tracked",c:"purple",d:"MaaS observability dashboard (TP). Export usage in CSV for cost attribution. OTEL spans across all tiers. Prometheus + Grafana integration."}
+{t:"Inference request arrives at MaaS Gateway",c:"cyan"},
+{t:"Authorino authenticates: API key validated against",c:"blue"},
+{t:"Limitador checks subscription quota: token rate limits",c:"blue"},
+{t:"Gateway decides routing path based on model name in",c:"cyan"},
+{t:"Observability: token consumption, request counts, and",c:"purple"}
 ],m:[
 {v:"OpenAI",l:"/v1/chat/completions compatible"},
 {v:"Multi",l:"Self-hosted + external, one gateway"},
@@ -980,23 +980,23 @@ steps:[
 
 F01a:{t:"Semantic Router: vLLM model selection (Tier 2)",src:"Red Hat Developer: vLLM Semantic Router; llm-d deep dive",
 steps:[
-{t:"Inference request arrives from MaaS Gateway (self-hosted path only)",c:"cyan",d:"This tier applies ONLY to self-hosted vLLM models. External providers use body-based routing — they never reach the Semantic Router."},
-{t:"Envoy ExtProc proxy extracts user prompt and converts to embeddings via BERT",c:"green",d:"Semantic processor retrieves the prompt, converts to numerical vector representations using a configured BERT model."},
-{t:"Embeddings compared against configured signal vectors: topic, complexity, PII, jailbreak",c:"green",d:"Signals are YAML-configured decision rules. Each signal fires or not based on vector similarity. No application code changes needed."},
-{t:"Decision engine selects the best on-cluster vLLM model for this request",c:"cyan",d:"Example decisions: blocked (jailbreak detected, priority 100), research → Qwen3-8B (priority 20), RAG → Granite 3.1-8B (priority 15), general → Granite 3.1-2B (priority 1). Fallback escalates on low confidence."},
-{t:"Request forwarded to the selected model's llm-d EPP for replica selection",c:"blue",d:"The Semantic Router picks the MODEL. The EPP picks the REPLICA. Two separate decisions in sequence."}
+{t:"Inference request arrives from MaaS Gateway",c:"cyan"},
+{t:"Envoy ExtProc proxy extracts user prompt and converts",c:"green"},
+{t:"Embeddings compared against configured signal vectors:",c:"green"},
+{t:"Decision engine selects the best on-cluster vLLM model",c:"cyan"},
+{t:"Request forwarded to the selected model's llm-d EPP",c:"blue"}
 ],m:[
 {v:"vLLM",l:"Self-hosted models only"},
 {v:"YAML",l:"Config-driven, no code changes"},
 {v:"ExtProc",l:"Envoy External Processor filter"}
 ]},
 
-F01b:{t:"llm-d EPP: replica selection and KV cache affinity (Tier 3)",src:"llm-d deep dive slides 11-18",
+F01b:{t:"llm-d EPP: replica selection and KV cache affinity",src:"llm-d deep dive slides 11-18",
 steps:[
-{t:"Request arrives from Semantic Router (or directly from MaaS Gateway for single-model pools)",c:"blue",d:"The EPP is a Gateway API ext-proc filter. It runs as a sidecar or standalone process alongside the vLLM replicas."},
-{t:"EPP probes vLLM `/metrics` endpoints across all replicas in the pool",c:"blue",d:"Collects: queue depth, KV cache utilization, current request count, prefix cache hit data. Continuously updated."},
-{t:"Prefix-affinity: route to the replica that already has this prompt's KV cache",c:"cyan",d:"95% KV cache hit rate at 24 replicas. Avoids redundant prefill computation. Saves GPU time and memory."},
-{t:"Load-aware back-pressure: avoid overloaded replicas, respect queue depth limits",c:"cyan",d:"If all replicas are loaded, back-pressure signals propagate to the caller. If disaggregated mode: selects separate prefill + decode workers, coordinated via NIXL sidecar for KV transfer."}
+{t:"Request arrives from Semantic Router (or directly from",c:"blue"},
+{t:"EPP probes vLLM `/metrics` endpoints across all",c:"blue"},
+{t:"Prefix-affinity: route to the replica that already has",c:"cyan"},
+{t:"Load-aware back-pressure: avoid overloaded replicas,",c:"cyan"}
 ],m:[
 {v:"95%",l:"KV cache hit rate (prefix-aware)"},
 {v:"ext-proc",l:"Gateway API extension point"},
@@ -1005,9 +1005,9 @@ steps:[
 
 F01c:{t:"External LLM Providers: body-based routing via MaaS",src:"RHOAI 3.5 MaaS docs",
 steps:[
-{t:"MaaS Gateway reads model name from request body and matches to ExternalModel CR",c:"neutral",d:"ExternalModel CRs map a client-facing model name to one or more external providers via externalProviderRefs. Each ref specifies target model ID, apiFormat, and outgoing request path."},
-{t:"Multi-provider API passthrough: request forwarded in native provider format",c:"neutral",d:"Anthropic Messages API, OpenAI Responses API routed WITHOUT format translation. Preserves prompt caching, extended thinking, and provider-specific features. No Semantic Router, no EPP — direct passthrough."},
-{t:"Response streams back through MaaS Gateway; token consumption metered against subscription quota",c:"neutral",d:"Same governance (auth, quota, observability) as self-hosted models. AI coding tools can connect to one MaaS URL and switch between self-hosted and external models mid-session."}
+{t:"MaaS Gateway reads model name from request body and",c:"neutral"},
+{t:"Multi-provider API passthrough: request forwarded in",c:"neutral"},
+{t:"Response streams back through MaaS Gateway; token",c:"neutral"}
 ],m:[
 {v:"Passthrough",l:"No format translation"},
 {v:"Same GW",l:"Same auth + quota as self-hosted"},
@@ -1016,9 +1016,9 @@ steps:[
 
 F01d:{t:"Model Workers: vLLM inference execution",src:"llm-d deep dive",
 steps:[
-{t:"Selected vLLM replica receives the inference request from EPP",c:"neutral",d:"Request includes the full prompt (after any prompt expansion by the harness). KV cache checked for prefix match."},
-{t:"GPU executes inference — prefill then decode phases",c:"neutral",d:"If disaggregated: prefill pod computes KVs → NIXL sidecar transfers KV metadata → decode pod pulls KVs and generates tokens. If co-located: both phases on same GPU."},
-{t:"Tokens stream back: vLLM → EPP → MaaS Gateway → caller",c:"neutral",d:"KV cache offloaded to CPU RAM or remote storage for multi-turn reuse. Token consumption metered at gateway level against subscription quota."}
+{t:"Selected vLLM replica receives the inference request",c:"neutral"},
+{t:"GPU executes inference — prefill then decode phases",c:"neutral"},
+{t:"Tokens stream back: vLLM → EPP → MaaS Gateway → caller",c:"neutral"}
 ],m:[
 {v:"900",l:"tok/s/GPU typical"},
 {v:"$1.2/M",l:"Self-hosted output tokens"},
@@ -1027,27 +1027,27 @@ steps:[
 
 F02:{t:"MCP Gateway: tool call authorization",src:"Blog §Tool governance; Agentic deep dive slides 16-17",
 steps:[
-{t:"Tool call request arrives at MCP Gateway — single endpoint, agent configured with `MCP_URL`",c:"blue",d:"Envoy + Kuadrant/Authorino. Authorization by SVID token claims, never by prompt content. The harness initiated the call (see ReAct loop flow); the supervisor's egress proxy already passed network policy checks (see Network Enforcement flow)."},
-{t:"Authorino validates the caller's SVID token claims against gateway policy",c:"blue",d:"Identity-based authorization. The token identifies which sandbox and which agent issued this tool call. Claims determine which tools are accessible."},
-{t:"Gateway matches the MCP tool name to the correct MCP server from aggregated tool catalog",c:"neutral",d:"Multiple MCP servers registered behind one gateway. The gateway resolves which server advertises the requested tool."},
-{t:"MCP server invokes its service backend (query engine, optimization solver, API, etc.)",c:"neutral",d:"Three separate things: skill told the agent WHAT to call (F10). Gateway authorized WHETHER the call is allowed (this flow). Backend is the actual compute."},
-{t:"Response returns: backend → MCP server → Gateway → Supervisor → Agent",c:"green",d:"Full return path. Supervisor logs the response. Harness adds result to conversation context."},
-{t:"OCSF events emitted for every allow AND every deny decision",c:"neutral",d:"NetworkActivity for the connection. HttpActivity for L7 details. Both stored in OCSF JSONL for audit."}
+{t:"Tool call request arrives at MCP Gateway — single",c:"blue"},
+{t:"Authorino validates the caller's SVID token claims",c:"blue"},
+{t:"Gateway matches the MCP tool name to the correct MCP",c:"neutral"},
+{t:"MCP server invokes its service backend (query engine,",c:"neutral"},
+{t:"Response returns: backend → MCP server → Gateway →",c:"green"},
+{t:"OCSF events emitted for every allow AND every deny",c:"neutral"}
 ]},
 
 F03:{t:"Sandbox creation lifecycle",src:"OpenShell docs: sandboxes/overview, gateways/overview; Blog §Agent packaging",
 steps:[
-{t:"User runs: `openshell sandbox create --from registry.example.com/org/agent:latest -- claude`",c:"blue",d:"The trailing command is the sandbox's canonical main process. Default image: nvcr.io/nvidia/base/ubuntu:24.04. Use --from for custom images."},
-{t:"CLI sends gRPC request (mTLS) to the active OpenShell Gateway",c:"blue",d:"Register a gateway first: openshell gateway add. Supports Docker, Podman, Kubernetes, and MicroVM compute drivers — same API surface."},
-{t:"Gateway validates the effective policy (Z3 prover checks for risky configurations)",c:"blue",d:"Policy sources in priority: global policy → sandbox policy (--policy) → image policy → default restrictive policy."},
-{t:"K8s path: Gateway writes Sandbox CR (agents.x-k8s.io/v1beta1). Docker/Podman path: Gateway creates container directly.",c:"blue"},
-{t:"K8s: Agent Sandbox Operator reconciles CR into pod. Docker/Podman: container starts with supervisor binary mounted.",c:"neutral",d:"K8s init containers: supervisor-install (copies binary to emptyDir) + workspace-init. SandboxWarmPool CRs pre-provision pods for fast startup."},
+{t:"User runs: `openshell sandbox create --from",c:"blue"},
+{t:"CLI sends gRPC request (mTLS) to the active OpenShell",c:"blue"},
+{t:"Gateway validates the effective policy (Z3 prover",c:"blue"},
+{t:"K8s path: Gateway writes Sandbox CR",c:"blue"},
+{t:"K8s: Agent Sandbox Operator reconciles CR into pod.",c:"neutral"},
 {t:"Supervisor starts as PID 1 in the sandbox runtime",c:"green"},
-{t:"Supervisor connects outbound to Gateway over mTLS gRPC — receives policy + credentials + config",c:"green"},
-{t:"Applies Landlock LSM — irreversible filesystem scoping (even root cannot loosen)",c:"green",d:"filesystem_policy section controls paths. Landlock section controls fallback behavior if kernel doesn't support it."},
-{t:"Installs seccomp-BPF filter (USER_NOTIF) — intercepts connect, bind, sendmsg",c:"green"},
-{t:"Drops ALL capabilities, then launches agent as child process — capability-free",c:"green",d:"Network policies can be hot-reloaded while sandbox runs. Filesystem and process settings are fixed at startup."},
-{t:"Sandbox reaches Ready phase — supervisor control session is connected",c:"green",d:"Phases: Provisioning → Ready → Stopping → Stopped → Completed/Error → Deleting. Use openshell sandbox get for status."}
+{t:"Supervisor connects outbound to Gateway over mTLS gRPC",c:"green"},
+{t:"Applies Landlock LSM — irreversible filesystem scoping",c:"green"},
+{t:"Installs seccomp-BPF filter (USER_NOTIF) — intercepts",c:"green"},
+{t:"Drops ALL capabilities, then launches agent as child",c:"green"},
+{t:"Sandbox reaches Ready phase — supervisor control",c:"green"}
 ],m:[
 {v:"16.4s",l:"Cold start P50 (K8s)"},
 {v:"247ms",l:"Warm start P50 (with pool)"},
@@ -1057,41 +1057,41 @@ steps:[
 
 F04:{t:"Credential injection flow",src:"OpenShell docs: providers/overview, inference; Blog §Governance",
 steps:[
-{t:"Admin creates provider from a profile: `openshell provider create --name my-claude --type claude-code --from-existing`",c:"blue",d:"CLI discovers credentials from shell environment (e.g., ANTHROPIC_API_KEY). Profile defines authorized endpoints, binaries, and credential lifecycle."},
-{t:"Gateway encrypts credential with AES-256-GCM (KEK-wrapped) → stored in gateway database",c:"blue"},
-{t:"Admin attaches provider to sandbox: `openshell sandbox create --provider my-claude -- claude`",c:"blue",d:"Each --provider flag attaches one provider. Auto-discovery shortcut: if name matches an imported profile, CLI creates and attaches in one step."},
-{t:"At startup, OpenShell replaces each credential with an opaque placeholder token in the agent's environment",c:"green",d:"The agent process never sees real credential values — only placeholders."},
-{t:"Agent sends HTTP request containing the placeholder (in header, query param, URL path, or request body)",c:"amber"},
-{t:"Two independent authorization boundaries must BOTH pass",c:"green",d:"(1) Network policy: is this binary allowed to reach this destination? (2) Credential binding: does the provider profile authorize this credential at this host:port:path?"},
-{t:"If both pass: proxy resolves the placeholder to the real credential immediately before forwarding",c:"green",d:"Supported locations: header value, Basic auth, query parameter, URL path segment, request body (opt-in), WebSocket text (opt-in), AWS SigV4 signing."},
-{t:"Request leaves sandbox with real credential injected — agent never saw it",c:"green"},
-{t:"If either check fails: request blocked. Unknown, malformed, or expired placeholders also fail closed",c:"pink",d:"Fail-closed: unresolved placeholders are NEVER forwarded to upstream services. OCSF event emitted."},
-{t:"Detaching the provider revokes credential access: `openshell sandbox provider detach my-sandbox my-claude --wait`",c:"blue"}
+{t:"Admin creates provider from a profile: `openshell",c:"blue"},
+{t:"Gateway encrypts credential with AES-256-GCM",c:"blue"},
+{t:"Admin attaches provider to sandbox: `openshell sandbox",c:"blue"},
+{t:"At startup, OpenShell replaces each credential with an",c:"green"},
+{t:"Agent sends HTTP request containing the placeholder",c:"amber"},
+{t:"Two independent authorization boundaries must BOTH pass",c:"green"},
+{t:"If both pass: proxy resolves the placeholder to the",c:"green"},
+{t:"Request leaves sandbox with real credential injected —",c:"green"},
+{t:"If either check fails: request blocked. Unknown,",c:"pink"},
+{t:"Detaching the provider revokes credential access:",c:"blue"}
 ]},
 
 F05:{t:"SPIFFE workload identity lifecycle",src:"Blog §Workload identity; Agentic deep dive slide 24",
 steps:[
-{t:"SPIFFE/SPIRE issues `JWT-SVID` to each sandbox pod and gateway at deploy time",c:"blue",d:"SVID scoped to namespace + service account. Automatically rotated."},
-{t:"Supervisor presents projected `ServiceAccount` token (1h TTL) to gateway",c:"green"},
-{t:"Gateway mints `Ed25519`-signed sandbox token for the session",c:"blue"},
-{t:"Authentication sidecar performs token exchange for downstream services",c:"blue",d:"RFC 8693 token exchange or RFC 7523 JWT bearer grant with Keycloak/IdP."},
-{t:"SVID traded for short-lived access tokens — no static API key in any path",c:"cyan"},
-{t:"A leaked prompt or workspace file contains nothing durable to steal",c:"neutral"},
-{t:"Lifecycle tooling injects sidecar + identity plumbing at deploy time — `no agent code changes`",c:"blue"}
+{t:"SPIFFE/SPIRE issues `JWT-SVID` to each sandbox pod and",c:"blue"},
+{t:"Supervisor presents projected `ServiceAccount` token",c:"green"},
+{t:"Gateway mints `Ed25519`-signed sandbox token for the",c:"blue"},
+{t:"Authentication sidecar performs token exchange for",c:"blue"},
+{t:"SVID traded for short-lived access tokens — no static",c:"cyan"},
+{t:"A leaked prompt or workspace file contains nothing",c:"neutral"},
+{t:"Lifecycle tooling injects sidecar + identity plumbing",c:"blue"}
 ]},
 
 F06:{t:"Per-binary network enforcement",src:"OpenShell docs: policies/network-rules; Agentic deep dive slides 15, 18",
 steps:[
-{t:"Agent process calls `connect()` to establish a TCP connection",c:"amber"},
-{t:"`seccomp-BPF` filter intercepts the syscall (USER_NOTIF mode)",c:"green"},
-{t:"Supervisor resolves calling binary via `/proc/pid/exe` (real path, not symlink)",c:"green",d:"Example: /usr/bin/python3 is a symlink to /usr/bin/python3.12 — OpenShell uses the real path. When a connection is denied, the log shows the path it identified."},
-{t:"SHA-256 hash computed — compared against TOFU record. Mismatch → deny immediately.",c:"green",d:"OpenShell records a hash of each executable the first time it takes part in a connection, and denies later connections if the file at that path changes."},
-{t:"Stage 1 — Connection check: destination host:port + binary identity matched against policy rules",c:"green",d:"Each rule in network_policies lists endpoints (host+port) and binaries (path). A rule allows every listed binary to reach every listed endpoint. No rule match → deny."},
-{t:"Stage 2 — Request inspection: if endpoint sets a `protocol`, each request is checked against L7 rules",c:"green",d:"Protocols: rest (method+path+query), websocket (upgrade + text messages), graphql (operation type+name+fields), mcp (method+tool name), json-rpc (method name), tcp (no request rules). Protocol omitted → any request allowed."},
-{t:"Example: `gh` can reach github.com:443 with GET, while `curl` is denied entirely",c:"neutral",d:"A rule also applies to processes that a listed binary starts. A rule with an empty binaries list matches nothing."},
-{t:"If ALLOW: proxy forwards request to destination. If DENY: connection refused, OCSF logged",c:"pink",d:"Credential injection is handled separately (see Credential Injection flow). This step only determines allow/deny based on network policy."},
-{t:"`nftables` catch any attempt to bypass the proxy — raw sockets blocked by seccomp",c:"green"},
-{t:"Process ancestry tracked — subprocess inherits parent's identity constraints",c:"green"}],m:[
+{t:"Agent process calls `connect()` to establish a TCP",c:"amber"},
+{t:"`seccomp-BPF` filter intercepts the syscall",c:"green"},
+{t:"Supervisor resolves calling binary via `/proc/pid/exe`",c:"green"},
+{t:"SHA-256 hash computed — compared against TOFU record.",c:"green"},
+{t:"Stage 1 — Connection check: destination host:port +",c:"green"},
+{t:"Stage 2 — Request inspection: if endpoint sets a",c:"green"},
+{t:"Example: `gh` can reach github.com:443 with GET, while",c:"neutral"},
+{t:"If ALLOW: proxy forwards request to destination. If",c:"pink"},
+{t:"`nftables` catch any attempt to bypass the proxy — raw",c:"green"},
+{t:"Process ancestry tracked — subprocess inherits",c:"green"}],m:[
 {v:"L7",l:"REST, GraphQL, MCP, JSON-RPC, native TCP, WebSocket"},
 {v:"SHA-256",l:"Binary verification (TOFU)"},
 {v:"0",l:"Keys in agent environment"}
@@ -1100,42 +1100,42 @@ steps:[
 F07:{t:"Guardrails screening pipeline",src:"Agentic deep dive slides 26-28; NeMo Guardrails architecture",
 steps:[
 {t:"User or agent input arrives at the inference boundary",c:"amber"},
-{t:"TrustyAI Operator deploys NeMo Guardrails Server via `NemoGuardrails` CR",c:"blue",d:"Admin creates ConfigMap with config.yaml + Colang rails, then applies NemoGuardrails CR referencing it. TrustyAI component must be set to Managed in the DataScienceCluster. RHOAI 3.5: FMS Guardrails Orchestrator deprecated, NeMo Guardrails is the sole recommended framework."},
-{t:"Input detectors run in parallel: prompt injection, PII, toxicity, topic filter",c:"purple",d:"Internal detectors run in-process. External detectors called via API (regex, classifier, custom)."},
-{t:"If input blocked: request rejected before reaching model — saves inference cost. If passes: forwarded to model.",c:"pink"},
+{t:"TrustyAI Operator deploys NeMo Guardrails Server via",c:"blue"},
+{t:"Input detectors run in parallel: prompt injection,",c:"purple"},
+{t:"If input blocked: request rejected before reaching",c:"pink"},
 {t:"Model generates response via `vLLM`",c:"cyan"},
-{t:"Output detectors screen response: harmful content, data leakage, off-policy generation",c:"purple"},
-{t:"If output blocked: response filtered or replaced. If passes: delivered to user/agent.",c:"pink"},
-{t:"All decisions logged — findings feed back into guardrail rules",c:"neutral",d:"RHOAI 3.5 adds NeMo Guardrails integration with MCP Gateway, enforcing rails on agent tool calls at the gateway layer. Define rails once, enforce consistently across tool calls."}
+{t:"Output detectors screen response: harmful content,",c:"purple"},
+{t:"If output blocked: response filtered or replaced. If",c:"pink"},
+{t:"All decisions logged — findings feed back into",c:"neutral"}
 ]},
 
 F08:{t:"Evaluation and red teaming pipeline",src:"Agentic deep dive slides 29-32, 36",
 steps:[
-{t:"Inner loop: MLflow traces every step the agent takes during development",c:"cyan",d:"Python scorers, LLM judges, expert feedback on real traces."},
-{t:"Red teaming: Garak runs 120+ attack probes against the agent",c:"pink",d:"Probe categories: prompt injection, jailbreaks, encoding attacks, latent injection, data leakage, DAN."},
-{t:"Garak generators wrap the LLM API; probes generate adversarial prompts",c:"pink"},
-{t:"Detectors analyze outputs to determine if the attack succeeded",c:"pink"},
-{t:"Evaluators convert detector results into pass/fail metrics per risk taxonomy (OWASP Top-10)",c:"neutral"},
-{t:"Findings feed back into guardrail rules — attack catalog improves defenses",c:"amber"},
-{t:"Release gate: EvalHub runs the full eval suite against candidate version",c:"blue",d:"EvalHub: evaluation orchestration service on RHOAI (deployed via TrustyAI Operator). REST API for submitting jobs, managing benchmark providers, tracking results in MLflow. Adapters wrap frameworks (lm_evaluation_harness). Jobs: pending→running→completed/failed. MCP server enables agents to self-evaluate before committing."},
-{t:"Pass/fail thresholds enforced — nothing ships below the bar",c:"blue"},
-{t:"Results stored as audit evidence linked to configuration version in MLflow",c:"neutral"},
-{t:"Production traces become new eval cases — continuous improvement loop",c:"cyan"},
-{t:"asago (AI Safety And Governance Orchestration) translates governance policies into test scenarios",c:"neutral",d:"Open-source community project: Red Hat, NVIDIA, Microsoft, IBM Research, MIT Lincoln Lab, Alan Turing Institute. Automates: policy → scenarios → red teaming/eval jobs on EvalHub → recommendations → deployable controls (K8s CRs/ConfigMaps) → retest. Auditable, traceable workflow from policy to production."}
+{t:"Inner loop: MLflow traces every step the agent takes",c:"cyan"},
+{t:"Red teaming: Garak runs 120+ attack probes against the",c:"pink"},
+{t:"Garak generators wrap the LLM API; probes generate",c:"pink"},
+{t:"Detectors analyze outputs to determine if the attack",c:"pink"},
+{t:"Evaluators convert detector results into pass/fail",c:"neutral"},
+{t:"Findings feed back into guardrail rules — attack",c:"amber"},
+{t:"Release gate: EvalHub runs the full eval suite against",c:"blue"},
+{t:"Pass/fail thresholds enforced — nothing ships below",c:"blue"},
+{t:"Results stored as audit evidence linked to",c:"neutral"},
+{t:"Production traces become new eval cases — continuous",c:"cyan"},
+{t:"asago (AI Safety And Governance Orchestration)",c:"neutral"}
 ]},
 
 F09:{t:"ReAct loop and harness internals",src:"OpenClaw docs; Hermes Agent docs; Agentic deep dive slides 2-5; Blog §A new workload class; PSAP benchmarks",
 steps:[
-{t:"Harness receives goal/prompt from user, orchestrator, or messaging platform",c:"green",d:"Hermes: CLI, Telegram, Discord, Slack, WhatsApp, Teams, and 20+ platforms via messaging gateway. OpenClaw: chat UI or CLI. The harness is the agent runtime — it owns the ReAct loop, memory, and tool dispatch."},
-{t:"System prompt assembled: instructions + skills + context + tool schemas",c:"amber",d:"Prompt expansion: ~83 user tokens → 7,867–8,135 total input tokens (16–17× expansion). Skills loaded via progressive disclosure (~3k for list, full body on demand). Tool schemas describe available MCP tools."},
-{t:"Model reasons about the next action (Reason step)",c:"cyan",d:"The model reads the assembled prompt — skill instructions guide its reasoning about which tool to call. Hermes: built-in memory system injects key facts from prior sessions automatically."},
-{t:"If tool call needed: harness formats MCP request via supervisor proxy (Act step)",c:"green",d:"Tool call flows through OpenShell enforcement: sandbox proxy intercepts → supervisor checks policy → credentials injected → request forwarded. The harness doesn't bypass the sandbox boundary."},
-{t:"Tool result returned to harness, added to conversation context (Observe step)",c:"green",d:"Result added to context window. Skill instructions guide interpretation: retry on error, call follow-up tool on partial result, summarize on completion."},
-{t:"Loop repeats: reason → act → observe until goal met or limits reached",c:"amber",d:"Limits: step count, token budget, cost cap, timeout. 40%+ of sessions run full auto-approve. Hermes: agent can spawn isolated subagents for parallel workstreams."},
-{t:"Agent can create skills from experience — procedural memory for future reuse",c:"green",d:"Hermes: self-improving learning loop — creates skills from experience, improves them during use. OpenClaw: agent writes SKILL.md to workspace. This is the agent getting smarter over time."},
-{t:"Integration mode 1: whole-agent sandbox (`openshell sandbox create -- claude`)",c:"blue",d:"The entire harness + agent runs inside the sandbox. No code changes. OpenShell provides the isolated runtime."},
-{t:"Integration mode 2: per-tool sandbox (`harness.use_plugin('openshell')`)",c:"blue",d:"Harness runs outside, individual tool calls or sub-agents run in sandboxed environments. Fine-grained isolation."},
-{t:"Harness options: OpenClaw, Hermes, LangGraph, LangChain Deep Agents, custom",c:"neutral",d:"OpenClaw: agentskills.io-compatible host with chat UI. Hermes: self-improving agent by Nous Research. NemoClaw: OpenClaw + OpenShell + VSS plugin pre-configured. Any harness works — OpenShell is harness-agnostic."}
+{t:"Harness receives goal/prompt from user, orchestrator,",c:"green"},
+{t:"System prompt assembled: instructions + skills +",c:"amber"},
+{t:"Model reasons about the next action (Reason step)",c:"cyan"},
+{t:"If tool call needed: harness formats MCP request via",c:"green"},
+{t:"Tool result returned to harness, added to conversation",c:"green"},
+{t:"Loop repeats: reason → act → observe until goal met or",c:"amber"},
+{t:"Agent can create skills from experience — procedural",c:"green"},
+{t:"Integration mode 1: whole-agent sandbox (`openshell",c:"blue"},
+{t:"Integration mode 2: per-tool sandbox",c:"blue"},
+{t:"Harness options: OpenClaw, Hermes, LangGraph,",c:"neutral"}
 ],m:[
 {v:"16.9×",l:"Prompt expansion (with OpenShell)"},
 {v:"+268",l:"Input tokens added by sandbox context"},
@@ -1145,28 +1145,28 @@ steps:[
 
 F11:{t:"Observability pipeline",src:"OpenShell docs; AGENTS.md §Sandbox Logging; MLflow Tracing docs",
 steps:[
-{t:"Gateway emits `OCSF v1.8.0` structured events for every allow/deny decision (JSON lines)",c:"blue"},
-{t:"Supervisor emits OCSF events: `NetworkActivity, HttpActivity, ProcessActivity, ConfigStateChange, DetectionFinding`",c:"green"},
-{t:"Gateway exports OpenTelemetry traces over `OTLP/gRPC` to Jaeger or Tempo",c:"cyan"},
-{t:"MLflow Tracing records agent steps, tool calls, prompts, outputs, latencies, and costs",c:"amber",d:"OpenTelemetry-compatible. One-line auto-tracing: mlflow.openai.autolog(). Framework-agnostic — works with OpenAI, LangChain, DSPy, and custom harnesses."},
-{t:"OTEL GenAI semantic conventions link inference requests to agent actions",c:"cyan",d:"Conventions still in development — plan for attribute changes, not interface rewrites."},
-{t:"All three streams merge: every hop lands in the same traceable trail",c:"neutral"},
-{t:"Export: `Prometheus` (port 9090), `Jaeger/Tempo` (traces), SIEM (`Splunk/Elastic` via OCSF JSON)",c:"neutral"},
-{t:"Production traces become new eval cases — feeds the continuous improvement loop back to `EvalHub`",c:"blue"}
+{t:"Gateway emits `OCSF v1.8.0` structured events for",c:"blue"},
+{t:"Supervisor emits OCSF events: `NetworkActivity,",c:"green"},
+{t:"Gateway exports OpenTelemetry traces over `OTLP/gRPC`",c:"cyan"},
+{t:"MLflow Tracing records agent steps, tool calls,",c:"amber"},
+{t:"OTEL GenAI semantic conventions link inference",c:"cyan"},
+{t:"All three streams merge: every hop lands in the same",c:"neutral"},
+{t:"Export: `Prometheus` (port 9090), `Jaeger/Tempo`",c:"neutral"},
+{t:"Production traces become new eval cases — feeds the",c:"blue"}
 ]},
 
 F10:{t:"How skills drive agent actions",src:"OpenClaw docs/skills; Hermes Agent docs/skills; NemoClaw developer guide; Blog §Job placement",
 steps:[
-{t:"Agent harness discovers skill files from workspace roots at session start",c:"green",d:"Skills are Markdown instruction files (SKILL.md + optional references/, templates/, scripts/). OpenClaw discovers SKILL.md under configured roots up to 6 levels deep. Priority: workspace skills > project .agents/skills > personal > managed > bundled. Hermes uses ~/.hermes/skills/. NemoClaw installs skills into the sandbox workspace via its OpenClaw plugin."},
-{t:"Progressive disclosure: only a compact skills list is loaded initially (~3k tokens)",c:"amber",d:"Level 0: skills_list() returns [{name, description, category}...]. Level 1: skill_view(name) loads the full SKILL.md only when the agent decides it needs that skill. Level 2: skill_view(name, path) loads a specific reference file. Zero tokens until actually needed."},
-{t:"Skills filtered at load time — only eligible skills enter the agent's context",c:"amber",d:"OpenClaw filters on metadata.openclaw: required binaries (bins), environment variables (env), config paths, OS platform. A skill with missing dependencies is silently excluded. Hermes uses category-based organization."},
-{t:"When a task matches, the agent loads the full skill into conversation context",c:"cyan",d:"The SKILL.md body contains step-by-step instructions, tool schemas it references, goal conditions, and error-handling logic. Reference files (API docs, examples) loaded on demand via skill_view(name, path). This is part of the 16.9× prompt expansion."},
-{t:"Skill instructions guide the agent's reasoning: WHAT to call, WHEN, and in what ORDER",c:"cyan",d:"Three nouns — the skill is the instruction (no compute). The MCP server is the callable tool endpoint. The service backend is the actual compute. The skill narrows scope to relevant tools for the current goal — progressive disclosure, not all-tools-at-once."},
-{t:"Agent selects a tool call based on skill logic → harness formats the MCP request",c:"green",d:"Tool call goes through the full enforcement chain: sandbox proxy → supervisor policy check → MCP Gateway → MCP server → service backend. The skill told the agent WHAT to call. OpenShell controls WHETHER the call is allowed."},
-{t:"Tool result returned — skill instructions guide what to do next",c:"amber",d:"Skills encode conditional logic: if error → retry with different parameters. If partial result → call a second tool. If complete → summarize. This is procedural memory — step-by-step know-how, not just facts."},
-{t:"Agent can CREATE and UPDATE skills from experience — self-improving procedural memory",c:"green",d:"Hermes: skill_manage tool (create, patch, edit, delete). OpenClaw: agent writes to skills/ directory. When the agent figures out a non-trivial workflow, it saves the approach as a skill for future reuse. Skills improve through use — instructions become more accurate, edge cases documented."},
-{t:"Skill bundles group multiple skills under one command for multi-skill workflows",c:"neutral",d:"Hermes bundles: tiny YAML files that load several skills at once. OpenClaw: workspace .agents/skills/ for project-specific skill sets. NemoClaw: VSS plugin pre-installs domain skills into sandbox."},
-{t:"All skill-driven actions traced in MLflow — which skill was active, which tool called, what result",c:"purple",d:"MLflow Tracing captures skill context alongside tool calls. Production traces become new eval cases. Skills are the bridge between human intent and agent behavior — the traceable, auditable instruction layer."}
+{t:"Agent harness discovers skill files from workspace",c:"green"},
+{t:"Progressive disclosure: only a compact skills list is",c:"amber"},
+{t:"Skills filtered at load time — only eligible skills",c:"amber"},
+{t:"When a task matches, the agent loads the full skill",c:"cyan"},
+{t:"Skill instructions guide the agent's reasoning: WHAT",c:"cyan"},
+{t:"Agent selects a tool call based on skill logic →",c:"green"},
+{t:"Tool result returned — skill instructions guide what",c:"amber"},
+{t:"Agent can CREATE and UPDATE skills from experience —",c:"green"},
+{t:"Skill bundles group multiple skills under one command",c:"neutral"},
+{t:"All skill-driven actions traced in MLflow — which",c:"purple"}
 ],m:[
 {v:"3 levels",l:"Progressive disclosure (list → body → refs)"},
 {v:"3 nouns",l:"Skill → MCP server → backend"},
