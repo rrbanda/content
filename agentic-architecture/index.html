@@ -113,7 +113,7 @@ html.presentation .pres-toggle{background:var(--blue-d);border-color:var(--blue)
   background:transparent;color:var(--t2);cursor:pointer;font-size:calc(12px * var(--s));font-weight:500;transition:all .2s}
 .tab:hover{color:var(--t1);background:var(--surface)}
 .tab.active{color:var(--t1);background:var(--blue-d);border-color:var(--blue-s)}
-.section{display:none;padding:calc(4px * var(--s)) 20px calc(8px * var(--s));max-width:1600px;margin:0 auto}
+.section{display:none;padding:calc(2px * var(--s)) 20px calc(4px * var(--s));max-width:1600px;margin:0 auto}
 html.presentation .section{max-width:100%;padding:calc(2px * var(--s)) 28px calc(4px * var(--s))}
 .section.active{display:block;animation:fadeIn .3s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -153,7 +153,7 @@ html.presentation .section{max-width:100%;padding:calc(2px * var(--s)) 28px calc
 .example summary::before{content:'▸';transition:transform .2s}
 .example[open] summary::before{transform:rotate(90deg)}
 /* ── Journey stepper ─────────────────────────────────── */
-.journey-svg{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);padding:calc(24px * var(--s)) 12px calc(10px * var(--s));transition:all .3s}
+.journey-svg{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);padding:calc(12px * var(--s)) 12px calc(6px * var(--s));transition:all .3s}
 .j-node{cursor:pointer;transition:transform .2s}
 .j-node:hover{transform:scale(1.12)}
 .j-node .ring{transition:all .3s}
@@ -163,13 +163,13 @@ html.presentation .section{max-width:100%;padding:calc(2px * var(--s)) 28px calc
 .j-path-active{fill:none;stroke:var(--blue);stroke-width:calc(3px * var(--s));stroke-linecap:round;transition:stroke-dashoffset .6s ease}
 .j-dot{fill:var(--blue);filter:drop-shadow(0 0 8px var(--blue))}
 .j-detail{background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);
-  padding:calc(20px * var(--s)) calc(24px * var(--s));margin-top:calc(14px * var(--s));min-height:calc(90px * var(--s));transition:all .3s}
+  padding:calc(12px * var(--s)) calc(16px * var(--s));margin-top:calc(8px * var(--s));min-height:calc(60px * var(--s));transition:all .3s}
 .j-detail h3{font-size:calc(1rem * var(--s));font-weight:600;margin-bottom:2px;display:flex;align-items:center;gap:8px}
 .j-detail .j-comp{font-size:calc(.82rem * var(--s));color:var(--t2);margin-bottom:6px}
 .j-detail .j-desc{font-size:calc(.88rem * var(--s));color:var(--t1);line-height:1.6}
 .j-detail .j-metric{font-size:calc(.85rem * var(--s));color:var(--blue);font-weight:600;margin-top:6px}
 .j-badge{display:inline-block;font-size:calc(11px * var(--s));padding:2px calc(10px * var(--s));border-radius:3px;font-weight:600}
-.stepper{display:flex;align-items:center;justify-content:center;gap:calc(10px * var(--s));margin-top:calc(14px * var(--s));flex-wrap:wrap}
+.stepper{display:flex;align-items:center;justify-content:center;gap:calc(8px * var(--s));margin-top:calc(8px * var(--s));flex-wrap:wrap}
 .stepper button{background:var(--surface);border:1px solid var(--border);color:var(--t1);
   border-radius:6px;padding:calc(6px * var(--s)) calc(18px * var(--s));font-size:calc(13px * var(--s));cursor:pointer;transition:all .2s;font-family:system-ui,sans-serif}
 .stepper button:hover{background:var(--raised);border-color:var(--blue)}
