@@ -291,7 +291,7 @@ html.presentation .modal-card{max-width:95vw}
 </div>
 <nav class="tabs" role="tablist">
   <button class="tab active" data-tab="blueprint" role="tab">Control &amp; Execution Planes<span class="tab-tip">Three bands — control, execution, platform — with the MCP Gateway as the authorization checkpoint. Every box is a role; implementations are interchangeable behind open interfaces.</span></button>
-  <button class="tab" data-tab="security" role="tab">Isolation Rings &amp; Enforcement<span class="tab-tip">Three nested isolation boundaries — process, pod, hardware — each assuming the one inside it has already been compromised. Four cross-cutting controls.</span></button>
+  <button class="tab" data-tab="security" role="tab">Isolation Rings &amp; Enforcement<span class="tab-tip">Four nested isolation boundaries — agent process, sandbox pod, supervisor pod, hardware — each assuming the one inside it has already been compromised. Gateway manages multiple supervisors.</span></button>
   <button class="tab" data-tab="inference" role="tab">Inference Routing &amp; Tool Governance<span class="tab-tip">Three routing tiers (security, cost, efficiency) owned by different teams. Three nouns — skill, MCP server, service backend — with separate enforcement points.</span></button>
   <button class="tab" data-tab="journey" role="tab">End-to-End Journey<span class="tab-tip">One request traced from user to GPU and back. 13 stages through Gateway, Operator, Supervisor, inference tiers, and tool calls. Click any node or hit Play.</span></button>
   <button class="tab" data-tab="profiling" role="tab">Pipeline Profiling<span class="tab-tip">OTEL-traced pipeline decomposition from PSAP benchmarks. Qwen3-8B-FP8, 8×A100, OpenClaw + OpenShell. Sandbox adds 2.2% of E2E. GPU at 35% — harness is the bottleneck.</span></button>
@@ -455,69 +455,92 @@ html.presentation .modal-card{max-width:95vw}
 <!-- ═══════════ SECURITY RINGS ═══════════ -->
 <section class="section" id="security">
   <div class="diagram-wrap">
-    <svg viewBox="-2 -2 924 484" overflow="visible" width="100%" style="min-width:700px" xmlns="http://www.w3.org/2000/svg">
-      <rect x="40" y="20" width="510" height="340" rx="14" fill="none" stroke="var(--ns)" stroke-width="2" stroke-dasharray="6 3"/>
-      <text x="52" y="42" fill="var(--t2)" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 3 — Hardware / VM</text>
-      <text x="52" y="56" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Kata Containers · Confidential Computing (AMD SEV-SNP / Intel TDX) · GPU TEE</text>
+    <svg viewBox="-2 -2 924 440" overflow="visible" width="100%" style="min-width:700px" xmlns="http://www.w3.org/2000/svg">
+      <!-- 4 NESTED RINGS per Ann Marie: Agent → Sandbox Pod → Supervisor Pod → Hardware/VM -->
 
-      <rect x="80" y="70" width="430" height="260" rx="10" fill="none" stroke="var(--ss)" stroke-width="2"/>
-      <text x="92" y="90" fill="var(--ss)" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 2 — Pod / Container</text>
-      <text x="92" y="103" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Pod Security Standards · SELinux · NetworkPolicy · ResourceQuota · Kata microVM (optional)</text>
+      <!-- Ring 4: Hardware / VM (outermost) -->
+      <rect x="30" y="16" width="540" height="330" rx="16" fill="none" stroke="var(--ns)" stroke-width="2" stroke-dasharray="6 3"/>
+      <text x="42" y="36" fill="var(--ns)" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 4 — Hardware / VM</text>
+      <text x="42" y="50" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">Kata Containers · Confidential Computing (SEV-SNP / TDX) · GPU TEE</text>
 
-      <rect x="120" y="115" width="350" height="190" rx="8" fill="var(--ec)" stroke="var(--es)" stroke-width="2"/>
-      <text x="132" y="134" fill="var(--es)" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 1 — Process (OpenShell Supervisor)</text>
-      <text x="132" y="147" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">seccomp-BPF · Landlock LSM · per-binary OPA/Rego · netns</text>
+      <!-- Ring 3: Supervisor Pod (separate pod) -->
+      <rect x="65" y="60" width="470" height="260" rx="12" fill="none" stroke="var(--ss)" stroke-width="2"/>
+      <text x="77" y="78" fill="var(--ss)" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 3 — Supervisor Pod</text>
+      <text x="77" y="91" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">Trusted · policy enforcement · credential injection · DNS · proxy · gateway session</text>
 
-      <rect x="155" y="160" width="280" height="120" rx="6" fill="var(--band)" stroke="var(--ns)" stroke-width="1"/>
-      <text x="295" y="183" text-anchor="middle" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Agent Process</text>
-      <text x="295" y="198" text-anchor="middle" fill="var(--t2)" font-size="9" font-family="system-ui,sans-serif">Model calls · Tool calls · Code execution · File I/O</text>
-      <rect x="170" y="215" width="250" height="24" rx="3" fill="var(--pc)" stroke="var(--ps)" stroke-width=".8"/>
-      <text x="295" y="231" text-anchor="middle" fill="var(--ps)" font-size="8" font-family="system-ui,sans-serif">Sees placeholders only — real keys injected at egress</text>
-      <text x="170" y="265" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">Policy lives outside the process it constrains — agent cannot override it</text>
+      <!-- Ring 2: Sandbox Pod (container/VM boundary) -->
+      <rect x="100" y="105" width="400" height="195" rx="10" fill="none" stroke="var(--es)" stroke-width="2"/>
+      <text x="112" y="123" fill="var(--es)" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 2 — Sandbox Pod</text>
+      <text x="112" y="136" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">Container or VM boundary · NetworkPolicy · deny all egress except to supervisor</text>
 
-      <text x="380" y="318" fill="var(--es)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">↑ assumes process compromised</text>
-      <text x="330" y="340" fill="var(--ss)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">↑ assumes pod escaped</text>
-      <text x="280" y="355" fill="var(--t2)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">↑ assumes VM breached</text>
+      <!-- Ring 1: Agent Process (openshell-sandbox parent) -->
+      <rect x="135" y="150" width="330" height="130" rx="8" fill="var(--ec)" stroke="var(--es)" stroke-width="2"/>
+      <text x="147" y="168" fill="var(--es)" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 1 — Agent Process</text>
+      <text x="147" y="181" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">openshell-sandbox parent · Landlock · seccomp · process identity</text>
 
-      <text x="590" y="38" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Cross-cutting Controls</text>
-      <text x="590" y="54" fill="var(--t3)" font-size="9" font-family="system-ui,sans-serif">Apply across all three rings</text>
+      <!-- Agent (innermost — untrusted workload) -->
+      <rect x="170" y="195" width="260" height="65" rx="6" fill="var(--band)" stroke="var(--ns)" stroke-width="1"/>
+      <text x="300" y="218" text-anchor="middle" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Agent</text>
+      <text x="300" y="233" text-anchor="middle" fill="var(--t2)" font-size="9" font-family="system-ui,sans-serif">untrusted workload · model calls · tool calls</text>
+      <rect x="185" y="242" width="230" height="14" rx="3" fill="var(--pc)" stroke="var(--ps)" stroke-width=".8"/>
+      <text x="300" y="253" text-anchor="middle" fill="var(--ps)" font-size="7.5" font-family="system-ui,sans-serif">sees placeholders only — real keys at egress</text>
 
-      <g class="box" data-flow="F05"><rect x="590" y="68" width="290" height="52" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
-        <text x="600" y="86" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">1. Workload Identity</text>
-        <text x="600" y="99" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">SPIFFE SVIDs replace static keys</text>
-        <text x="600" y="111" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Leaked workspace contains nothing durable to steal</text></g>
-      <g class="box" data-flow="F02"><rect x="590" y="130" width="290" height="52" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
-        <text x="600" y="148" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">2. Tool Authorization</text>
-        <text x="600" y="161" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">MCP Gateway authorizes by token claims</text>
-        <text x="600" y="173" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Never from prompt content — infrastructure, not model</text></g>
-      <g class="box" data-flow="F07"><rect x="590" y="192" width="290" height="52" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
-        <text x="600" y="210" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">3. Inference Guardrails</text>
-        <text x="600" y="223" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">TrustyAI + NeMo Guardrails</text>
-        <text x="600" y="235" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Input/output screening at the inference boundary</text></g>
-      <g class="box" data-flow="F08"><rect x="590" y="254" width="290" height="52" rx="5" fill="var(--xc)" stroke="var(--xs)" stroke-width="1"/>
-        <text x="600" y="272" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">4. Pre-production Testing</text>
-        <text x="600" y="285" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Garak 120+ probes · EvalHub release gates</text>
-        <text x="600" y="297" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Adversarial scanning in CI/CD before promotion</text></g>
+      <!-- Assumption labels -->
+      <text x="395" y="290" fill="var(--es)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">↑ assumes process compromised</text>
+      <text x="370" y="310" fill="var(--ss)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">↑ assumes sandbox pod escaped</text>
+      <text x="345" y="327" fill="var(--ns)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">↑ assumes supervisor pod breached</text>
+      <text x="280" y="343" fill="var(--t3)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">↑ assumes VM breached</text>
 
-      <line x1="590" y1="94" x2="550" y2="94" stroke="var(--border)" stroke-width=".8" stroke-dasharray="3 2"/>
-      <line x1="590" y1="156" x2="550" y2="156" stroke="var(--border)" stroke-width=".8" stroke-dasharray="3 2"/>
-      <line x1="590" y1="218" x2="550" y2="218" stroke="var(--border)" stroke-width=".8" stroke-dasharray="3 2"/>
-      <line x1="590" y1="280" x2="550" y2="280" stroke="var(--border)" stroke-width=".8" stroke-dasharray="3 2"/>
+      <!-- Gateway OFF TO THE SIDE — manages multiple supervisors -->
+      <text x="600" y="30" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">OpenShell Gateway</text>
+      <text x="600" y="46" fill="var(--t3)" font-size="9" font-family="system-ui,sans-serif">Control plane — manages multiple supervisors</text>
 
-      <rect x="40" y="380" width="840" height="36" rx="5" fill="var(--band)" stroke="var(--band-s)" stroke-width=".8"/>
-      <text x="460" y="396" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Containment economics</text>
-      <text x="460" y="410" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">Single-sandbox, single-pod, single-identity: revoke or terminate a misbehaving agent as a single targeted operation. OCSF/OTEL trail = reviewable evidence.</text>
+      <g class="box" data-flow="F03"><rect x="600" y="56" width="280" height="50" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
+        <text x="740" y="76" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Gateway</text>
+        <text x="740" y="90" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">API · policy prover · durable state</text></g>
 
-      <text x="40" y="440" fill="var(--t2)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Trust progression:</text>
-      <text x="160" y="440" fill="var(--t3)" font-size="9" font-family="system-ui,sans-serif">Pods (trust the kernel) → VMs (trust the hypervisor) → Confidential VMs (trust the hardware)</text>
-      <text x="40" y="462" fill="var(--t2)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Composable profiles:</text>
-      <text x="175" y="462" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Permissive (L2–L3) · Minimally Restrictive (L1–L4) · Typical (L1–L4 tuned) · Kata/VM (L1–L5) · Confidential (L1–L5 + CoCo)</text>
+      <!-- Arrows: Gateway → Supervisor Pods -->
+      <line x1="600" y1="81" x2="535" y2="81" stroke="var(--ss)" stroke-width="1.5" marker-end="url(#a1)"/>
+      <line x1="600" y1="95" x2="535" y2="180" stroke="var(--ss)" stroke-width="1" stroke-dasharray="3 2"/>
+
+      <!-- Cross-cutting Controls -->
+      <text x="600" y="130" fill="var(--t1)" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Cross-cutting Controls</text>
+
+      <g class="box" data-flow="F05"><rect x="600" y="144" width="280" height="44" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
+        <text x="610" y="162" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">1. Workload Identity (SPIFFE)</text>
+        <text x="610" y="178" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Short-lived SVIDs · no static keys</text></g>
+      <g class="box" data-flow="F02"><rect x="600" y="196" width="280" height="44" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
+        <text x="610" y="214" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">2. Tool Authorization (MCP Gateway)</text>
+        <text x="610" y="230" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Claims-based · infrastructure, not model</text></g>
+      <g class="box" data-flow="F07"><rect x="600" y="248" width="280" height="44" rx="5" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
+        <text x="610" y="266" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">3. Inference Guardrails</text>
+        <text x="610" y="282" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">NeMo Guardrails + TrustyAI</text></g>
+      <g class="box" data-flow="F08"><rect x="600" y="300" width="280" height="44" rx="5" fill="var(--xc)" stroke="var(--xs)" stroke-width="1"/>
+        <text x="610" y="318" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">4. Pre-production Testing</text>
+        <text x="610" y="334" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Garak 120+ probes · EvalHub · asago</text></g>
+
+      <!-- Dashed lines connecting cross-cutting to rings -->
+      <line x1="600" y1="166" x2="550" y2="166" stroke="var(--border)" stroke-width=".8" stroke-dasharray="3 2"/>
+      <line x1="600" y1="218" x2="550" y2="218" stroke="var(--border)" stroke-width=".8" stroke-dasharray="3 2"/>
+      <line x1="600" y1="270" x2="550" y2="270" stroke="var(--border)" stroke-width=".8" stroke-dasharray="3 2"/>
+      <line x1="600" y1="322" x2="550" y2="322" stroke="var(--border)" stroke-width=".8" stroke-dasharray="3 2"/>
+
+      <!-- Trust progression -->
+      <text x="30" y="378" fill="var(--t2)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Trust progression:</text>
+      <text x="150" y="378" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Process (trust the sandbox parent) → Pod (trust the kernel) → Supervisor (trust the policy engine) → VM (trust the hypervisor) → Confidential VM (trust the hardware)</text>
+
+      <text x="30" y="398" fill="var(--t2)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Key insight:</text>
+      <text x="105" y="398" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Supervisor is in its OWN pod (Ring 3), not inside the sandbox. On K8s: private service with mutual TLS. On Docker/Podman: own container. On VM: host process.</text>
+
+      <text x="30" y="418" fill="var(--t2)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Defense in depth:</text>
+      <text x="135" y="418" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Each ring assumes the one inside it has been compromised. Four independent boundaries — compromising one does not give you the next.</text>
     </svg>
   </div>
   <div class="info-grid">
-    <div class="info-card"><h3><span class="dot" style="background:var(--green)"></span>Ring 1 — Process</h3><p>OpenShell supervisor enforces per-binary, per-path, per-endpoint policy via seccomp, Landlock, and network namespaces. Irreversible after process start — the agent cannot override it.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--blue)"></span>Ring 2 — Pod</h3><p>Kubernetes pod security standards, SELinux, NetworkPolicy, and resource quotas bound what the pod can reach. Optionally, Kata Containers add a dedicated microVM kernel per sandbox pod.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--neutral)"></span>Ring 3 — Hardware</h3><p>Confidential containers extend the trust boundary into silicon. Hardware attestation verifies the sandbox runs the code it claims before any secret is released.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--green)"></span>Ring 1 — Agent Process</h3><p>The openshell-sandbox parent process enforces Landlock filesystem restrictions, seccomp-BPF syscall filtering, and process identity checks. Irreversible after startup — the agent cannot override these controls.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--green)"></span>Ring 2 — Sandbox Pod</h3><p>Container or VM boundary. NetworkPolicy denies all egress except to the supervisor. Pod Security Standards, SELinux, and resource quotas bound what the sandbox can reach.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--blue)"></span>Ring 3 — Supervisor Pod</h3><p>Separate pod (K8s), container (Docker/Podman), or host process (VM). Trusted policy engine, credential injection, DNS proxy, gateway session. Connected via mutual TLS.</p></div>
+    <div class="info-card"><h3><span class="dot" style="background:var(--neutral)"></span>Ring 4 — Hardware / VM</h3><p>Kata Containers add a dedicated microVM kernel. Confidential Computing (SEV-SNP, TDX) extends trust into silicon. Hardware attestation verifies the sandbox runs the code it claims.</p></div>
   </div>
 </section>
 
