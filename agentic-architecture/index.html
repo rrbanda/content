@@ -293,9 +293,9 @@ html.presentation .modal-card{max-width:95vw}
   <button class="tab active" data-tab="blueprint" role="tab">Control &amp; Execution Planes<span class="tab-tip">Three bands — control, execution, platform — with the MCP Gateway as the authorization checkpoint. Every box is a role; implementations are interchangeable behind open interfaces.</span></button>
   <button class="tab" data-tab="security" role="tab">Isolation Rings &amp; Enforcement<span class="tab-tip">Four nested isolation boundaries — agent process, sandbox pod, supervisor pod, hardware — each assuming the one inside it has already been compromised. Gateway manages multiple supervisors.</span></button>
   <button class="tab" data-tab="inference" role="tab">Inference Routing &amp; Tool Governance<span class="tab-tip">Three routing tiers (security, cost, efficiency) owned by different teams. Three nouns — skill, MCP server, service backend — with separate enforcement points.</span></button>
-  <button class="tab" data-tab="journey" role="tab">End-to-End Journey<span class="tab-tip">One request traced from user to GPU and back. 13 stages through Gateway, Operator, Supervisor, inference tiers, and tool calls. Click any node or hit Play.</span></button>
+  <button class="tab" data-tab="provisioning" role="tab">Agent Provisioning<span class="tab-tip">What happens when you create a new agent. CLI → Gateway → Operator → Supervisor → Ready. No inference, no agent loop — just the creation and isolation setup.</span></button>
+  <button class="tab" data-tab="requestflow" role="tab">Request Flow<span class="tab-tip">What happens each time the user sends a request. Agent loop → inference → tool calls → response. The agent is already running — no provisioning involved.</span></button>
   <button class="tab" data-tab="profiling" role="tab">Pipeline Profiling<span class="tab-tip">OTEL-traced pipeline decomposition from PSAP benchmarks. Qwen3-8B-FP8, 8×A100, OpenClaw + OpenShell. Sandbox adds 2.2% of E2E. GPU at 35% — harness is the bottleneck.</span></button>
-  <button class="tab" data-tab="sandboxing" role="tab">How Sandboxing Works<span class="tab-tip">Step through the handoff: OpenShell Gateway → Agent Sandbox Operator → Supervisor. From CLI command to isolated, policy-enforced, credential-injected runtime.</span></button>
   <button class="tab" data-tab="usecase" role="tab">Use Case: Portfolio Risk<span class="tab-tip">A risk analyst asks for overnight VaR on the APAC equity book. Agent uses three tools, OpenShell enforces GET-only OMS access, and every step is audited.</span></button>
 </nav>
 
@@ -797,8 +797,8 @@ html.presentation .modal-card{max-width:95vw}
   </div>
 </section>
 
-<!-- ═══════════ END-TO-END JOURNEY ═══════════ -->
-<section class="section" id="journey">
+<!-- ═══════════ AGENT PROVISIONING ═══════════ -->
+<section class="section" id="provisioning">
 
   <div class="journey-svg">
     <svg id="jSvg" viewBox="-2 -10 1164 240" overflow="visible" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
@@ -806,26 +806,22 @@ html.presentation .modal-card{max-width:95vw}
         <marker id="ja" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,6 2.5,0 5" fill="var(--t3)"/></marker>
         <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
       </defs>
-      <!-- Path segments drawn by JS -->
       <path id="jPathBg" class="j-path" d=""/>
       <path id="jPathActive" class="j-path-active" d=""/>
       <circle id="jDot" class="j-dot" r="5" filter="url(#glow)" style="display:none"/>
-      <!-- Continuously animated traveling dot -->
       <g id="jTraveler">
         <circle r="6" fill="var(--blue)" opacity=".9" filter="url(#glow)"/>
         <circle r="3" fill="#fff" opacity=".8"/>
-        <animateMotion id="jMotion" dur="52s" repeatCount="indefinite" rotate="auto" fill="freeze">
+        <animateMotion id="jMotion" dur="36s" repeatCount="indefinite" rotate="auto" fill="freeze">
           <mpath href="#jPathActive"/>
         </animateMotion>
       </g>
-      <!-- Trail effect -->
       <circle id="jTrail1" r="4" fill="var(--blue)" opacity=".3" filter="url(#glow)">
-        <animateMotion dur="52s" repeatCount="indefinite" begin="0.3s"><mpath href="#jPathActive"/></animateMotion>
+        <animateMotion dur="36s" repeatCount="indefinite" begin="0.3s"><mpath href="#jPathActive"/></animateMotion>
       </circle>
       <circle id="jTrail2" r="3" fill="var(--blue)" opacity=".15">
-        <animateMotion dur="52s" repeatCount="indefinite" begin="0.6s"><mpath href="#jPathActive"/></animateMotion>
+        <animateMotion dur="36s" repeatCount="indefinite" begin="0.6s"><mpath href="#jPathActive"/></animateMotion>
       </circle>
-      <!-- Nodes drawn by JS -->
       <g id="jNodes"></g>
     </svg>
   </div>
@@ -850,8 +846,8 @@ html.presentation .modal-card{max-width:95vw}
   </div>
 </section>
 
-<!-- ═══════════ HOW SANDBOXING WORKS ═══════════ -->
-<section class="section" id="sandboxing">
+<!-- ═══════════ REQUEST FLOW ═══════════ -->
+<section class="section" id="requestflow">
 
   <div class="journey-svg">
     <svg id="sbSvg" viewBox="-2 -10 1164 200" overflow="visible" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
@@ -863,10 +859,10 @@ html.presentation .modal-card{max-width:95vw}
       <g id="sbTraveler" style="opacity:0">
         <circle r="6" fill="var(--blue)" opacity=".9" filter="url(#sbGlow)"/>
         <circle r="3" fill="#fff" opacity=".8"/>
-        <animateMotion id="sbMotion" dur="40s" repeatCount="indefinite"><mpath href="#sbPathActive"/></animateMotion>
+        <animateMotion id="sbMotion" dur="44s" repeatCount="indefinite"><mpath href="#sbPathActive"/></animateMotion>
       </g>
       <circle r="4" fill="var(--blue)" opacity=".3" filter="url(#sbGlow)">
-        <animateMotion dur="40s" repeatCount="indefinite" begin="0.4s"><mpath href="#sbPathActive"/></animateMotion>
+        <animateMotion dur="44s" repeatCount="indefinite" begin="0.4s"><mpath href="#sbPathActive"/></animateMotion>
       </circle>
       <g id="sbNodes"></g>
     </svg>
@@ -1363,52 +1359,39 @@ document.querySelectorAll('[data-flow]').forEach(el=>{
 
 /* ── Journey stepper logic ── */
 const JStages=[
-{id:"S01",l:"User",c:"var(--neutral)",comp:"CLI / Browser / SDK",plane:"External",
- w:"User sends a goal or prompt to the agent",
- d:"openshell sandbox exec my-agent -- 'fix the CI'. Or via browser through TLS Route to Secure Agent Workspace.",m:""},
-{id:"S02",l:"OS Gateway",c:"var(--blue)",comp:"OpenShell Gateway — the control plane",plane:"Control",
- w:"OpenShell Gateway: control plane for all sandbox operations",
- d:"The gateway is the control plane for OpenShell. All traffic between CLI and sandboxes flows through it.",m:"~60mc / ~122 MiB overhead"},
-{id:"S03",l:"Sandbox Op",c:"var(--blue)",comp:"Agent Sandbox Operator (K8s path) or direct container (Docker/Podman)",plane:"Control",
- w:"On K8s: operator reconciles the Sandbox CR into a pod. On Docker/Podman: gateway creates the container directly.",
- d:"Kubernetes path: Red Hat-distributed operator in agent-sandbox-system namespace watches Sandbox CRs (agents.x-k8s.io/v1be",m:"Cold: 16.4s → Warm: 247ms P50 (K8s)"},
-{id:"S04",l:"Supervisor",c:"var(--green)",comp:"OpenShell Supervisor (PID 1) — the data plane inside the sandbox",plane:"Execution",
- w:"Supervisor bootstraps: this is where OpenShell enforcement begins",
- d:"A sandbox is the OpenShell data plane: a safe, private execution environment.",m:""},
-{id:"S05",l:"Agent",c:"var(--green)",comp:"Agent Harness (OpenClaw, Hermes, LangGraph…)",plane:"Execution",
- w:"Loads skills, assembles prompt, begins ReAct loop",
- d:"Loads skill instruction files. Assembles: instructions + skills + context + tool schemas.",m:"16.9× prompt expansion"},
-{id:"S06",l:"Reason",c:"var(--cyan)",comp:"Inference request → Supervisor Tier 1",plane:"Execution → Inference",
- w:"Agent thinks — sends inference request through enforcement chain",
- d:"Supervisor egress router: policy check → PII detection-and-redaction if external → confidential context never leaves clus",m:""},
-{id:"S07",l:"AI GW",c:"var(--cyan)",comp:"AI Gateway (MaaS) — Kuadrant + Authorino + Limitador",plane:"Inference",
- w:"MaaS gateway: subscription-based governance for model access",
- d:"Gateway API-conformant proxy built on Red Hat Connectivity Link (Kuadrant).",m:""},
-{id:"S08",l:"Router",c:"var(--cyan)",comp:"Semantic Router — Tier 2 (Cost)",plane:"Inference",
- w:"Classifier picks the cheapest capable model",
- d:"Lightweight classifier: intent + complexity → model pool (e.g., Nemotron-mini vs full Llama).",m:""},
-{id:"S09",l:"EPP",c:"var(--blue)",comp:"llm-d EPP — Tier 3 (Efficiency)",plane:"Inference",
- w:"Selects optimal vLLM replica via ext-proc",
- d:"Probes vLLM /metrics. Prefix-affinity: route to pod with cached KVs (95% hit rate).",m:"95% KV cache hit rate"},
-{id:"S10",l:"vLLM",c:"var(--neutral)",comp:"vLLM on GPU (NVIDIA / AMD / Intel / TPU)",plane:"Infrastructure",
- w:"GPU runs inference — tokens stream back",
- d:"If disaggregated: prefill pod → KVXfer metadata → NIXL sidecar → decode pod pulls KVs → generates tokens.",m:"900 tok/s/GPU · $1.2/M output tokens"},
-{id:"S11",l:"Act",c:"var(--amber)",comp:"Tool call → two authorization boundaries → credential injection",plane:"Execution → Tools",
- w:"Model calls a tool — every request crosses two independent authorization checks",
- d:"seccomp intercepts connect(). Binary identity resolved via /proc/exe + SHA-256 TOFU.",m:""},
-{id:"S12",l:"Observe",c:"var(--green)",comp:"Loop decision in harness",plane:"Execution",
- w:"Result added to context — loop or finish",
- d:"Tool result added to conversation context.",m:""},
-{id:"S13",l:"Audit",c:"var(--purple)",comp:"OCSF + OTEL + MLflow — every hop",plane:"Cross-cutting",
- w:"The entire journey traced end-to-end",
- d:"OCSF v1.8.0 events for every allow/deny. OTEL spans across all 3 inference tiers.",m:""}
+{id:"P01",l:"CLI",c:"var(--neutral)",comp:"CLI / SDK / API",plane:"User",
+ w:"User runs openshell sandbox create",
+ d:"openshell sandbox create --from <image> --provider <provider> -- <command>",m:""},
+{id:"P02",l:"Gateway",c:"var(--blue)",comp:"OpenShell Gateway",plane:"Control",
+ w:"Gateway receives gRPC/mTLS request",
+ d:"Validates auth, resolves policy sources, encrypts credentials.",m:"~60mc overhead"},
+{id:"P03",l:"Policy",c:"var(--blue)",comp:"Z3 Policy Prover",plane:"Control",
+ w:"Gateway validates effective policy",
+ d:"Global > sandbox > image > default. Z3 prover flags risky configs.",m:""},
+{id:"P04",l:"Sandbox CR",c:"var(--blue)",comp:"Gateway writes resource",plane:"Control",
+ w:"Writes Sandbox CR (K8s) or creates container",
+ d:"K8s: agents.x-k8s.io/v1beta1. Docker/Podman: direct container.",m:""},
+{id:"P05",l:"Operator",c:"var(--green)",comp:"Agent Sandbox Operator",plane:"Control",
+ w:"Operator reconciles CR into pod",
+ d:"Init containers: supervisor-install + workspace-init. Warm pool: 247ms.",m:"Cold: 16.4s / Warm: 247ms"},
+{id:"P06",l:"Supervisor",c:"var(--cyan)",comp:"Supervisor starts as PID 1",plane:"Execution",
+ w:"Supervisor bootstraps — connects to Gateway",
+ d:"Connects outbound mTLS gRPC. Receives policy + credentials + config.",m:""},
+{id:"P07",l:"Landlock",c:"var(--purple)",comp:"Landlock + seccomp applied",plane:"Kernel",
+ w:"Filesystem + syscall controls locked",
+ d:"Landlock: irreversible. seccomp USER_NOTIF: intercepts connect/bind/sendmsg.",m:""},
+{id:"P08",l:"Agent",c:"var(--green)",comp:"Agent launched as child",plane:"Execution",
+ w:"Drops ALL capabilities, launches agent",
+ d:"Capability-free child process. Network policies can hot-reload.",m:""},
+{id:"P09",l:"Ready",c:"var(--green)",comp:"Sandbox Ready state",plane:"Execution",
+ w:"Sandbox reaches Ready — accepting requests",
+ d:"Phases: Provisioning → Ready → Stopping → Stopped → Completed.",m:""}
 ];
 
 const jNodePositions=[
-  {x:40,y:80},{x:140,y:80},{x:260,y:80},{x:380,y:80},{x:490,y:80},
-  {x:590,y:45},{x:690,y:45},{x:790,y:45},{x:890,y:45},{x:1000,y:45},
-  {x:790,y:145},{x:590,y:145},
-  {x:1100,y:100}
+  {x:60,y:80},{x:180,y:80},{x:300,y:80},{x:420,y:80},
+  {x:560,y:80},{x:700,y:80},{x:840,y:80},
+  {x:960,y:80},{x:1080,y:80}
 ];
 
 let jCur=0,jTimer=null;
@@ -1416,25 +1399,19 @@ let jCur=0,jTimer=null;
 function jBuildPath(){
   const p=jNodePositions;
   let d='M'+p[0].x+' '+p[0].y;
-  for(let i=1;i<5;i++) d+=' L'+p[i].x+' '+p[i].y;
-  d+=' C'+p[4].x+' '+(p[4].y-40)+' '+p[5].x+' '+p[5].y+' '+p[5].x+' '+p[5].y;
-  for(let i=6;i<=9;i++) d+=' L'+p[i].x+' '+p[i].y;
-  d+=' C'+(p[9].x+20)+' '+p[9].y+' '+(p[9].x+20)+' '+p[10].y+' '+p[10].x+' '+p[10].y;
-  d+=' L'+p[11].x+' '+p[11].y;
-  d+=' C'+(p[11].x-40)+' '+p[11].y+' '+(p[11].x-40)+' '+p[5].y+' '+p[5].x+' '+p[5].y;
+  for(let i=1;i<p.length;i++) d+=' L'+p[i].x+' '+p[i].y;
   return d;
 }
 
 function jBuildAuditPath(){
-  const p=jNodePositions;
-  return 'M'+p[0].x+' 185 L'+p[12].x+' 185';
+  return '';
 }
 
 function jInit(){
   const svg=document.getElementById('jSvg');
   const nodesG=document.getElementById('jNodes');
   const mainPath=jBuildPath();
-  document.getElementById('jPathBg').setAttribute('d',mainPath+' M40 185 L1100 185');
+  document.getElementById('jPathBg').setAttribute('d',mainPath);
   document.getElementById('jPathActive').setAttribute('d',mainPath);
 
   const activePath=document.getElementById('jPathActive');
@@ -1553,7 +1530,7 @@ function jTogglePlay(){
 
 // Keyboard navigation
 document.addEventListener('keydown',e=>{
-  if(document.getElementById('journey').classList.contains('active')){
+  if(document.getElementById('provisioning').classList.contains('active')){
     if(e.key==='ArrowRight')jNext();
     else if(e.key==='ArrowLeft')jPrev();
     else if(e.key===' '&&!document.querySelector('.modal-backdrop.open')){e.preventDefault();jTogglePlay();}
@@ -1602,7 +1579,7 @@ function jResume(){
 
 // Init journey when tab is first shown
 const jObserver=new MutationObserver(()=>{
-  const journeyEl=document.getElementById('journey');
+  const journeyEl=document.getElementById('provisioning');
   if(journeyEl.classList.contains('active')){
     if(!document.getElementById('jSvg').dataset.init){
       document.getElementById('jSvg').dataset.init='1';jInit();
@@ -1612,46 +1589,49 @@ const jObserver=new MutationObserver(()=>{
     jStopSync();
   }
 });
-jObserver.observe(document.getElementById('journey'),{attributes:true,attributeFilter:['class']});
+jObserver.observe(document.getElementById('provisioning'),{attributes:true,attributeFilter:['class']});
 
 /* ── Sandbox flow stepper (horizontal, matches journey) ── */
 const SB=[
-{l:"CLI",c:"var(--neutral)",comp:"CLI / SDK",plane:"User",
- w:"User creates a sandbox",
- d:"openshell sandbox create --from my-image:latest --provider claude-code -- claude.",m:""},
-{l:"Gateway",c:"var(--blue)",comp:"OpenShell Gateway — control plane",plane:"Control",
- w:"Gateway validates policy and encrypts credentials",
- d:"Receives gRPC/mTLS request. Resolves effective policy (global → sandbox → image → default).",m:"~60mc / ~122 MiB"},
-{l:"Sandbox CR",c:"var(--blue)",comp:"OpenShell Gateway writes the resource",plane:"Control",
- w:"Gateway writes a Sandbox CR (K8s) or creates container directly (Docker/Podman)",
- d:"On Kubernetes: writes agents.x-k8s.io/v1beta1 Sandbox CR with openshell.ai/ labels.",m:""},
-{l:"Operator",c:"var(--green)",comp:"Agent Sandbox Operator (K8s path)",plane:"Control",
- w:"Operator reconciles the CR into a pod with init containers",
- d:"Red Hat-distributed operator in agent-sandbox-system namespace. Watches Sandbox CRs, reconciles each into a pod.",m:"Cold: 16.4s → Warm: 247ms"},
-{l:"PID 1",c:"var(--cyan)",comp:"OpenShell Supervisor starts as PID 1",plane:"Execution",
- w:"Supervisor starts — the security data plane begins",
- d:"Main container entrypoint: /opt/openshell/bin/openshell-sandbox --workdir /sandbox.",m:""},
-{l:"Landlock",c:"var(--purple)",comp:"Landlock LSM — irreversible filesystem isolation",plane:"Kernel",
- w:"Filesystem scoped — even root cannot loosen it",
- d:"Applies explicit path allowlist via Landlock LSM. Irreversible after process start — not even root can widen access.",m:""},
-{l:"seccomp",c:"var(--purple)",comp:"seccomp-BPF (USER_NOTIF) + OPA/Rego proxy",plane:"Kernel",
- w:"Every outbound connection intercepted and policy-checked",
- d:"seccomp-BPF filter intercepts connect(), bind(), sendmsg().",m:""},
-{l:"Creds",c:"var(--cyan)",comp:"Credential placeholders — two auth boundaries",plane:"Execution",
- w:"Every credential becomes an opaque placeholder — real keys injected at egress only",
- d:"Agent sees $ANTHROPIC_API_KEY = opaque token, not the real key.",m:""},
-{l:"Agent",c:"var(--amber)",comp:"Agent process — capability-free",plane:"Execution",
- w:"Supervisor drops ALL capabilities, spawns agent as child — zero privileges",
- d:"Agent runs with zero Linux capabilities. Loads skills, assembles system prompt (16.9× expansion), begins ReAct loop.",m:"16.9× prompt expansion"},
-{l:"Audit",c:"var(--purple)",comp:"OCSF + OTEL + MLflow — every decision",plane:"Cross-cutting",
- w:"Full lifecycle traced — every allow, deny, tool call, and latency recorded",
- d:"OCSF v1.8.0: NetworkActivity, HttpActivity, ProcessActivity, ConfigStateChange, DetectionFinding.",m:""}
+{l:"Prompt",c:"var(--neutral)",comp:"User sends request to running agent",plane:"User",
+ w:"User sends a prompt to the running agent",
+ d:"The agent is already provisioned and in Ready state. This is a per-request flow.",m:""},
+{l:"Context",c:"var(--amber)",comp:"Agent assembles context",plane:"Execution",
+ w:"Agent loads skills, assembles prompt",
+ d:"Instructions + skills + conversation history + tool schemas. 16.9× expansion.",m:"16.9× expansion"},
+{l:"Reason",c:"var(--cyan)",comp:"Agent reasons about next action",plane:"Execution",
+ w:"Model decides: respond, call a tool, or request inference",
+ d:"ReAct loop: reason → act → observe. Skill instructions guide the decision.",m:""},
+{l:"Tier 1",c:"var(--green)",comp:"Supervisor policy check",plane:"Execution",
+ w:"Supervisor checks policy, PII redaction if external",
+ d:"Egress router in supervisor. Confidential context never leaves cluster.",m:""},
+{l:"AI GW",c:"var(--cyan)",comp:"MaaS Gateway",plane:"Inference",
+ w:"AI Gateway: auth + quota + routing",
+ d:"Authorino authenticates. Limitador checks quota. Routes to self-hosted or external.",m:""},
+{l:"Model",c:"var(--cyan)",comp:"Inference execution",plane:"Inference",
+ w:"Semantic Router → llm-d EPP → vLLM (or external)",
+ d:"Self-hosted: model selection → replica selection → GPU. External: body-based routing.",m:"95% KV hit"},
+{l:"Tokens",c:"var(--neutral)",comp:"Tokens stream back",plane:"Inference",
+ w:"GPU inference complete — tokens stream back",
+ d:"vLLM → EPP → Gateway → Supervisor → Agent. Metered against quota.",m:""},
+{l:"Act",c:"var(--amber)",comp:"Agent calls a tool",plane:"Execution → Tools",
+ w:"Tool call: supervisor → MCP Gateway → backend",
+ d:"Two auth boundaries: network policy + credential binding. Fail-closed.",m:""},
+{l:"MCP",c:"var(--blue)",comp:"MCP Gateway + tool server",plane:"Tools",
+ w:"MCP Gateway authorizes, tool executes",
+ d:"SVID claims-based auth. Tool server invokes service backend.",m:""},
+{l:"Observe",c:"var(--green)",comp:"Result added to context",plane:"Execution",
+ w:"Agent observes result — loop or respond",
+ d:"If goal met: produce final answer. If not: back to Reason step.",m:""},
+{l:"Audit",c:"var(--purple)",comp:"OCSF + OTEL + MLflow",plane:"Cross-cutting",
+ w:"Every step traced end-to-end",
+ d:"OCSF events, OTEL spans, MLflow traces. Production traces become eval cases.",m:""}
 ];
 
 const sbPositions=[
-  {x:40,y:90},{x:160,y:90},{x:290,y:90},{x:420,y:90},{x:540,y:90},
-  {x:660,y:60},{x:770,y:60},{x:880,y:60},
-  {x:770,y:140},{x:1100,y:90}
+  {x:40,y:90},{x:150,y:90},{x:260,y:90},{x:370,y:90},{x:480,y:90},
+  {x:590,y:90},{x:700,y:90},{x:810,y:90},{x:920,y:90},
+  {x:1030,y:90},{x:1110,y:90}
 ];
 
 let sbCur=0,sbTimer=null,sbPaused=false,sbSyncTimer=null;
@@ -1659,12 +1639,7 @@ let sbCur=0,sbTimer=null,sbPaused=false,sbSyncTimer=null;
 function sbBuildPath(){
   const p=sbPositions;
   let d='M'+p[0].x+' '+p[0].y;
-  for(let i=1;i<=4;i++) d+=' L'+p[i].x+' '+p[i].y;
-  d+=' C'+p[4].x+' '+(p[4].y-40)+' '+p[5].x+' '+p[5].y+' '+p[5].x+' '+p[5].y;
-  d+=' L'+p[6].x+' '+p[6].y;
-  d+=' L'+p[7].x+' '+p[7].y;
-  d+=' C'+(p[7].x+30)+' '+p[7].y+' '+(p[7].x+30)+' '+p[8].y+' '+p[8].x+' '+p[8].y;
-  d+=' L'+p[9].x+' '+p[9].y;
+  for(let i=1;i<p.length;i++) d+=' L'+p[i].x+' '+p[i].y;
   return d;
 }
 
@@ -1798,7 +1773,7 @@ function sbTogglePlay(){
 
 // Init when tab shown
 const sbObserver=new MutationObserver(()=>{
-  const el=document.getElementById('sandboxing');
+  const el=document.getElementById('requestflow');
   if(el.classList.contains('active')){
     if(!document.getElementById('sbSvg').dataset.init){
       document.getElementById('sbSvg').dataset.init='1';sbInit();
@@ -1806,7 +1781,7 @@ const sbObserver=new MutationObserver(()=>{
     sbStartSync();
   } else {sbStopSync();}
 });
-sbObserver.observe(document.getElementById('sandboxing'),{attributes:true,attributeFilter:['class']});
+sbObserver.observe(document.getElementById('requestflow'),{attributes:true,attributeFilter:['class']});
 
 /* ── Use Case: Portfolio Risk Agent journey ── */
 const UC=[
