@@ -118,7 +118,57 @@ kbd{background:#2a2a2a;border:1px solid #444;border-radius:2px;padding:1px 5px;f
   <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S3 (PDF 3/32) MOTIVATION -->
+<!-- S3 (NEW) WHAT IS TEXT WATERMARKING -->
+<section class="slide slide-content">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Foundations</div>
+  <div class="rh-title-area"><h2>What is text watermarking?</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <ul class="rh-bullets">
+      <li>A <strong>watermark</strong> alters a work to embed a hidden message about it &mdash; for instance, its provenance</li>
+      <li><strong>Images &amp; audio:</strong> embed watermarks as subtle perturbations (pixel noise, inaudible frequencies)</li>
+      <li><strong>Text is different:</strong> it is <em>discrete</em> &mdash; there are no sub-token pixels to tweak</li>
+      <li>Instead of perturbing the text itself, we influence the <strong>generation process</strong> in a way that is detectable but does not modify the expected output</li>
+    </ul>
+    <p class="rh-note">Alternatives: metadata (strippable), Unicode substitution (easily removed), red-green lists (distort output), tournament sampling (slow). Source: vLLM blog, Sep 2026.</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+</section>
+
+<!-- S4 (NEW) HOW LLMS GENERATE TEXT -->
+<section class="slide slide-content">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Foundations</div>
+  <div class="rh-title-area"><h2>How an LLM generates text</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <ul class="rh-bullets">
+      <li>At each step, the model assigns a <strong>probability to every possible next token</strong> (word piece)</li>
+      <li>A <strong>sampler</strong> draws one token from this distribution &mdash; this is the &ldquo;dice roll&rdquo;</li>
+      <li>The chosen token feeds back as input for the next step &mdash; <strong>autoregressive generation</strong></li>
+      <li>Ordinary sampling draws <strong>fresh random numbers</strong> at every step and discards them</li>
+      <li>This randomness is the opportunity: <strong>replace fresh randomness with keyed randomness</strong></li>
+    </ul>
+    <p class="rh-note">The watermark lives inside this sampling step. Everything else &mdash; the model, the logits, the filtering &mdash; is unchanged.</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+</section>
+
+<!-- S5 (NEW) WHY INSIDE THE SERVING ENGINE -->
+<section class="slide slide-content">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Foundations</div>
+  <div class="rh-title-area"><h2>Why the watermark must live inside the serving engine</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <ul class="rh-bullets">
+      <li><strong>Model serving</strong> = the system that takes prompts, runs inference, and returns completions at scale</li>
+      <li><strong>vLLM</strong> is a high-throughput serving engine used in production LLM deployments</li>
+      <li>The watermark is applied at the <strong>final token selection</strong> inside vLLM&rsquo;s sampler &mdash; not as post-processing</li>
+      <li>Post-processing approaches can be stripped: metadata removed, Unicode reverted, text rephrased</li>
+      <li>Sampler-level watermarking is <strong>inherent to which tokens were chosen</strong> &mdash; copy-paste preserves it</li>
+    </ul>
+    <p class="rh-note">vLLM integrated watermarking directly into Model Runner V2's sampling pipeline (PR #54053, Sep 2026). Co-authored by Red Hat and Mistral engineers.</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+</section>
+
+<!-- S6 (PDF 3/32) MOTIVATION -->
 <section class="slide slide-icon-row">
   <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Motivation</div>
   <div class="rh-title-area"><h2>Why watermark generated text</h2><div class="rh-rule"></div></div>
@@ -603,11 +653,17 @@ kbd{background:#2a2a2a;border:1px solid #444;border-radius:2px;padding:1px 5px;f
 </div>
 
 <script>
-window.SLIDE_TITLES=["Watermarking in vLLM","Four parts","Why watermark generated text","Part 1: How it works","Keyed dice instead of fresh dice","Only the final pick changes","Each candidate gets keyed noise","The window slides, the noise changes","On average, the model\u2019s choices are unchanged","Detection replays the dice","One number decides: the p-value","What a detector needs","Longer text, stronger signal","One engine flag, one request field","Part 2: Speculative decoding","One round: guess, check, keep","Two ways to watermark it","The drafter samples with key A","The big model checks with plain probabilities","The big model\u2019s own token uses key B","Same speed-up, detectable output","Part 3: Repeated contexts","Same context, same noise","A repeated context gets a plain pick","Deduplication keeps repetition natural","The same rule in speculative decoding","Which history counts as \u2018seen before\u2019","Part 4: In production","What happens when watermarking cannot apply","Text watermarked today stays detectable","Operating checklist","Questions"];
+window.SLIDE_TITLES=["Watermarking in vLLM","Four parts","What is text watermarking?","How an LLM generates text","Why the watermark must live inside the serving engine","Why watermark generated text","Part 1: How it works","Keyed dice instead of fresh dice","Only the final pick changes","Each candidate gets keyed noise","The window slides, the noise changes","On average, the model\u2019s choices are unchanged","Detection replays the dice","One number decides: the p-value","What a detector needs","Longer text, stronger signal","One engine flag, one request field","Part 2: Speculative decoding","One round: guess, check, keep","Two ways to watermark it","The drafter samples with key A","The big model checks with plain probabilities","The big model\u2019s own token uses key B","Same speed-up, detectable output","Part 3: Repeated contexts","Same context, same noise","A repeated context gets a plain pick","Deduplication keeps repetition natural","The same rule in speculative decoding","Which history counts as \u2018seen before\u2019","Part 4: In production","What happens when watermarking cannot apply","Text watermarked today stays detectable","Operating checklist","Questions"];
 window.SPEAKER_NOTES=[
 "Welcome everyone. Today we\u2019re doing a technical deep dive on text watermarking in vLLM. This feature was co-authored by Simon Veitner and Tomas Ruiz from Red Hat, together with Rapha\u00ebl Rialland from Mistral, and shipped in September 2026. It\u2019s the first production-grade, distortion-free watermarking system built directly into an inference engine\u2019s sampling pipeline. The blog post went live September 24. I want to walk you through not just the what, but the why and the engineering at the implementation level.",
 
-"We\u2019ll cover four parts. Part 1 is the core algorithm \u2014 how keyed sampling works and how you detect the watermark afterward. Part 2 is speculative decoding, which is the hard engineering problem: how do you watermark both draft and target tokens without killing your acceptance rate? Part 3 is the repeated-context problem \u2014 why identical contexts create repetition loops and how context deduplication fixes it. Part 4 is production deployment: what falls back, what refuses, and what operators need to get right. Let\u2019s dive in.",
+"We\u2019ll cover four parts. Part 1 is the core algorithm \u2014 how keyed sampling works and how you detect the watermark afterward. Part 2 is speculative decoding, which is the hard engineering problem: how do you watermark both draft and target tokens without killing your acceptance rate? Part 3 is the repeated-context problem \u2014 why identical contexts create repetition loops and how context deduplication fixes it. Part 4 is production deployment: what falls back, what refuses, and what operators need to get right. But first, let\u2019s make sure everyone has the same mental model of what watermarking even is and why text is uniquely hard.",
+
+"So what is watermarking? At the most basic level, a watermark alters a work to embed a hidden message about it \u2014 typically its provenance. Think of the watermarks in banknotes, or the imperceptible noise added to images by services like Google\u2019s SynthID. For images and audio, you can add tiny perturbations \u2014 shift a pixel value by one, inject an inaudible frequency \u2014 and the result is indistinguishable to a human but detectable by a machine. Text doesn\u2019t work that way. Text is discrete: there are no sub-token pixels to tweak. You can\u2019t add half a word. The character \u2018a\u2019 is either there or it isn\u2019t. So the alternatives people have tried \u2014 attaching metadata that gets stripped on copy, Unicode lookalike substitution that\u2019s trivially detected, red-green token lists that measurably bias the output \u2014 all fail on at least one axis. The breakthrough insight is: don\u2019t try to perturb the text after it\u2019s written. Instead, influence how it\u2019s written in the first place. That\u2019s what vLLM does.",
+
+"Before we get into the watermarking mechanism, let\u2019s make sure the generation process is clear, because the watermark lives inside it. An LLM generates text one token at a time. At each step, the model takes everything generated so far as input and produces a probability distribution over its entire vocabulary \u2014 tens of thousands of possible next tokens. A sampler then draws one token from that distribution. That chosen token gets appended to the sequence and fed back as input for the next step. This is autoregressive generation. The key observation is that ordinary sampling uses fresh random numbers at every step and immediately discards them. Nobody records what random values were used. The watermark replaces those throwaway random numbers with reproducible, keyed random numbers. Same key plus same context always produces the same random values. So a detector with the key can replay every single dice roll after the fact, without needing the model or a GPU.",
+
+"Why does the watermark have to live inside the serving engine? Because the signal is in which tokens were chosen, not in anything attached to the text afterward. If you watermark as a post-processing step \u2014 add metadata, swap in Unicode lookalikes, rewrite sentences \u2014 the user can strip or undo it. Copy the text into a new document, the metadata is gone. Run it through another LLM for paraphrasing, the Unicode tricks vanish. But if the watermark influenced which token was selected at generation time, then the signal is baked into the text itself. Copy-pasting preserves it. Partial editing degrades it gracefully but doesn\u2019t erase it. The only way to fully remove it is to rewrite the entire text. That\u2019s why vLLM integrated watermarking directly into its Model Runner V2 sampling pipeline, in PR #54053, co-authored by Simon Veitner and Tomas Ruiz from Red Hat and Rapha\u00ebl Rialland from Mistral. The serving engine is the only place where you have access to the token selection step.",
 
 "Three motivations. First, regulation is real now. EU AI Act Article 50 and California SB 942 both ask for machine-detectable marking of AI-generated content. This isn\u2019t theoretical. Second, provenance \u2014 you want to check later whether a piece of text came from your deployment, not someone else\u2019s. Third, invisibility. The signal is in which tokens were chosen, not in any metadata. You can\u2019t strip it by copying to a new document. Readers can\u2019t see it. The alternatives \u2014 metadata, Unicode tricks, red-green lists \u2014 are either strippable or they visibly distort the output. The design is tracked in vLLM RFC #53916.",
 
