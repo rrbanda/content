@@ -15,14 +15,7 @@
 @font-face{font-family:'Red Hat Display';font-weight:900;src:url('/fonts/RedHatDisplay-Black.otf') format('opentype')}
 @font-face{font-family:'Red Hat Display';font-weight:900;font-style:italic;src:url('/fonts/RedHatDisplay-BlackItalic.otf') format('opentype')}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --rh-red:#EE0000;--rh-dark:#151515;--rh-cover-dark:#292929;
-  --rh-white:#FFFFFF;--rh-gray:#F2F2F2;--rh-gray-mid:#D2D2D2;
-  --rh-green:#63993D;--rh-blue:#0066CC;--rh-teal:#009596;
-  --rh-orange:#F4B400;--rh-purple:#6753AC;
-  --fh:'Red Hat Display',Arial,sans-serif;
-  --fb:'Red Hat Display',Arial,sans-serif;
-}
+:root{--rh-red:#EE0000;--rh-dark:#151515;--rh-cover-dark:#292929;--rh-white:#FFFFFF;--rh-gray:#F2F2F2;--rh-gray-mid:#D2D2D2;--rh-green:#63993D;--rh-blue:#0066CC;--rh-teal:#009596;--rh-orange:#F4B400;--rh-purple:#6753AC;--fh:'Red Hat Display',Arial,sans-serif;--fb:'Red Hat Display',Arial,sans-serif}
 body{background:#111;font-family:var(--fb);overflow:hidden;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
 #controls{position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,.9);color:#fff;display:flex;align-items:center;justify-content:center;gap:20px;padding:9px 24px;font-size:13px;z-index:100;font-family:var(--fb)}
 #controls button{background:var(--rh-red);color:white;border:none;padding:5px 14px;border-radius:2px;cursor:pointer;font-family:var(--fh);font-size:13px;font-weight:700}
@@ -32,892 +25,572 @@ kbd{background:#2a2a2a;border:1px solid #444;border-radius:2px;padding:1px 5px;f
 #viewport{width:1280px;height:720px;flex-shrink:0;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.7)}
 #slides{display:flex;width:100%;height:100%;transition:transform .3s cubic-bezier(.4,0,.2,1)}
 .slide{min-width:1280px;width:1280px;height:720px;position:relative;overflow:hidden;flex-shrink:0;background:#fff}
-
-.rh-bar-t,.rh-bar-b{position:absolute;left:3.67%;width:2px;background:var(--rh-red)}
-.rh-bar-t{top:0;height:12.93%}
-.rh-bar-b{bottom:0;height:6.65%}
-
+.rh-bar-t,.rh-bar-b{position:absolute;left:3.67%;width:2px;background:var(--rh-red)}.rh-bar-t{top:0;height:12.93%}.rh-bar-b{bottom:0;height:6.65%}
 .rh-tag{position:absolute;left:3.67%;top:0.83%;font:500 13px/1 var(--fh);color:var(--rh-red);text-transform:uppercase;letter-spacing:.07em}
-
 .rh-title-area{position:absolute;left:7.26%;right:3%;top:16.04%}
 .rh-title-area h2{font:700 30px/1.15 var(--fh);color:var(--rh-dark)}
 .rh-rule{width:48px;height:3px;background:var(--rh-red);margin-top:10px}
-
 .rh-body{position:absolute;left:7.26%;right:3%;top:30%;bottom:11%;display:flex;gap:32px;align-items:flex-start}
 .rh-bullets-wrap{flex:1;display:flex;flex-direction:column;gap:0;overflow:hidden}
 .rh-bullets{list-style:none;padding:0;display:flex;flex-direction:column;gap:9px}
 .rh-bullets li{font:400 21px/1.4 var(--fb);color:var(--rh-dark);padding-left:18px;position:relative}
 .rh-bullets li::before{content:'';position:absolute;left:0;top:11px;width:7px;height:7px;background:var(--rh-red);border-radius:50%}
-.rh-bullets li.sub-bullet{font-size:18px;padding-left:32px;color:#444}
-.rh-bullets li.sub-bullet::before{width:5px;height:5px;background:var(--rh-gray-mid);left:14px;top:10px}
+.rh-bullets li.sub{font-size:18px;padding-left:32px;color:#444}.rh-bullets li.sub::before{width:5px;height:5px;background:var(--rh-gray-mid);left:14px;top:10px}
 .rh-note{font-size:11px;color:#999;margin-top:auto;padding-top:8px;border-top:1px solid var(--rh-gray-mid)}
-
 .rh-privacy{position:absolute;right:4.1%;top:3.9%;width:16.5%;font:500 7px/1.3 var(--fh);color:#999;text-align:right;letter-spacing:.02em}
 .slide-section .rh-privacy{color:rgba(255,255,255,.35)}
-.quote-dark .rh-privacy{color:rgba(255,255,255,.25)}
-
 .rh-footer{position:absolute;left:0;right:0;bottom:0;height:10.04%;display:flex;align-items:center;padding:0 2% 0 0.7%;border-top:1px solid #eee}
 .rh-fn{font:400 10px var(--fb);color:#bbb;min-width:40px}
-.rh-fl{position:absolute;right:2%;bottom:0;height:100%;display:flex;align-items:center}
-
 .slide-title{background:var(--rh-red)}
 .title-area{position:absolute;left:17.1%;top:25.4%;width:61.8%}
 .title-area h1{font:900 58px/1.1 var(--fh);color:var(--rh-white);margin-bottom:16px}
 .title-subtitle{font:400 22px/1.4 var(--fh);color:rgba(255,255,255,.88)}
 .closing-area h1{font-size:60px}
 .closing-contact{font:500 16px var(--fb);color:rgba(255,255,255,.7);margin-top:12px}
-.title-presenter{position:absolute;left:17.1%;top:72%;font:500 13px var(--fb);color:rgba(255,255,255,.75);display:flex;align-items:center;gap:0;flex-wrap:wrap}
+.title-presenter{position:absolute;left:17.1%;top:72%;font:500 13px var(--fb);color:rgba(255,255,255,.75)}
 .tp-sep{margin:0 10px;opacity:.4}
 .title-white-strip{position:absolute;bottom:0;left:0;right:0;height:13%;background:var(--rh-white);display:flex;align-items:center;padding:0 2.5%}
 .title-brand{font:700 12px var(--fh);color:var(--rh-red);text-transform:uppercase;letter-spacing:.06em;margin-left:auto}
-
-.slide-section{background:var(--rh-cover-dark)}
-.slide-section .rh-bar-t,.slide-section .rh-bar-b{background:var(--rh-red)}
-.slide-section .rh-tag{color:rgba(255,255,255,.55)}
-.slide-section .rh-footer{border-top-color:rgba(255,255,255,.08)}
-.slide-section .rh-fn{color:#555}
+.slide-section{background:var(--rh-cover-dark)}.slide-section .rh-bar-t,.slide-section .rh-bar-b{background:var(--rh-red)}.slide-section .rh-tag{color:rgba(255,255,255,.55)}.slide-section .rh-footer{border-top-color:rgba(255,255,255,.08)}.slide-section .rh-fn{color:#555}
 .section-title-area{position:absolute;left:3.67%;right:5%;top:18%}
 .section-title-area h2{font:700 52px/1.1 var(--fh);color:var(--rh-white)}
 .section-rule{width:56px;height:3px;background:var(--rh-red);margin-top:16px}
 .section-subtitle{font:400 22px/1.5 var(--fb);color:rgba(255,255,255,.7);margin-top:20px;max-width:70%}
-
 .two-col-body{position:absolute;left:7.26%;right:3%;top:30%;bottom:11%;display:grid;grid-template-columns:1fr 1px 1fr;gap:0;align-items:start}
-.col-left,.col-right{padding:0 28px;overflow:hidden}
-.col-left{padding-left:0}
-.col-right{padding-right:0}
+.col-left,.col-right{padding:0 28px;overflow:hidden}.col-left{padding-left:0}.col-right{padding-right:0}
 .col-divider{background:var(--rh-gray-mid);align-self:stretch;margin:4px 0}
 .col-label{font:700 13px var(--fh);color:var(--rh-red);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
 .two-col-body .rh-bullets li{font-size:18px}
-
 .stats-grid{position:absolute;left:7.26%;right:3%;top:32%;bottom:12%;display:flex;align-items:center}
-.stat-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 16px;border-right:1px solid var(--rh-gray-mid)}
-.stat-item:last-child{border-right:none}
+.stat-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 16px;border-right:1px solid var(--rh-gray-mid)}.stat-item:last-child{border-right:none}
 .stat-value{font:900 56px/1 var(--fh);color:var(--rh-red);margin-bottom:14px}
 .stat-label{font:500 17px/1.3 var(--fb);color:var(--rh-dark);max-width:200px}
 .rh-note-stats{position:absolute;bottom:11%;left:7.26%;right:3%;font-size:11px;color:#999;border-top:1px solid var(--rh-gray-mid);padding-top:6px}
-
 .icon-row{position:absolute;left:7.26%;right:3%;top:32%;bottom:11%;display:flex;align-items:stretch;gap:14px}
 .icon-row-item{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 14px;background:var(--rh-gray);border-top:3px solid var(--rh-red)}
 .icon-row-icon{width:64px;height:64px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
 .icon-row-label{font:700 17px var(--fh);color:var(--rh-dark);margin-bottom:6px}
 .icon-row-desc{font:400 15px/1.4 var(--fb);color:#555}
-
 .table-wrap{position:absolute;left:7.26%;right:3%;top:30%;bottom:11%;overflow:auto}
 .rh-table{width:100%;border-collapse:collapse;font-size:17px}
 .rh-table thead tr{background:var(--rh-dark);color:var(--rh-white)}
 .rh-table th{padding:10px 14px;text-align:left;font-weight:600;font-size:15px}
 .rh-table td{padding:10px 14px;border-bottom:1px solid var(--rh-gray-mid)}
 .rh-table tr:nth-child(even) td{background:var(--rh-gray)}
-
-.slide-quote .rh-bar-t,.slide-quote .rh-bar-b{opacity:.3}
-.quote-dark{background:var(--rh-dark)}
-.quote-inner{position:absolute;left:10%;right:10%;top:50%;transform:translateY(-50%);text-align:center}
-.quote-mark{font:900 96px/0.5 var(--fh);color:var(--rh-red);margin-bottom:20px;display:block}
-blockquote{font:500 32px/1.45 var(--fh);font-style:italic;max-width:900px;margin:0 auto}
-.quote-dark blockquote{color:var(--rh-white)}
-cite{display:block;margin-top:28px;font:500 15px var(--fb);font-style:normal;color:var(--rh-red)}
-.quote-dark .rh-fn,.quote-dark .rh-fl{color:rgba(255,255,255,.35)}
-.quote-dark .rh-footer{border-top-color:rgba(255,255,255,.08)}
-
 .code-block{background:#1e1e1e;border-radius:6px;padding:18px 22px;font:400 16px/1.6 'Red Hat Mono','Courier New',monospace;color:#e0e0e0;white-space:pre;overflow:hidden;max-width:100%}
-.code-block .kw{color:#c586c0}
-.code-block .str{color:#ce9178}
-.code-block .cm{color:#6a9955}
-.code-block .num{color:#b5cea8}
-
-.token-box{display:inline-flex;align-items:center;justify-content:center;padding:6px 14px;border-radius:4px;font:700 16px var(--fh);margin:3px}
-.token-wm{background:rgba(238,0,0,.1);border:2px solid var(--rh-red);color:var(--rh-dark)}
-.token-plain{background:var(--rh-gray);border:2px solid var(--rh-gray-mid);color:var(--rh-dark)}
-.token-rejected{background:rgba(153,153,153,.1);border:2px dashed #999;color:#999;text-decoration:line-through}
-.token-keyA{background:rgba(0,102,204,.1);border:2px solid var(--rh-blue);color:var(--rh-dark)}
-.token-keyB{background:rgba(0,149,150,.1);border:2px solid var(--rh-teal);color:var(--rh-dark)}
-
+.code-block .kw{color:#c586c0}.code-block .str{color:#ce9178}
+.tk{display:inline-flex;align-items:center;justify-content:center;padding:6px 14px;border-radius:4px;font:700 16px var(--fh);margin:3px}
+.tk-wm{background:rgba(238,0,0,.1);border:2px solid var(--rh-red);color:var(--rh-dark)}
+.tk-p{background:var(--rh-gray);border:2px solid var(--rh-gray-mid);color:var(--rh-dark)}
+.tk-x{background:rgba(153,153,153,.1);border:2px dashed #999;color:#999;text-decoration:line-through}
+.tk-a{background:rgba(0,102,204,.1);border:2px solid var(--rh-blue);color:var(--rh-dark)}
+.tk-b{background:rgba(0,149,150,.1);border:2px solid var(--rh-teal);color:var(--rh-dark)}
 .hbar-wrap{display:flex;flex-direction:column;gap:14px;width:100%}
 .hbar-row{display:flex;align-items:center;gap:12px}
 .hbar-label{flex:0 0 260px;font:500 16px var(--fb);color:var(--rh-dark);text-align:right}
-.hbar-track{flex:1;height:28px;background:var(--rh-gray);border-radius:4px;overflow:hidden;position:relative}
+.hbar-track{flex:1;height:28px;background:var(--rh-gray);border-radius:4px;overflow:hidden}
 .hbar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:10px;font:700 13px var(--fh);color:#fff}
-.hbar-value{flex:0 0 80px;font:700 16px var(--fh);color:var(--rh-dark);text-align:left;padding-left:8px}
-
-@media print{
-  body{background:white;overflow:visible;height:auto;display:block}
-  #controls{display:none}
-  #viewport{width:100%;height:auto;box-shadow:none;overflow:visible}
-  #slides{display:block;transform:none!important;transition:none}
-  .slide{width:100%;height:auto;min-height:560px;page-break-after:always;break-after:page}
-}
+.hbar-value{flex:0 0 100px;font:700 16px var(--fh);color:var(--rh-dark);text-align:left;padding-left:8px}
+.legend{display:flex;gap:16px;margin-top:14px}.legend-item{display:flex;align-items:center;gap:6px;font:500 14px var(--fb);color:var(--rh-dark)}.legend-swatch{width:16px;height:16px;border-radius:3px}
+@media print{body{background:white;overflow:visible;height:auto;display:block}#controls{display:none}#viewport{width:100%;height:auto;box-shadow:none;overflow:visible}#slides{display:block;transform:none!important;transition:none}.slide{width:100%;height:auto;min-height:560px;page-break-after:always;break-after:page}}
 </style>
 </head>
 <body>
-
 <div id="viewport"><div id="slides">
 
-<!-- S1: TITLE -->
+<!-- S1 (PDF 1/32) TITLE -->
 <section class="slide slide-title">
-  <div class="title-area">
-    <h1>Watermarking in vLLM</h1>
-    <p class="title-subtitle">A secret, checkable signal in generated text, built into the sampler</p>
-  </div>
-  <div class="title-presenter">
-    vLLM Text Watermarking<span class="tp-sep">&middot;</span>Technical Deep Dive
-  </div>
-  <div class="title-white-strip">
-    <span class="title-brand">Red Hat</span>
-  </div>
+  <div class="title-area"><h1>Watermarking in vLLM</h1><p class="title-subtitle">A secret, checkable signal in generated text, built into the sampler</p></div>
+  <div class="title-presenter">vLLM &middot; Text Watermarking</div>
+  <div class="title-white-strip"><span class="title-brand">Red Hat</span></div>
 </section>
 
-<!-- S2: OVERVIEW -->
+<!-- S2 (PDF 2/32) OVERVIEW -->
 <section class="slide slide-icon-row">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Overview</div>
-  <div class="rh-title-area">
-    <h2>Four parts</h2>
-    <div class="rh-rule"></div>
-  </div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Overview</div>
+  <div class="rh-title-area"><h2>Four parts</h2><div class="rh-rule"></div></div>
   <div class="icon-row">
-    <div class="icon-row-item">
-      <div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="#EE0000" stroke-width="2"/><text x="24" y="30" text-anchor="middle" font-size="24" font-weight="900" fill="#EE0000" font-family="Red Hat Display">1</text></svg></div>
-      <div class="icon-row-label">How it works</div>
-      <div class="icon-row-desc">Gumbel-max sampling and detection</div>
-    </div>
-    <div class="icon-row-item">
-      <div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="#EE0000" stroke-width="2"/><text x="24" y="30" text-anchor="middle" font-size="24" font-weight="900" fill="#EE0000" font-family="Red Hat Display">2</text></svg></div>
-      <div class="icon-row-label">Speculative decoding</div>
-      <div class="icon-row-desc">Dual-key watermarking for draft tokens</div>
-    </div>
-    <div class="icon-row-item">
-      <div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="#EE0000" stroke-width="2"/><text x="24" y="30" text-anchor="middle" font-size="24" font-weight="900" fill="#EE0000" font-family="Red Hat Display">3</text></svg></div>
-      <div class="icon-row-label">Repeated contexts</div>
-      <div class="icon-row-desc">Maintaining output diversity</div>
-    </div>
-    <div class="icon-row-item">
-      <div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="#EE0000" stroke-width="2"/><text x="24" y="30" text-anchor="middle" font-size="24" font-weight="900" fill="#EE0000" font-family="Red Hat Display">4</text></svg></div>
-      <div class="icon-row-label">In production</div>
-      <div class="icon-row-desc">Defaults, monitoring, safety rails</div>
-    </div>
+    <div class="icon-row-item"><div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="#EE0000" stroke-width="2"/><text x="24" y="30" text-anchor="middle" font-size="24" font-weight="900" fill="#EE0000">1</text></svg></div><div class="icon-row-label">How it works</div><div class="icon-row-desc">Keyed sampling and detection</div></div>
+    <div class="icon-row-item"><div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="#EE0000" stroke-width="2"/><text x="24" y="30" text-anchor="middle" font-size="24" font-weight="900" fill="#EE0000">2</text></svg></div><div class="icon-row-label">Speculative decoding</div><div class="icon-row-desc">Watermarking draft tokens too</div></div>
+    <div class="icon-row-item"><div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="#EE0000" stroke-width="2"/><text x="24" y="30" text-anchor="middle" font-size="24" font-weight="900" fill="#EE0000">3</text></svg></div><div class="icon-row-label">Repeated contexts</div><div class="icon-row-desc">Keeping text natural</div></div>
+    <div class="icon-row-item"><div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="#EE0000" stroke-width="2"/><text x="24" y="30" text-anchor="middle" font-size="24" font-weight="900" fill="#EE0000">4</text></svg></div><div class="icon-row-label">In production</div><div class="icon-row-desc">Defaults, safety rails, upgrades</div></div>
   </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S3: MOTIVATION -->
+<!-- S3 (PDF 3/32) MOTIVATION -->
 <section class="slide slide-icon-row">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Motivation</div>
-  <div class="rh-title-area">
-    <h2>Why watermark generated text</h2>
-    <div class="rh-rule"></div>
-  </div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Motivation</div>
+  <div class="rh-title-area"><h2>Why watermark generated text</h2><div class="rh-rule"></div></div>
   <div class="icon-row">
-    <div class="icon-row-item">
-      <div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><rect x="4" y="8" width="40" height="32" rx="4" fill="none" stroke="#EE0000" stroke-width="2"/><line x1="12" y1="18" x2="36" y2="18" stroke="#EE0000" stroke-width="2"/><line x1="12" y1="24" x2="36" y2="24" stroke="#EE0000" stroke-width="1.5" opacity=".5"/><line x1="12" y1="30" x2="28" y2="30" stroke="#EE0000" stroke-width="1.5" opacity=".5"/></svg></div>
-      <div class="icon-row-label">Regulation</div>
-      <div class="icon-row-desc">EU AI Act (Art. 50) and California SB 942 require machine-detectable marking of AI-generated text</div>
-    </div>
-    <div class="icon-row-item">
-      <div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><path d="M24 4 L44 16 L44 32 L24 44 L4 32 L4 16 Z" fill="none" stroke="#EE0000" stroke-width="2"/><circle cx="24" cy="24" r="6" fill="none" stroke="#EE0000" stroke-width="2"/></svg></div>
-      <div class="icon-row-label">Provenance</div>
-      <div class="icon-row-desc">Verify later whether text came from your deployment, without metadata to strip</div>
-    </div>
-    <div class="icon-row-item">
-      <div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="none" stroke="#EE0000" stroke-width="2"/><line x1="8" y1="24" x2="40" y2="24" stroke="#EE0000" stroke-width="2" stroke-dasharray="4,3"/><text x="24" y="20" text-anchor="middle" font-size="10" fill="#EE0000" font-family="Red Hat Display" font-weight="700">invisible</text></svg></div>
-      <div class="icon-row-label">Invisible</div>
-      <div class="icon-row-desc">The signal is in which tokens were chosen. Copy-paste preserves it; readers cannot see it</div>
-    </div>
+    <div class="icon-row-item"><div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><rect x="4" y="8" width="40" height="32" rx="4" fill="none" stroke="#EE0000" stroke-width="2"/><line x1="12" y1="18" x2="36" y2="18" stroke="#EE0000" stroke-width="2"/><line x1="12" y1="24" x2="36" y2="24" stroke="#EE0000" stroke-width="1.5" opacity=".5"/><line x1="12" y1="30" x2="28" y2="30" stroke="#EE0000" stroke-width="1.5" opacity=".5"/></svg></div><div class="icon-row-label">Regulation</div><div class="icon-row-desc">Transparency rules such as the EU AI Act (Art.&nbsp;50) and California SB&nbsp;942 ask for machine-detectable marking of AI-generated text</div></div>
+    <div class="icon-row-item"><div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><path d="M24 4 L44 16 L44 32 L24 44 L4 32 L4 16 Z" fill="none" stroke="#EE0000" stroke-width="2"/><circle cx="24" cy="24" r="6" fill="none" stroke="#EE0000" stroke-width="2"/></svg></div><div class="icon-row-label">Provenance</div><div class="icon-row-desc">Check later whether a piece of text came from your deployment</div></div>
+    <div class="icon-row-item"><div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="none" stroke="#EE0000" stroke-width="2"/><line x1="8" y1="24" x2="40" y2="24" stroke="#EE0000" stroke-width="2" stroke-dasharray="4,3"/></svg></div><div class="icon-row-label">Invisible</div><div class="icon-row-desc">No metadata to strip. The signal is in which tokens were chosen, and readers cannot see it</div></div>
   </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Background: vLLM RFC #53916</div>
 </section>
 
-<!-- S4: SECTION - Part 1 -->
+<!-- S4 (PDF 4/32) SECTION - Part 1 -->
 <section class="slide slide-section">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Part 1</div>
-  <div class="section-title-area">
-    <h2>How it works</h2>
-    <div class="section-rule"></div>
-    <p class="section-subtitle">Exploiting the natural randomness in LLM sampling. The Gumbel-max trick gives us distortion-free watermarking.</p>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Part 1</div>
+  <div class="section-title-area"><h2>How it works</h2><div class="section-rule"></div><p class="section-subtitle">A model picks each token by rolling dice. A watermark swaps in dice that only the key holder can replay.</p></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S5: The Gumbel-max trick -->
+<!-- S5 (PDF 5/32) THE IDEA -->
 <section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">The Idea</div>
-  <div class="rh-title-area">
-    <h2>The Gumbel-max trick: keyed noise on log-probabilities</h2>
-    <div class="rh-rule"></div>
-  </div>
-  <div class="rh-body">
-    <div class="rh-bullets-wrap">
-      <ul class="rh-bullets">
-        <li><strong>Ordinary sampling:</strong> add fresh Gumbel noise to each candidate's logits, take the argmax &mdash; this is how Model Runner V2 already works</li>
-        <li><strong>Watermarked sampling:</strong> replace fresh noise with <strong>keyed noise</strong> from a PRF seeded by the secret key, the last <em>context_width</em> tokens, and each candidate token ID</li>
-        <li>Same inputs &rarr; same noise &rarr; a detector with the key can <strong>replay every draw</strong></li>
-        <li><strong>Distortion-free guarantee:</strong> in expectation over keys, p(token <em>i</em>) remains exactly the model probability</li>
-      </ul>
-      <p class="rh-note">The PRF is Philox4x32-10 (counter-based, not cryptographic). It generates 4 values per invocation, so the fused GPU kernel processes 4 consecutive candidate token IDs together. Context width defaults to 4.</p>
-    </div>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">The Idea</div>
+  <div class="rh-title-area"><h2>Keyed dice instead of fresh dice</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <ul class="rh-bullets">
+      <li>The last few tokens and a <strong>secret key</strong> set the random numbers the sampler uses</li>
+      <li>Last 4 tokens (context): <span class="tk tk-p">the</span> <span class="tk tk-p">old</span> <span class="tk tk-p">light</span> <span class="tk tk-p">house</span> &nbsp;+ secret key</li>
+      <li><strong>Keyed random function:</strong> same inputs &rarr; same numbers</li>
+      <li>Per candidate: keeper&nbsp;0.91 &nbsp; was&nbsp;0.12 &nbsp; stood&nbsp;0.47 &nbsp;&hellip;</li>
+      <li>Pick: <strong>keeper</strong> (highest keyed value wins)</li>
+    </ul>
+    <p class="rh-note">Illustrative values</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S6: Inside vLLM -->
+<!-- S6 (PDF 6/32) INSIDE VLLM -->
 <section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Inside vLLM</div>
-  <div class="rh-title-area">
-    <h2>Only the final sampling step changes</h2>
-    <div class="rh-rule"></div>
-  </div>
-  <div class="rh-body">
-    <div class="rh-bullets-wrap">
-      <ul class="rh-bullets">
-        <li><strong>Model scores (logits)</strong> &rarr; computed normally</li>
-        <li><strong>Penalties, constraints, structured output grammars</strong> &rarr; applied normally</li>
-        <li><strong>Temperature, min-p, top-k, top-p</strong> &rarr; applied normally</li>
-        <li><strong>GPUWatermarkSampler</strong> invokes the algorithm-specific <strong>Watermarker</strong> for the final stochastic pick</li>
-        <li>A <strong>fused Triton kernel</strong> handles Philox PRF generation, Gumbel transformation, and argmax in one GPU pass &mdash; no CPU transfer</li>
-        <li>Per-row mask lets the same kernel handle watermarked and unwatermarked requests in one batch</li>
-      </ul>
-    </div>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Inside vLLM</div>
+  <div class="rh-title-area"><h2>Only the final pick changes</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <ul class="rh-bullets">
+      <li>Everything before the last sampling step runs exactly as without a watermark</li>
+      <li><strong>Model scores (logits)</strong> &rarr; penalties and constraints &rarr; <strong>temperature, top-k, top-p</strong></li>
+      <li><strong>Watermark off:</strong> random draw</li>
+      <li><strong>Watermark on:</strong> keyed draw</li>
+    </ul>
+    <p class="rh-note">Watermarking runs in vLLM's Model Runner V2 sampler</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S7: Example Step 1 -->
+<!-- S7 (PDF 7/32) EXAMPLE STEP 1 OF 2 -->
 <section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Example &middot; Step 1 of 2</div>
-  <div class="rh-title-area">
-    <h2>Each candidate gets keyed Gumbel noise</h2>
-    <div class="rh-rule"></div>
-  </div>
-  <div class="rh-body">
-    <div class="rh-bullets-wrap">
-      <ul class="rh-bullets">
-        <li>Context: <span class="token-box token-plain">the</span> <span class="token-box token-plain">cat</span> <span class="token-box token-plain">sat</span> <span class="token-box token-plain">on</span> <span class="token-box token-wm" style="font-size:18px">?</span></li>
-        <li>PRF(key, context, candidate_id) &rarr; uniform value &rarr; Gumbel transform &rarr; added to logit</li>
-        <li>The candidate with <strong>highest logit + Gumbel noise</strong> wins</li>
-        <li>Including the <strong>token ID</strong> means every candidate gets different noise; including the <strong>context</strong> means noise changes at each generation step</li>
-      </ul>
-      <p class="rh-note">Illustrative values. Context = last 4 tokens (vLLM default). Including the candidate token ID in the PRF input is what makes this a per-token watermark, not just a per-position one.</p>
-    </div>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Example &middot; Step 1 of 2</div>
+  <div class="rh-title-area"><h2>Each candidate gets keyed noise</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <ul class="rh-bullets">
+      <li>The candidate with the highest preference + noise wins. Here the noise lifts &ldquo;my&rdquo; to the top.</li>
+      <li>Context: <span class="tk tk-p">the</span> <span class="tk tk-p">cat</span> <span class="tk tk-p">sat</span> <span class="tk tk-p">on</span> <span class="tk tk-wm" style="font-size:18px">?</span> &nbsp;+ key</li>
+      <li>Model preference + keyed noise &rarr; combined scores for: the, a, <strong>my</strong>, her, mat</li>
+      <li>&ldquo;my&rdquo; wins despite lower model preference, because its keyed noise is highest</li>
+    </ul>
+    <p class="rh-note">Illustrative values &middot; context = last 4 tokens (vLLM default)</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S8: Example Step 2 -->
+<!-- S8 (PDF 8/32) EXAMPLE STEP 2 OF 2 -->
 <section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Example &middot; Step 2 of 2</div>
-  <div class="rh-title-area">
-    <h2>The window slides, the noise changes</h2>
-    <div class="rh-rule"></div>
-  </div>
-  <div class="rh-body">
-    <div class="rh-bullets-wrap">
-      <ul class="rh-bullets">
-        <li>Context slides: <span class="token-box token-plain">cat</span> <span class="token-box token-plain">sat</span> <span class="token-box token-plain">on</span> <span class="token-box token-wm">my</span> <span class="token-box token-wm" style="font-size:18px">?</span></li>
-        <li>New context &rarr; <strong>new PRF values</strong> &rarr; completely different noise for every candidate</li>
-        <li>Rerunning with the <strong>same key reproduces it exactly</strong> &mdash; this is what makes detection possible</li>
-        <li>The signal is in which tokens were <em>chosen</em>, not in any attached metadata &mdash; copy-paste preserves it</li>
-      </ul>
-      <p class="rh-note">Larger context_width values make the watermark less robust to edits: one insertion changes more subsequent contexts. Values above 16 emit a warning.</p>
-    </div>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Example &middot; Step 2 of 2</div>
+  <div class="rh-title-area"><h2>The window slides, the noise changes</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <ul class="rh-bullets">
+      <li>Each token gets fresh noise from its own context. Rerunning with the same key reproduces it exactly.</li>
+      <li>Context slides one token: <span class="tk tk-p">cat</span> <span class="tk tk-p">sat</span> <span class="tk tk-p">on</span> <span class="tk tk-wm">my</span> <span class="tk tk-wm" style="font-size:18px">?</span></li>
+      <li>New context &rarr; new noise &rarr; different candidates favored</li>
+      <li>model preference + keyed noise &rarr; mat, bed, <strong>lap</strong>, desk, rug</li>
+    </ul>
+    <p class="rh-note">Illustrative values</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S9: Quality -->
+<!-- S9 (PDF 9/32) QUALITY -->
 <section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Quality</div>
-  <div class="rh-title-area">
-    <h2>Benchmarks show no degradation from watermarking</h2>
-    <div class="rh-rule"></div>
-  </div>
-  <div class="rh-body">
-    <div class="rh-bullets-wrap" style="gap:16px">
-      <div class="hbar-wrap">
-        <div class="hbar-row"><span class="hbar-label"><strong>GSM8K</strong> (math)</span><div class="hbar-track"><div class="hbar-fill" style="width:93%;background:var(--rh-red)">93.0%</div></div><span class="hbar-value" style="color:var(--rh-gray-mid)">vs 94.2%</span></div>
-        <div class="hbar-row"><span class="hbar-label"><strong>MBPP</strong> (code)</span><div class="hbar-track"><div class="hbar-fill" style="width:79.2%;background:var(--rh-red)">79.2%</div></div><span class="hbar-value" style="color:var(--rh-gray-mid)">vs 77.2%</span></div>
-        <div class="hbar-row"><span class="hbar-label"><strong>IFEval</strong> (instruction)</span><div class="hbar-track"><div class="hbar-fill" style="width:90.7%;background:var(--rh-red)">90.7%</div></div><span class="hbar-value" style="color:var(--rh-gray-mid)">vs 91.9%</span></div>
-      </div>
-      <p style="font:500 15px var(--fb);color:var(--rh-dark);margin-top:8px">Red bars = dual-key watermarked &nbsp;&middot;&nbsp; Gray = unwatermarked</p>
-      <p class="rh-note">Qwen3.5-27B with dual-key watermarking. Error bars overlap on all three benchmarks. The distortion-free guarantee means in expectation each token has the same probability as without the watermark. (vLLM blog, Sep 2026)</p>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Quality</div>
+  <div class="rh-title-area"><h2>On average, the model&rsquo;s choices are unchanged</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap" style="gap:16px">
+    <p style="font:500 18px var(--fb);color:var(--rh-dark);margin-bottom:4px">Over all keys, each token wins exactly as often as the model&rsquo;s probability says.</p>
+    <div class="hbar-wrap">
+      <div class="hbar-row"><span class="hbar-label"><strong>was</strong> &mdash; model 40%</span><div class="hbar-track"><div class="hbar-fill" style="width:40%;background:var(--rh-red)">39.9%</div></div></div>
+      <div class="hbar-row"><span class="hbar-label"><strong>keeper</strong> &mdash; model 30%</span><div class="hbar-track"><div class="hbar-fill" style="width:30%;background:var(--rh-red);opacity:.85">29.8%</div></div></div>
+      <div class="hbar-row"><span class="hbar-label"><strong>stood</strong> &mdash; model 20%</span><div class="hbar-track"><div class="hbar-fill" style="width:20%;background:var(--rh-red);opacity:.7">20.2%</div></div></div>
+      <div class="hbar-row"><span class="hbar-label"><strong>sat</strong> &mdash; model 10%</span><div class="hbar-track"><div class="hbar-fill" style="width:10%;background:var(--rh-red);opacity:.55"></div></div><span class="hbar-value">10.1%</span></div>
     </div>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+    <p class="rh-note">Simulated, 100,000 random keys. With one fixed key, plain gumbel gives the same text for the same prompt; dual_key_gumbel varies it.</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S10: Detection -->
+<!-- S10 (PDF 10/32) DETECTION - replays the dice -->
 <section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Detection</div>
-  <div class="rh-title-area">
-    <h2>Detection replays the PRF, not the model</h2>
-    <div class="rh-rule"></div>
-  </div>
-  <div class="rh-body">
-    <div class="rh-bullets-wrap">
-      <ul class="rh-bullets">
-        <li>For each token <em>t</em>, the detector recomputes PRF(key, context, <em>t</em>) using the preceding tokens</li>
-        <li>Transforms the value into a per-token score; for unwatermarked text these scores are Exp(1)</li>
-        <li>Sums the scores &rarr; under H&#8320; (no watermark), the sum follows a <strong>Gamma(n, 1)</strong> distribution</li>
-        <li>One-sided p-value: probability that unwatermarked text produces a score this high</li>
-        <li><strong>No model weights, no GPU:</strong> detection runs on CPU from token IDs alone</li>
-      </ul>
-      <p class="rh-note">Repeated contexts are scored once by default (deduplicate_contexts=True in detector) so identical PRF vectors are not treated as independent evidence. Scores and p-values expose signal info &mdash; keep detection behind access control.</p>
-    </div>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Detection</div>
+  <div class="rh-title-area"><h2>Detection replays the dice</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <ul class="rh-bullets">
+      <li>With the key, the detector <strong>recomputes each chosen token&rsquo;s number</strong></li>
+      <li>Above 0.9: <strong>51%</strong> of watermarked tokens, <strong>12%</strong> of ordinary ones</li>
+      <li><strong>Unwatermarked text:</strong> values spread evenly across 0&ndash;1</li>
+      <li><strong>Watermarked text:</strong> values piled up near 1</li>
+    </ul>
+    <p class="rh-note">Measured: two 200-token stories from Qwen3.5-0.8B, one per row, one dot per token</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S11: p-value -->
+<!-- S11 (PDF 11/32) DETECTION - p-value -->
 <section class="slide slide-stats">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Detection</div>
-  <div class="rh-title-area">
-    <h2>One number decides: the p-value</h2>
-    <div class="rh-rule"></div>
-  </div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Detection</div>
+  <div class="rh-title-area"><h2>One number decides: the p-value</h2><div class="rh-rule"></div></div>
   <div class="stats-grid">
-    <div class="stat-item">
-      <div class="stat-value" style="font-size:40px;color:var(--rh-green)">1.4e-73</div>
-      <div class="stat-label">Watermarked story &mdash; overwhelmingly detected</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value" style="font-size:40px;color:var(--rh-gray-mid)">0.27</div>
-      <div class="stat-label">Same prompt, watermark off &mdash; not flagged</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value" style="font-size:40px;color:var(--rh-gray-mid)">0.72</div>
-      <div class="stat-label">Watermarked text, wrong detector &mdash; not flagged</div>
-    </div>
+    <div class="stat-item"><div class="stat-value" style="font-size:40px;color:var(--rh-green)">2.3e-84</div><div class="stat-label">Watermarked story</div></div>
+    <div class="stat-item"><div class="stat-value" style="font-size:40px;color:var(--rh-gray-mid)">0.27</div><div class="stat-label">Same prompt, watermark off</div></div>
+    <div class="stat-item"><div class="stat-value" style="font-size:40px;color:var(--rh-gray-mid)">0.63</div><div class="stat-label">Watermarked, wrong key</div></div>
   </div>
-  <div class="rh-note-stats">p-value = chance of this score under no watermark. vLLM default threshold: p &le; 0.01. Measured: Qwen3.5-0.8B gumbel, 200-token story. With multiple keys/configs, apply Bonferroni correction.</div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-note-stats">The p-value is the chance of a score this high in text without the watermark. vLLM flags p &le; 0.01. Across 128 math answers: 119 of 128 watermarked answers flagged, 0 of 128 unwatermarked. Measured: Qwen3.5-0.8B, 200-token story, vLLM main.</div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S12: What a detector needs -->
+<!-- S12 (PDF 12/32) DETECTION - what a detector needs -->
 <section class="slide slide-table">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Detection</div>
-  <div class="rh-title-area">
-    <h2>What a detector needs &mdash; all five must match generation</h2>
-    <div class="rh-rule"></div>
-  </div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Detection</div>
+  <div class="rh-title-area"><h2>What a detector needs</h2><div class="rh-rule"></div></div>
   <div class="table-wrap">
+    <p style="font:500 18px var(--fb);color:var(--rh-dark);margin-bottom:12px">All five settings must match generation. With any one wrong, watermarked text looks unwatermarked.</p>
     <table class="rh-table">
-      <thead><tr><th>Parameter</th><th>Detector must match</th><th>Notes</th></tr></thead>
+      <thead><tr><th>Setting</th><th>Value</th></tr></thead>
       <tbody>
-        <tr><td><strong>Tokenizer</strong></td><td>Same model's tokenizer</td><td>Token IDs must be identical</td></tr>
-        <tr><td><strong>Key</strong></td><td>Same secret key</td><td>Wrong key &rarr; text looks unwatermarked</td></tr>
-        <tr><td><strong>Algorithm</strong></td><td>gumbel or dual_key_gumbel</td><td>Use the matching detector class</td></tr>
-        <tr><td><strong>Context width</strong></td><td>4 (default)</td><td>Number of preceding tokens in PRF input</td></tr>
-        <tr><td><strong>PRF</strong></td><td>philox</td><td>Philox4x32-10, versioned input mapping</td></tr>
+        <tr><td>text</td><td>The generated text</td></tr>
+        <tr><td>tokenizer</td><td>Of the same model</td></tr>
+        <tr><td>key</td><td>The secret key used at generation</td></tr>
+        <tr><td>algorithm</td><td>gumbel</td></tr>
+        <tr><td>context width</td><td>4</td></tr>
+        <tr><td>PRF</td><td>philox</td></tr>
       </tbody>
     </table>
-    <p class="rh-note" style="margin-top:12px">If you rotate keys or serve multiple tenants, retain all candidate configs and test against each with Bonferroni correction to p-values. vLLM ships GumbelWatermarkDetector and DualKeyGumbelWatermarkDetector.</p>
+    <p class="rh-note" style="margin-top:12px">No model weights and no GPU: detection runs on a CPU from token IDs alone. vLLM ships the detector primitives and a minimal example detection server.</p>
   </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S13: Longer text, stronger signal -->
+<!-- S13 (PDF 13/32) DETECTION - longer text -->
 <section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Detection</div>
-  <div class="rh-title-area">
-    <h2>Longer text, stronger signal &mdash; but content type matters</h2>
-    <div class="rh-rule"></div>
-  </div>
-  <div class="rh-body">
-    <div class="rh-bullets-wrap" style="gap:14px">
-      <div class="hbar-wrap">
-        <div class="hbar-row"><span class="hbar-label">First 25 tokens</span><div class="hbar-track"><div class="hbar-fill" style="width:20%;background:var(--rh-red)"></div></div><span class="hbar-value">p = 8.7e-6</span></div>
-        <div class="hbar-row"><span class="hbar-label">First 50 tokens</span><div class="hbar-track"><div class="hbar-fill" style="width:40%;background:var(--rh-red)"></div></div><span class="hbar-value">p = 5.3e-10</span></div>
-        <div class="hbar-row"><span class="hbar-label">All 200 tokens</span><div class="hbar-track"><div class="hbar-fill" style="width:90%;background:var(--rh-red)"></div></div><span class="hbar-value">p = 2.3e-84</span></div>
-        <div class="hbar-row"><span class="hbar-label">Every 10th token edited</span><div class="hbar-track"><div class="hbar-fill" style="width:65%;background:var(--rh-orange)"></div></div><span class="hbar-value">p = 7.4e-33</span></div>
-        <div class="hbar-row"><span class="hbar-label">JSON (structured)</span><div class="hbar-track"><div class="hbar-fill" style="width:8%;background:var(--rh-purple)"></div></div><span class="hbar-value">p = 6.6e-4</span></div>
-      </div>
-      <p class="rh-note">Prose story measured on Qwen3.5-0.8B, gumbel. JSON median from 128 outputs. High-entropy (creative) text carries more signal per token. Low-entropy (JSON, code) tokens where the model has little choice carry almost none.</p>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Detection</div>
+  <div class="rh-title-area"><h2>Longer text, stronger signal</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap" style="gap:14px">
+    <p style="font:500 18px var(--fb);color:var(--rh-dark);margin-bottom:4px">Evidence adds up token by token. Edits erase some of it, since each edit changes the next few contexts.</p>
+    <div class="hbar-wrap">
+      <div class="hbar-row"><span class="hbar-label">first 25 tokens</span><div class="hbar-track"><div class="hbar-fill" style="width:20%;background:var(--rh-red)"></div></div><span class="hbar-value">p = 8.7e-6</span></div>
+      <div class="hbar-row"><span class="hbar-label">first 50 tokens</span><div class="hbar-track"><div class="hbar-fill" style="width:40%;background:var(--rh-red)"></div></div><span class="hbar-value">p = 5.3e-10</span></div>
+      <div class="hbar-row"><span class="hbar-label">all 200 tokens</span><div class="hbar-track"><div class="hbar-fill" style="width:90%;background:var(--rh-red)"></div></div><span class="hbar-value">p = 2.3e-84</span></div>
+      <div class="hbar-row"><span class="hbar-label">every 10th token edited</span><div class="hbar-track"><div class="hbar-fill" style="width:65%;background:var(--rh-orange)"></div></div><span class="hbar-value">p = 7.4e-33</span></div>
     </div>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+    <p class="rh-note">Measured on the watermarked story above. Predictable text such as JSON or code carries less signal per token.</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S14: Configuration -->
+<!-- S14 (PDF 14/32) CONFIGURATION -->
 <section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Configuration</div>
-  <div class="rh-title-area">
-    <h2>One engine flag, one request field</h2>
-    <div class="rh-rule"></div>
-  </div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Configuration</div>
+  <div class="rh-title-area"><h2>One engine flag, one request field</h2><div class="rh-rule"></div></div>
   <div class="two-col-body">
     <div class="col-left">
       <div class="col-label">Engine: set once at startup</div>
+      <p style="font:400 16px var(--fb);color:var(--rh-dark);margin-bottom:10px">Every request is watermarked by default.</p>
       <div class="code-block"><span class="kw">vllm serve</span> MODEL \
   <span class="kw">--watermark-config</span> \
   <span class="str">'{"algorithm":"gumbel",
-    "key": &lt;SECRET&gt;}'</span></div>
-      <ul class="rh-bullets" style="margin-top:16px">
-        <li>Every request watermarked by default</li>
-        <li>Disabled when flag is omitted</li>
-      </ul>
+    "key":42}'</span></div>
     </div>
     <div class="col-divider"></div>
     <div class="col-right">
-      <div class="col-label">Request: opt out per-call</div>
+      <div class="col-label">Request: opt out</div>
+      <p style="font:400 16px var(--fb);color:var(--rh-dark);margin-bottom:10px">For internal or non-user-facing traffic. Restrict this field to trusted callers.</p>
       <div class="code-block">{<span class="str">"model"</span>: <span class="str">"MODEL"</span>,
  <span class="str">"messages"</span>: [...],
  <span class="str">"watermarking"</span>: <span class="kw">false</span>}</div>
-      <ul class="rh-bullets" style="margin-top:16px">
-        <li>For internal / non-user-facing traffic</li>
-        <li>Restrict field to trusted callers</li>
-      </ul>
+      <p style="font:400 14px var(--fb);color:#999;margin-top:12px">Greedy requests (temperature 0) cannot be watermarked and skip it with a warning</p>
     </div>
   </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S15: Throughput -->
-<section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Performance</div>
-  <div class="rh-title-area">
-    <h2>Near-zero throughput impact &mdash; measured on H100</h2>
-    <div class="rh-rule"></div>
-  </div>
-  <div class="rh-body">
-    <div class="rh-bullets-wrap">
-      <ul class="rh-bullets">
-        <li>Qwen3.5-27B + MTP-3, one H100, 512 output tokens, 8 keys &times; 9 batch sizes</li>
-        <li>Mean throughput change across batch sizes: <strong>&minus;1.1% to +2.0%</strong></li>
-        <li class="sub-bullet">Batch 1: 113.9 tok/s unwatermarked vs 113.9 watermarked (&minus;0.23%)</li>
-        <li class="sub-bullet">Batch 256: 1590.7 vs 1586.5 (&minus;0.58%)</li>
-        <li>Context deduplication overhead: &le; <strong>0.19%</strong> (Qwen3.5-27B)</li>
-        <li>The fused kernel avoids materializing a [batch &times; vocab] noise tensor &mdash; PRF, Gumbel, and argmax are one pass</li>
-      </ul>
-      <p class="rh-note">From the vLLM blog (Sep 24, 2026) by Rialland (Mistral), Veitner &amp; Ruiz (Red Hat). Medians across 8 watermarked keys, 4 unwatermarked controls.</p>
-    </div>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
-</section>
-
-<!-- S16: SECTION - Part 2 -->
+<!-- S15 (PDF 15/32) SECTION - Part 2 -->
 <section class="slide slide-section">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Part 2</div>
-  <div class="section-title-area">
-    <h2>Speculative decoding</h2>
-    <div class="section-rule"></div>
-    <p class="section-subtitle">A small drafter guesses ahead, the big model checks. Both kinds of tokens need a watermark.</p>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Part 2</div>
+  <div class="section-title-area"><h2>Speculative decoding</h2><div class="section-rule"></div><p class="section-subtitle">A small drafter guesses ahead, the big model checks. Both kinds of tokens need a watermark.</p></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S17: Spec decode overview -->
+<!-- S16 (PDF 16/32) ONE ROUND -->
 <section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Speculative Decoding</div>
-  <div class="rh-title-area">
-    <h2>One round: guess, check, keep</h2>
-    <div class="rh-rule"></div>
-  </div>
-  <div class="rh-body">
-    <div class="rh-bullets-wrap">
-      <ul class="rh-bullets">
-        <li><strong>Step 1:</strong> Drafter proposes k tokens (e.g. 3 with MTP)</li>
-        <li><strong>Step 2:</strong> Target model checks all k in one forward pass using probability-ratio test: accept if r &lt; min(1, p(x)/q(x))</li>
-        <li><strong>Step 3:</strong> Rejected &rarr; sample from residual distribution; all accepted &rarr; bonus token from target</li>
-        <li>Applying the <strong>same watermark key</strong> to both models can reduce their overlap and lower acceptance rate</li>
-        <li>Solution: <strong>dual-key</strong> watermarking (PR #56122), based on SynthID-Text Algorithm 6</li>
-      </ul>
-      <p class="rh-note">Supported draft methods: MTP, EAGLE, EAGLE3, DSpark. DFlash support is pending (issue #59662). ngram and separate draft_model are rejected at startup.</p>
-    </div>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Speculative Decoding</div>
+  <div class="rh-title-area"><h2>One round: guess, check, keep</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <p style="font:500 18px var(--fb);color:var(--rh-dark);margin-bottom:8px">Up to four tokens per big-model pass instead of one. The output follows the big model&rsquo;s distribution.</p>
+    <ul class="rh-bullets">
+      <li><strong>1 &middot; drafter guesses 3 tokens:</strong> <span class="tk tk-p">sat</span> <span class="tk tk-p">on</span> <span class="tk tk-p">the</span></li>
+      <li><strong>2 &middot; big model checks all 3 in one pass, adds one:</strong></li>
+      <li class="sub"><span class="tk tk-p">sat</span> kept &nbsp; <span class="tk tk-p">on</span> kept &nbsp; <span class="tk tk-x">the</span> rejected &nbsp; <span class="tk tk-wm">my</span> added</li>
+    </ul>
+    <p class="rh-note">Illustrative tokens</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S18: Two ways -->
+<!-- S17 (PDF 17/32) TWO WAYS -->
 <section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Speculative Decoding</div>
-  <div class="rh-title-area">
-    <h2>Two approaches to watermarking speculative decoding</h2>
-    <div class="rh-rule"></div>
-  </div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Speculative Decoding</div>
+  <div class="rh-title-area"><h2>Two ways to watermark it</h2><div class="rh-rule"></div></div>
   <div class="two-col-body">
     <div class="col-left">
       <div class="col-label">Target-only</div>
       <ul class="rh-bullets">
-        <li><strong>gumbel</strong> + allow_target_only</li>
-        <li><span class="token-box token-plain">sat</span> <span class="token-box token-plain">on</span> <span class="token-box token-wm">my</span></li>
-        <li>Accepted drafts carry <strong>no</strong> watermark</li>
-        <li>Signal diluted by acceptance rate</li>
-        <li style="color:var(--rh-orange)">p = 2.1e-31</li>
+        <li>gumbel + allow_target_only_watermarking</li>
+        <li><span class="tk tk-p">sat</span> <span class="tk tk-p">on</span> <span class="tk tk-wm">my</span></li>
+        <li>Accepted drafts carry no watermark, so the signal thins out as acceptance rises</li>
+        <li style="color:var(--rh-orange)">story p = 2.1e-31 &middot; 93/128 answers flagged</li>
       </ul>
     </div>
     <div class="col-divider"></div>
     <div class="col-right">
-      <div class="col-label">Dual-key (recommended)</div>
+      <div class="col-label">Dual-key</div>
       <ul class="rh-bullets">
-        <li><strong>dual_key_gumbel</strong></li>
-        <li><span class="token-box token-keyA">sat</span> <span class="token-box token-keyA">on</span> <span class="token-box token-keyB">my</span></li>
-        <li>Drafts &rarr; key A; recovery/bonus &rarr; key B</li>
-        <li><strong>Every</strong> token carries signal</li>
-        <li style="color:var(--rh-green)">p = 5.0e-56</li>
+        <li>dual_key_gumbel</li>
+        <li><span class="tk tk-a">sat</span> <span class="tk tk-a">on</span> <span class="tk tk-b">my</span></li>
+        <li>Drafts carry key A, the big model&rsquo;s own tokens carry key B. Every token carries signal.</li>
+        <li style="color:var(--rh-green)">story p = 5.0e-56 &middot; 114/128 answers flagged</li>
       </ul>
     </div>
   </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-note-stats">Measured: Qwen3.5-0.8B with its MTP draft head, 3 draft tokens; 200-token story and 128 GSM8K answers</div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S19: Dual-key protocol -->
+<!-- S18 (PDF 18/32) EXAMPLE STEP 1 OF 3 -->
 <section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Dual-Key Protocol</div>
-  <div class="rh-title-area">
-    <h2>The dual-key protocol preserves acceptance rate exactly</h2>
-    <div class="rh-rule"></div>
-  </div>
-  <div class="rh-body">
-    <div class="rh-bullets-wrap">
-      <ul class="rh-bullets">
-        <li><strong>Keys A and B</strong> are derived from one configured master key</li>
-        <li>Draft tokens sampled from q<sub>wm</sub>(&middot;; key A) &mdash; the drafter's watermarked distribution</li>
-        <li>Accept/reject uses <strong>unwatermarked</strong> probabilities: r &lt; min(1, p(x)/q(x)) &mdash; identical test to no watermark</li>
-        <li>Rejected &rarr; sample from residual(p, q)(&middot;; key B); all accepted &rarr; bonus from p<sub>wm</sub>(&middot;; key B)</li>
-        <li>Acceptance rate is <strong>unchanged</strong> because the ratio test never sees watermarked probabilities</li>
-      </ul>
-      <div style="margin-top:14px;display:flex;gap:12px;align-items:center">
-        <span style="display:inline-block;width:16px;height:16px;background:var(--rh-blue);border-radius:3px"></span><span style="font:500 14px var(--fb);color:var(--rh-dark)">Key A (drafter)</span>
-        <span style="display:inline-block;width:16px;height:16px;background:var(--rh-teal);border-radius:3px"></span><span style="font:500 14px var(--fb);color:var(--rh-dark)">Key B (target)</span>
-      </div>
-      <p class="rh-note">Implements SynthID-Text Supplementary Algorithm 6. The alpha config parameter has no effect under speculative decoding; the protocol selects the key. See section K.13 of SynthID-Text supplementary for non-distortion proof.</p>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Example &middot; Step 1 of 3</div>
+  <div class="rh-title-area"><h2>The drafter samples with key A</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <p style="font:500 18px var(--fb);color:var(--rh-dark);margin-bottom:8px">Each draft token is a keyed pick from the drafter&rsquo;s own probabilities.</p>
+    <ul class="rh-bullets">
+      <li>drafter proposes: <span class="tk tk-a">sat</span> key&nbsp;A &nbsp; <span class="tk tk-a">on</span> key&nbsp;A &nbsp; <span class="tk tk-a">the</span> key&nbsp;A</li>
+    </ul>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--rh-blue)"></div>Key A (drafter)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--rh-teal)"></div>Key B (big model)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#999;opacity:.4"></div>Rejected</div>
     </div>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+    <p class="rh-note">Illustrative tokens &middot; context = previous 4 tokens, as in normal decoding</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S20: Spec decode stats -->
+<!-- S19 (PDF 19/32) EXAMPLE STEP 2 OF 3 -->
+<section class="slide slide-content">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Example &middot; Step 2 of 3</div>
+  <div class="rh-title-area"><h2>The big model checks with plain probabilities</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <p style="font:500 18px var(--fb);color:var(--rh-dark);margin-bottom:8px">Keep or reject uses the unwatermarked probabilities, the same test as without a watermark.</p>
+    <ul class="rh-bullets">
+      <li>drafter proposes: <span class="tk tk-a">sat</span> <span class="tk tk-a">on</span> <span class="tk tk-a">the</span></li>
+      <li>big model checks: <span class="tk tk-a">sat</span> <em>kept</em> &nbsp; <span class="tk tk-a">on</span> <em>kept</em> &nbsp; <span class="tk tk-x">the</span> <em>rejected</em></li>
+    </ul>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--rh-blue)"></div>Key A (drafter)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--rh-teal)"></div>Key B (big model)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#999;opacity:.4"></div>Rejected</div>
+    </div>
+    <p class="rh-note">Illustrative tokens &middot; context = previous 4 tokens, as in normal decoding</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+</section>
+
+<!-- S20 (PDF 20/32) EXAMPLE STEP 3 OF 3 -->
+<section class="slide slide-content">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Example &middot; Step 3 of 3</div>
+  <div class="rh-title-area"><h2>The big model&rsquo;s own token uses key B</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <p style="font:500 18px var(--fb);color:var(--rh-dark);margin-bottom:8px">A replacement for a rejected draft, or a bonus token after all drafts are kept, is a keyed pick with key&nbsp;B.</p>
+    <ul class="rh-bullets">
+      <li>output of this round: <span class="tk tk-a">sat</span> key&nbsp;A &nbsp; <span class="tk tk-a">on</span> key&nbsp;A &nbsp; <span class="tk tk-b">my</span> key&nbsp;B</li>
+    </ul>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--rh-blue)"></div>Key A (drafter)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--rh-teal)"></div>Key B (big model)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#999;opacity:.4"></div>Rejected</div>
+    </div>
+    <p class="rh-note">Illustrative tokens &middot; context = previous 4 tokens, as in normal decoding</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+</section>
+
+<!-- S21 (PDF 21/32) SAME SPEED-UP -->
 <section class="slide slide-stats">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Speculative Decoding</div>
-  <div class="rh-title-area">
-    <h2>Same speed-up, detectable output</h2>
-    <div class="rh-rule"></div>
-  </div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Speculative Decoding</div>
+  <div class="rh-title-area"><h2>Same speed-up, detectable output</h2><div class="rh-rule"></div></div>
   <div class="stats-grid">
-    <div class="stat-item">
-      <div class="stat-value">62%</div>
-      <div class="stat-label">Acceptance rate &mdash; watermark off</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value">62%</div>
-      <div class="stat-label">Acceptance rate &mdash; dual-key on</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value" style="font-size:36px;color:var(--rh-green)">5.0e-56</div>
-      <div class="stat-label">Dual-key detector p-value</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value" style="font-size:40px;color:var(--rh-gray-mid)">0.72</div>
-      <div class="stat-label">Plain detector (wrong approach)</div>
-    </div>
+    <div class="stat-item"><div class="stat-value">62%</div><div class="stat-label">Draft acceptance rate &mdash; watermark off</div></div>
+    <div class="stat-item"><div class="stat-value">62%</div><div class="stat-label">Draft acceptance rate &mdash; dual-key watermark</div></div>
+    <div class="stat-item"><div class="stat-value" style="font-size:36px;color:var(--rh-green)">5.0e-56</div><div class="stat-label">Dual-key detector</div></div>
+    <div class="stat-item"><div class="stat-value" style="font-size:40px;color:var(--rh-gray-mid)">0.72</div><div class="stat-label">Plain detector</div></div>
   </div>
-  <div class="rh-note-stats">Measured: Qwen3.5-0.8B + MTP, 3 draft tokens, probabilistic drafting. Acceptance over 128 GSM8K prompts; p-values on a 200-token story. The plain gumbel detector gives ~0.7 because it does not know about key A.</div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-note-stats">Measured: Qwen3.5-0.8B + MTP, 3 draft tokens. Acceptance over 128 GSM8K prompts; p-values on the 200-token story.</div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S21: Detection alpha -->
-<section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Detection Tuning</div>
-  <div class="rh-title-area">
-    <h2>The detector's alpha weights the two keys</h2>
-    <div class="rh-rule"></div>
-  </div>
-  <div class="rh-body">
-    <div class="rh-bullets-wrap">
-      <ul class="rh-bullets">
-        <li><strong>Config alpha</strong> (default 0.1): in non-spec-decode mode, probability of using key B per token &mdash; ignored under spec decode</li>
-        <li><strong>Detector alpha:</strong> weight given to key B scores (default 0.2 in vLLM)</li>
-        <li>Under spec decode, key B's share &asymp; 1/(1 + k &times; acceptance) where k = draft tokens per step</li>
-        <li class="sub-bullet">Prose: 1/(1 + 3 &times; 0.34) &asymp; 0.49 &rarr; use alpha &asymp; 0.5</li>
-        <li class="sub-bullet">JSON: 1/(1 + 3 &times; 0.91) &asymp; 0.27 &rarr; alpha &asymp; 0.2</li>
-        <li>The best alpha is <strong>key-dependent and template-dependent</strong> &mdash; compare on your own data</li>
-      </ul>
-      <p class="rh-note">With 8 keys on JSON: alpha 0.2 detected clearly more for keys 0, 7, 42; alpha 0.5 detected more for key 99. Without key 42, the two were roughly equal after FPR matching.</p>
-    </div>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
-</section>
-
-<!-- S22: SECTION - Part 3 -->
+<!-- S22 (PDF 22/32) SECTION - Part 3 -->
 <section class="slide slide-section">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Part 3</div>
-  <div class="section-title-area">
-    <h2>Repeated contexts</h2>
-    <div class="section-rule"></div>
-    <p class="section-subtitle">The same context always gives the same noise. Without mitigation, this creates repetition loops.</p>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Part 3</div>
+  <div class="section-title-area"><h2>Repeated contexts</h2><div class="section-rule"></div><p class="section-subtitle">The same context always gives the same noise. vLLM makes sure that does not snowball.</p></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S23: The problem -->
+<!-- S23 (PDF 23/32) SAME CONTEXT SAME NOISE -->
 <section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Repeated Contexts</div>
-  <div class="rh-title-area">
-    <h2>Same context, same noise &mdash; biased toward loops</h2>
-    <div class="rh-rule"></div>
-  </div>
-  <div class="rh-body">
-    <div class="rh-bullets-wrap">
-      <ul class="rh-bullets">
-        <li>A fixed key + repeated context &rarr; identical PRF values &rarr; same token favored again</li>
-        <li>Example: <span class="token-box token-wm">1</span> <span class="token-box token-wm">+</span> <span class="token-box token-wm">1</span> <span class="token-box token-wm">+</span> <span class="token-box token-wm">1</span> <span class="token-box token-wm">+</span> <span class="token-box token-wm">1</span> <span class="token-box token-wm">+</span> ...</li>
-        <li>Context (1, +, 1, +) repeats &rarr; same noise &rarr; <strong>infinite loop</strong> in the worst case</li>
-        <li>Even without complete loops: lower diversity, longer generations, reduced quality</li>
-        <li>This is the gap between single-<em>token</em> non-distortion and single-<em>sequence</em> non-distortion</li>
-      </ul>
-    </div>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Repeated Contexts</div>
+  <div class="rh-title-area"><h2>Same context, same noise</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <p style="font:500 18px var(--fb);color:var(--rh-dark);margin-bottom:8px">Without a fix, a repeated phrase gets the same push every time, which feeds repetition.</p>
+    <ul class="rh-bullets">
+      <li><span class="tk tk-wm">the</span> <span class="tk tk-wm">keeper</span> <span class="tk tk-wm">lit</span> <span class="tk tk-wm">the</span> <span class="tk tk-wm">lamp</span> &hellip; <span class="tk tk-wm">the</span> <span class="tk tk-wm">keeper</span> <span class="tk tk-wm">lit</span> <span class="tk tk-wm">the</span> <span class="tk tk-wm">lamp</span></li>
+      <li>Same context &rarr; same noise &rarr; pushed toward the same token again &rarr; <strong>loops</strong></li>
+    </ul>
+    <p class="rh-note">Illustrative tokens &middot; context = last 4 tokens</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S24: The fix -->
+<!-- S24 (PDF 24/32) PLAIN PICK -->
 <section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Repeated Contexts</div>
-  <div class="rh-title-area">
-    <h2>Context deduplication: plain pick at repeated contexts</h2>
-    <div class="rh-rule"></div>
-  </div>
-  <div class="rh-body">
-    <div class="rh-bullets-wrap">
-      <ul class="rh-bullets">
-        <li>When the last <em>context_width</em> tokens already appeared earlier, vLLM uses <strong>ordinary sampling</strong></li>
-        <li><span class="token-box token-wm">the</span> <span class="token-box token-wm">keeper</span> <span class="token-box token-wm">lit</span> <span class="token-box token-wm">the</span> <span class="token-box token-wm">lamp</span> ... <span class="token-box token-wm">the</span> <span class="token-box token-wm">keeper</span> <span class="token-box token-wm">lit</span> <span class="token-box token-wm">the</span> <span class="token-box token-plain">stove</span></li>
-        <li>The detector independently deduplicates &mdash; skips repeated contexts &mdash; so <strong>no evidence is lost</strong></li>
-        <li>This gives <strong>single-sequence non-distortion</strong> (section G.3 of SynthID-Text supplementary)</li>
-        <li>Overhead: &le; <strong>0.19%</strong> throughput reduction on Qwen3.5-27B</li>
-      </ul>
-      <p class="rh-note">On by default: deduplicate_contexts = "single_turn". Search window defaults to last 8,192 positions. Values below 1,024 emit a warning.</p>
-    </div>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Repeated Contexts</div>
+  <div class="rh-title-area"><h2>A repeated context gets a plain pick</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <p style="font:500 18px var(--fb);color:var(--rh-dark);margin-bottom:8px">vLLM samples normally when the last 4 tokens already appeared earlier in the output.</p>
+    <ul class="rh-bullets">
+      <li><span class="tk tk-wm">the</span> <span class="tk tk-wm">keeper</span> <span class="tk tk-wm">lit</span> <span class="tk tk-wm">the</span> <span class="tk tk-wm">lamp</span> &hellip; <span class="tk tk-wm">the</span> <span class="tk tk-wm">keeper</span> <span class="tk tk-wm">lit</span> <span class="tk tk-wm">the</span> <span class="tk tk-p">stove</span></li>
+      <li class="sub">watermarked, scored by detector &nbsp;&nbsp;&nbsp; plain pick, skipped by detector</li>
+      <li>The detector skips repeated contexts anyway, so the watermark loses no evidence</li>
+    </ul>
+    <p class="rh-note">On by default (deduplicate_contexts = "single_turn")</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S25: Dedup stats -->
+<!-- S25 (PDF 25/32) DEDUP STATS -->
 <section class="slide slide-stats">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Repeated Contexts</div>
-  <div class="rh-title-area">
-    <h2>Deduplication keeps repetition at its natural level</h2>
-    <div class="rh-rule"></div>
-  </div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Repeated Contexts</div>
+  <div class="rh-title-area"><h2>Deduplication keeps repetition at its natural level</h2><div class="rh-rule"></div></div>
   <div class="stats-grid">
-    <div class="stat-item">
-      <div class="stat-value" style="font-size:48px;color:var(--rh-green)">17.4%</div>
-      <div class="stat-label">Watermark off &mdash; natural baseline</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value" style="font-size:48px;color:var(--rh-red)">24.3%</div>
-      <div class="stat-label">Watermark on, no dedup &mdash; excessive</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value" style="font-size:48px;color:var(--rh-green)">17.5%</div>
-      <div class="stat-label">Watermark + dedup (default) &mdash; natural</div>
-    </div>
+    <div class="stat-item"><div class="stat-value" style="font-size:48px;color:var(--rh-green)">17.4%</div><div class="stat-label">Watermark off</div></div>
+    <div class="stat-item"><div class="stat-value" style="font-size:48px;color:var(--rh-red)">24.3%</div><div class="stat-label">Watermark, no dedup</div></div>
+    <div class="stat-item"><div class="stat-value" style="font-size:48px;color:var(--rh-green)">17.5%</div><div class="stat-label">Watermark, dedup (default)</div></div>
   </div>
-  <div class="rh-note-stats">Share of output tokens whose 4-token context already appeared. Qwen3.5-0.8B, 128 GSM8K questions, temperature 1, up to 1,024 tokens.</div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-note-stats">Without it, watermarked answers repeat their own phrases more often than unwatermarked ones. Share of output tokens whose 4-token context already appeared. Measured: Qwen3.5-0.8B, 128 GSM8K questions, temperature 1, up to 1,024 tokens.</div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S26: Dedup settings -->
+<!-- S26 (PDF 26/32) SAME RULE IN SPEC DECODE -->
+<section class="slide slide-content">
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Repeated Contexts</div>
+  <div class="rh-title-area"><h2>The same rule in speculative decoding</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <p style="font:500 18px var(--fb);color:var(--rh-dark);margin-bottom:8px">A draft, replacement or bonus token at a repeated context is a plain pick. Contexts inside the drafted block count too.</p>
+    <ul class="rh-bullets">
+      <li>drafter proposes: <span class="tk tk-a">the</span> key&nbsp;A &nbsp; <span class="tk tk-p">keeper</span> plain &nbsp; <span class="tk tk-a">lit</span> key&nbsp;A</li>
+    </ul>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--rh-blue)"></div>Key A (drafter)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--rh-teal)"></div>Key B (big model)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--rh-gray-mid)"></div>Plain pick at a repeated context</div>
+    </div>
+    <ul class="rh-bullets" style="margin-top:12px">
+      <li>Keep or reject still uses the same test, so the speed-up is unchanged</li>
+    </ul>
+    <p class="rh-note">Measured with MTP, 128 GSM8K answers: repeated contexts 19.6% without dedup, 17.1% with, 17.6% unwatermarked</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+</section>
+
+<!-- S27 (PDF 27/32) HISTORY TABLE -->
 <section class="slide slide-table">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Repeated Contexts</div>
-  <div class="rh-title-area">
-    <h2>Which history counts as "seen before"</h2>
-    <div class="rh-rule"></div>
-  </div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Repeated Contexts</div>
+  <div class="rh-title-area"><h2>Which history counts as &ldquo;seen before&rdquo;</h2><div class="rh-rule"></div></div>
   <div class="table-wrap">
     <table class="rh-table">
       <thead><tr><th>Setting</th><th>Status</th><th>Searches</th><th>Use for</th></tr></thead>
       <tbody>
-        <tr><td><strong>"single_turn"</strong></td><td style="color:var(--rh-green);font-weight:700">Default</td><td>This output so far</td><td>Almost everything</td></tr>
-        <tr><td><strong>"all"</strong></td><td>Opt-in</td><td>Prompt + output</td><td>Multi-turn chats. Caution: first context_width tokens and prompt-matching contexts lose watermark</td></tr>
-        <tr><td><strong>"none"</strong></td><td style="color:var(--rh-red)">Not recommended</td><td>Nothing</td><td>Invites repetition loops</td></tr>
+        <tr><td><strong>"single_turn"</strong></td><td style="color:var(--rh-green);font-weight:700">default</td><td>this output so far</td><td>almost everything</td></tr>
+        <tr><td><strong>"all"</strong></td><td>opt-in</td><td>prompt and output</td><td>multi-turn chats; fewer watermarked tokens when the prompt resembles the answer</td></tr>
+        <tr><td><strong>"none"</strong></td><td style="color:var(--rh-red)">not recommended</td><td>nothing</td><td>invites repetition loops</td></tr>
       </tbody>
     </table>
-    <p class="rh-note" style="margin-top:12px">deduplicate_contexts_max_history defaults to 8,192 positions. Set to null for unbounded (costs more as sequence grows). "all" has performance and detectability impact: prompt-matching contexts lose their watermark signal.</p>
+    <p class="rh-note" style="margin-top:12px">deduplicate_contexts in the watermark config; the search window defaults to the last 8,192 positions</p>
   </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S27: SECTION - Part 4 -->
+<!-- S28 (PDF 28/32) SECTION - Part 4 -->
 <section class="slide slide-section">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">Part 4</div>
-  <div class="section-title-area">
-    <h2>In production</h2>
-    <div class="section-rule"></div>
-    <p class="section-subtitle">Watermarking is on by default once configured, and falls back loudly when it cannot apply.</p>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">Part 4</div>
+  <div class="section-title-area"><h2>In production</h2><div class="section-rule"></div><p class="section-subtitle">Watermarking is on by default once configured, and falls back loudly when it cannot apply.</p></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S28: Fallback behavior -->
+<!-- S29 (PDF 29/32) FALLBACK TABLE -->
 <section class="slide slide-table">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">In Production</div>
-  <div class="rh-title-area">
-    <h2>What happens when watermarking cannot apply</h2>
-    <div class="rh-rule"></div>
-  </div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">In Production</div>
+  <div class="rh-title-area"><h2>What happens when watermarking cannot apply</h2><div class="rh-rule"></div></div>
   <div class="table-wrap">
     <table class="rh-table">
       <thead><tr><th>Request or setup</th><th>What happens</th></tr></thead>
       <tbody>
-        <tr><td>temperature &gt; 0 (default)</td><td style="color:var(--rh-green);font-weight:600">Watermarked</td></tr>
-        <tr><td>"watermarking": false</td><td>Not watermarked (opt-out)</td></tr>
-        <tr><td>Greedy (temperature 0)</td><td style="color:var(--rh-orange)">Not watermarked, logs warning once</td></tr>
-        <tr><td>Beam search</td><td>Not watermarked, logs warning</td></tr>
-        <tr><td>Trace replay</td><td>Not watermarked (replaces sampled token)</td></tr>
-        <tr><td>Structured output / grammars</td><td style="color:var(--rh-green)">Watermarked, but constrained tokens reduce signal</td></tr>
-        <tr><td>Spec decode: ngram, separate draft model</td><td style="color:var(--rh-red);font-weight:600">Rejected at startup</td></tr>
+        <tr><td>temperature &gt; 0 (default)</td><td style="color:var(--rh-green);font-weight:600">watermarked</td></tr>
+        <tr><td>"watermarking": false</td><td>not watermarked (opt-out)</td></tr>
+        <tr><td>greedy (temperature 0)</td><td>not watermarked, logs a warning</td></tr>
+        <tr><td>beam search</td><td>not watermarked</td></tr>
+        <tr><td>spec decoding: ngram, separate draft model</td><td style="color:var(--rh-red);font-weight:600">refused at startup</td></tr>
+        <tr><td>spec decoding: plain gumbel</td><td>refused unless target-only is allowed</td></tr>
       </tbody>
     </table>
+    <p class="rh-note" style="margin-top:12px">Supported draft methods: MTP, EAGLE, EAGLE3, DSpark &middot; one shared policy for all APIs: PR #56801 (in review)</p>
   </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S29: Monitoring -->
+<!-- S30 (PDF 30/32) STAYS DETECTABLE -->
 <section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">In Production</div>
-  <div class="rh-title-area">
-    <h2>Prometheus monitoring and stability guarantees</h2>
-    <div class="rh-rule"></div>
-  </div>
-  <div class="rh-body">
-    <div class="rh-bullets-wrap">
-      <ul class="rh-bullets">
-        <li><strong>vllm:watermark_requests_total</strong> counts finished requests by status:</li>
-        <li class="sub-bullet"><strong>watermarked</strong> &mdash; sampled with watermark on</li>
-        <li class="sub-bullet"><strong>skipped</strong> &mdash; wanted watermark but couldn't (e.g. temperature=0)</li>
-        <li class="sub-bullet"><strong>not_watermarked</strong> &mdash; explicit opt-out, beam search, pooling</li>
-        <li>Sum over status = vllm:request_success_total on the same instance</li>
-        <li><strong>Forward compatibility:</strong> golden tests store reference token picks and detector scores per algorithm. A change that alters them fails the vLLM test suite. PRF input mapping is versioned.</li>
-      </ul>
-      <p class="rh-note">Counter exists only with --watermark-config. Status is per request, not per token. In disaggregated prefill/decode, sum over decode instances only.</p>
-    </div>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">In Production</div>
+  <div class="rh-title-area"><h2>Text watermarked today stays detectable</h2><div class="rh-rule"></div></div>
+  <div class="rh-body"><div class="rh-bullets-wrap">
+    <p style="font:500 18px var(--fb);color:var(--rh-dark);margin-bottom:8px">Generation and detection are a contract. vLLM tests it on every change.</p>
+    <ul class="rh-bullets">
+      <li><strong>Generated today</strong> &rarr; watermarked &rarr; <strong>next release</strong> &rarr; still detected &rarr; <strong>release after</strong> &rarr; still detected</li>
+      <li>Golden tests store reference token picks and detector scores for each algorithm setting</li>
+      <li>A change that would alter them <strong>fails vLLM&rsquo;s test suite</strong></li>
+    </ul>
+    <p class="rh-note">PR #56809 &middot; the PRF input mapping is versioned</p>
+  </div></div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S30: Operating checklist -->
+<!-- S31 (PDF 31/32) OPERATING CHECKLIST -->
 <section class="slide slide-icon-row">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">In Production</div>
-  <div class="rh-title-area">
-    <h2>Operating checklist</h2>
-    <div class="rh-rule"></div>
-  </div>
+  <div class="rh-bar-t"></div><div class="rh-bar-b"></div><div class="rh-tag">In Production</div>
+  <div class="rh-title-area"><h2>Operating checklist</h2><div class="rh-rule"></div></div>
   <div class="icon-row">
-    <div class="icon-row-item">
-      <div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><rect x="8" y="6" width="32" height="36" rx="4" fill="none" stroke="#EE0000" stroke-width="2"/><circle cx="24" cy="22" r="6" fill="none" stroke="#EE0000" stroke-width="2"/><line x1="24" y1="28" x2="24" y2="32" stroke="#EE0000" stroke-width="2"/></svg></div>
-      <div class="icon-row-label">Key</div>
-      <div class="icon-row-desc">Keep the key secret. Anyone with it can detect, forge, or strip the watermark.</div>
-    </div>
-    <div class="icon-row-item">
-      <div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><rect x="6" y="14" width="36" height="22" rx="4" fill="none" stroke="#EE0000" stroke-width="2"/><rect x="16" y="6" width="16" height="12" rx="4" fill="none" stroke="#EE0000" stroke-width="2"/></svg></div>
-      <div class="icon-row-label">Access</div>
-      <div class="icon-row-desc">Detection behind access control. Repeated queries can reveal or erase the signal.</div>
-    </div>
-    <div class="icon-row-item">
-      <div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><path d="M12 24 L24 12 L36 24 L24 36 Z" fill="none" stroke="#EE0000" stroke-width="2"/><circle cx="24" cy="24" r="4" fill="#EE0000"/></svg></div>
-      <div class="icon-row-label">Match</div>
-      <div class="icon-row-desc">Same tokenizer, algorithm, key, context width, and PRF for detection.</div>
-    </div>
-    <div class="icon-row-item">
-      <div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><polyline points="8,36 16,28 24,32 32,16 40,12" fill="none" stroke="#EE0000" stroke-width="2" stroke-linejoin="round"/><circle cx="40" cy="12" r="3" fill="#EE0000"/></svg></div>
-      <div class="icon-row-label">Measure</div>
-      <div class="icon-row-desc">Check false positives on your own unwatermarked traffic with your deployed key.</div>
-    </div>
+    <div class="icon-row-item"><div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><rect x="8" y="6" width="32" height="36" rx="4" fill="none" stroke="#EE0000" stroke-width="2"/><circle cx="24" cy="22" r="6" fill="none" stroke="#EE0000" stroke-width="2"/><line x1="24" y1="28" x2="24" y2="32" stroke="#EE0000" stroke-width="2"/></svg></div><div class="icon-row-label">Key</div><div class="icon-row-desc">Keep the key secret. Anyone with it can detect, and can also forge or strip the watermark.</div></div>
+    <div class="icon-row-item"><div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><rect x="6" y="14" width="36" height="22" rx="4" fill="none" stroke="#EE0000" stroke-width="2"/><rect x="16" y="6" width="16" height="12" rx="4" fill="none" stroke="#EE0000" stroke-width="2"/></svg></div><div class="icon-row-label">Access</div><div class="icon-row-desc">Keep detection behind access control. Scores leak information about the signal.</div></div>
+    <div class="icon-row-item"><div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><path d="M12 24 L24 12 L36 24 L24 36 Z" fill="none" stroke="#EE0000" stroke-width="2"/><circle cx="24" cy="24" r="4" fill="#EE0000"/></svg></div><div class="icon-row-label">Match</div><div class="icon-row-desc">Use the same tokenizer, algorithm, key and context width for detection.</div></div>
+    <div class="icon-row-item"><div class="icon-row-icon"><svg width="48" height="48" viewBox="0 0 48 48"><polyline points="8,36 16,28 24,32 32,16 40,12" fill="none" stroke="#EE0000" stroke-width="2" stroke-linejoin="round"/><circle cx="40" cy="12" r="3" fill="#EE0000"/></svg></div><div class="icon-row-label">Measure</div><div class="icon-row-desc">Check false positives on your own unwatermarked traffic, especially templated output like JSON.</div></div>
   </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
+  <div class="rh-footer"><span class="rh-fn"></span></div><div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
 </section>
 
-<!-- S31: References -->
-<section class="slide slide-content">
-  <div class="rh-bar-t"></div><div class="rh-bar-b"></div>
-  <div class="rh-tag">References</div>
-  <div class="rh-title-area">
-    <h2>Key references and upstream contributions</h2>
-    <div class="rh-rule"></div>
-  </div>
-  <div class="rh-body">
-    <div class="rh-bullets-wrap">
-      <ul class="rh-bullets">
-        <li><strong>vLLM blog (Sep 24, 2026):</strong> "Watermarking in vLLM" by Rialland (Mistral), Veitner &amp; Ruiz (Red Hat)</li>
-        <li><strong>RFC #53916:</strong> Native Text Watermarking Support (Aug 2026)</li>
-        <li><strong>PR #54053:</strong> Gumbel-max watermarking and detection (merged Sep 10, 2026)</li>
-        <li><strong>PR #56122:</strong> Dual-key Gumbel-max for speculative decoding + context dedup</li>
-        <li><strong>Aaronson &amp; Kirchner (2023):</strong> "Watermarking GPT outputs" &mdash; original Gumbel-max idea</li>
-        <li><strong>Dathathri et al. (2024):</strong> SynthID-Text &mdash; scalable watermarking, supplementary Algorithm 6</li>
-        <li><strong>Sander et al. (2026):</strong> TextSeal &mdash; localized LLM watermark for provenance</li>
-      </ul>
-    </div>
-  </div>
-  <div class="rh-footer"><span class="rh-fn"></span></div>
-  <div class="rh-privacy">Confidential: Red Hat associate and NDA partner use only. No further distribution</div>
-</section>
-
-<!-- S32: CLOSING -->
+<!-- S32 (PDF 32/32) CLOSING -->
 <section class="slide slide-title slide-closing">
-  <div class="title-area closing-area">
-    <h1>Watermarking in vLLM</h1>
-    <p class="title-subtitle">Distortion-free watermarking with efficient GPU generation and speculative decoding support</p>
-    <p class="closing-contact">docs.vllm.ai &rsaquo; Features &rsaquo; Text watermarking &nbsp;&middot;&nbsp; RFC: vllm-project/vllm#53916</p>
+  <div class="title-area closing-area"><h1>Questions</h1>
+    <p class="title-subtitle" style="font-size:18px;line-height:1.6;margin-top:20px">docs.vllm.ai &rsaquo; Features &rsaquo; Text watermarking<br>RFC: github.com/vllm-project/vllm/issues/53916<br>PRs #54053 &middot; #56122 &middot; #56807 &middot; #56809 &middot; #56801</p>
   </div>
-  <div class="title-white-strip">
-    <span class="title-brand">Red Hat</span>
-  </div>
+  <div class="title-white-strip"><span class="title-brand">Red Hat</span></div>
 </section>
 
 </div></div>
@@ -930,219 +603,101 @@ cite{display:block;margin-top:28px;font:500 15px var(--fb);font-style:normal;col
 </div>
 
 <script>
-window.SLIDE_TITLES=[
-  "Watermarking in vLLM",
-  "Four parts",
-  "Why watermark generated text",
-  "Part 1: How it works",
-  "The Gumbel-max trick: keyed noise on log-probabilities",
-  "Only the final sampling step changes",
-  "Each candidate gets keyed Gumbel noise",
-  "The window slides, the noise changes",
-  "Benchmarks show no degradation",
-  "Detection replays the PRF, not the model",
-  "One number decides: the p-value",
-  "What a detector needs",
-  "Longer text, stronger signal",
-  "One engine flag, one request field",
-  "Near-zero throughput impact",
-  "Part 2: Speculative decoding",
-  "One round: guess, check, keep",
-  "Two approaches to watermarking spec decode",
-  "The dual-key protocol preserves acceptance rate",
-  "Same speed-up, detectable output",
-  "The detector's alpha weights the two keys",
-  "Part 3: Repeated contexts",
-  "Same context, same noise",
-  "Context deduplication: plain pick at repeated contexts",
-  "Deduplication keeps repetition natural",
-  "Which history counts as 'seen before'",
-  "Part 4: In production",
-  "What happens when watermarking cannot apply",
-  "Prometheus monitoring and stability guarantees",
-  "Operating checklist",
-  "Key references and upstream contributions",
-  "Questions"
-];
+window.SLIDE_TITLES=["Watermarking in vLLM","Four parts","Why watermark generated text","Part 1: How it works","Keyed dice instead of fresh dice","Only the final pick changes","Each candidate gets keyed noise","The window slides, the noise changes","On average, the model\u2019s choices are unchanged","Detection replays the dice","One number decides: the p-value","What a detector needs","Longer text, stronger signal","One engine flag, one request field","Part 2: Speculative decoding","One round: guess, check, keep","Two ways to watermark it","The drafter samples with key A","The big model checks with plain probabilities","The big model\u2019s own token uses key B","Same speed-up, detectable output","Part 3: Repeated contexts","Same context, same noise","A repeated context gets a plain pick","Deduplication keeps repetition natural","The same rule in speculative decoding","Which history counts as \u2018seen before\u2019","Part 4: In production","What happens when watermarking cannot apply","Text watermarked today stays detectable","Operating checklist","Questions"];
 window.SPEAKER_NOTES=[
-  "Welcome everyone. Today we're doing a technical deep dive on text watermarking in vLLM. This is a feature that two Red Hat engineers \u2014 Simon Veitner and Tomas Ruiz \u2014 co-authored with Rapha\u00ebl Rialland from Mistral. It shipped in September 2026 and it's the first production-grade, distortion-free watermarking system built directly into an inference engine's sampling pipeline. I want to walk you through not just the what, but the why and the how at the implementation level, because the engineering decisions here are fascinating.",
+"Welcome everyone. Today we\u2019re doing a technical deep dive on text watermarking in vLLM. This feature was co-authored by Simon Veitner and Tomas Ruiz from Red Hat, together with Rapha\u00ebl Rialland from Mistral, and shipped in September 2026. It\u2019s the first production-grade, distortion-free watermarking system built directly into an inference engine\u2019s sampling pipeline. The blog post went live September 24. I want to walk you through not just the what, but the why and the engineering at the implementation level.",
 
-  "We'll cover four parts. Part 1 is the core algorithm \u2014 the Gumbel-max trick and how detection works. Part 2 is how this interacts with speculative decoding, which is the hard engineering problem they had to solve. Part 3 is the repeated-context problem and why you need context deduplication for output diversity. And Part 4 is the production deployment story: monitoring, fallback behavior, and what operators actually need to care about. The math is elegant but the systems engineering is where it gets real.",
+"We\u2019ll cover four parts. Part 1 is the core algorithm \u2014 how keyed sampling works and how you detect the watermark afterward. Part 2 is speculative decoding, which is the hard engineering problem: how do you watermark both draft and target tokens without killing your acceptance rate? Part 3 is the repeated-context problem \u2014 why identical contexts create repetition loops and how context deduplication fixes it. Part 4 is production deployment: what falls back, what refuses, and what operators need to get right. Let\u2019s dive in.",
 
-  "Let's start with why. The EU AI Act Article 50 and California SB 942 are creating concrete legal requirements for machine-detectable marking of AI-generated text. This isn't theoretical anymore. The key insight of text watermarking is that the signal lives in which tokens were chosen, not in any metadata you can strip. You can copy-paste watermarked text into a new document, edit it partially, mix it with other text \u2014 and the statistical signal persists in the remaining original tokens. The alternatives \u2014 metadata, Unicode substitution, red-green lists \u2014 are either strippable, detectable by users, or they measurably distort the output. This approach avoids all three problems.",
+"Three motivations. First, regulation is real now. EU AI Act Article 50 and California SB 942 both ask for machine-detectable marking of AI-generated content. This isn\u2019t theoretical. Second, provenance \u2014 you want to check later whether a piece of text came from your deployment, not someone else\u2019s. Third, invisibility. The signal is in which tokens were chosen, not in any metadata. You can\u2019t strip it by copying to a new document. Readers can\u2019t see it. The alternatives \u2014 metadata, Unicode tricks, red-green lists \u2014 are either strippable or they visibly distort the output. The design is tracked in vLLM RFC #53916.",
 
-  "Part 1: How it works. The key realization is that language models already use randomness when sampling. At each step, the model produces a probability distribution over the vocabulary, and ordinary inference draws a random sample. Watermarking replaces that random draw with a reproducible, keyed draw. Same key and same context always produce the same random values, so a detector can replay them. But here's the remarkable part \u2014 the expected output distribution is mathematically unchanged.",
+"Part 1: How it works. The mental model is rolling dice. An LLM picks each token by sampling from a probability distribution \u2014 that\u2019s rolling dice. A watermark swaps in loaded dice that only the key holder can replay. The trick is that these loaded dice, in expectation over all possible keys, produce exactly the same probability distribution as fair dice. That\u2019s the distortion-free guarantee.",
 
-  "The Gumbel-max trick is the foundation. In standard categorical sampling, you add Gumbel-distributed noise to each candidate's log-probability and take the argmax. This is actually how Model Runner V2 already works in vLLM \u2014 it's not an exotic technique. For watermarking, instead of fresh random noise, we use a Philox4x32-10 pseudo-random function seeded by three things: the secret key, the preceding context tokens, and each candidate token ID. Including the token ID is critical \u2014 it gives every candidate a different noise value. Including the context means the noise changes at every generation step. The Philox PRF is counter-based and vectorizes beautifully on GPUs. It generates four values per invocation, so the fused Triton kernel processes four consecutive candidate token IDs together. The non-distortion guarantee is precise: in expectation over all possible keys, the probability of selecting token i remains exactly the model's probability for token i.",
+"Here\u2019s the core idea. Ordinary sampling draws fresh random numbers at each step and discards them. Watermarked sampling derives those random numbers from three inputs: the secret key, the last four tokens (the context), and each candidate token ID. So given the context \u2018the old light house\u2019 plus a secret key, a keyed random function produces a value for every candidate. The candidate with the highest value wins \u2014 here, \u2018keeper\u2019 at 0.91 beats \u2018stood\u2019 at 0.47 and \u2018was\u2019 at 0.12. The same inputs always produce the same outputs, which is what makes detection possible. Under the hood, the PRF is Philox4x32-10 \u2014 a counter-based generator that vectorizes on GPUs. It generates four values per invocation, so the fused Triton kernel processes four consecutive candidate token IDs together in one pass.",
 
-  "Here's what I love about the vLLM implementation. They didn't bolt this on as a post-processing step \u2014 they integrated it directly into Model Runner V2's sampling pipeline. The WatermarkConfig selects an algorithm and PRF. GPUWatermarkSampler invokes the algorithm-specific Watermarker only at the final stochastic selection, after temperature, min-p, top-k, and top-p have already been applied. The naive approach would materialize a [batch \u00d7 vocabulary] noise tensor \u2014 that's enormous temporary storage and memory traffic. Instead, they fuse the PRF generation, Gumbel transformation, and argmax reduction into a single GPU kernel with no CPU transfer. A per-row mask lets the same kernel handle watermarked and unwatermarked requests in the same batch. Structured output grammars are applied before the watermark, which is correct but means constrained tokens carry less evidence.",
+"Here\u2019s what\u2019s important architecturally. Everything before the last sampling step is completely unchanged. The model computes logits normally. Penalties and constraints are applied normally. Temperature, top-k, top-p filtering happens normally. Only the very final stochastic selection is different: instead of a fresh random draw, it\u2019s a keyed draw. This runs in vLLM\u2019s Model Runner V2 sampler through GPUWatermarkSampler, which invokes the algorithm-specific Watermarker. A na\u00efve implementation would materialize a [batch \u00d7 vocabulary] noise tensor \u2014 enormous memory. Instead, PRF generation, the Gumbel transformation, and argmax are fused into a single GPU kernel. A per-row mask lets the same kernel handle watermarked and unwatermarked requests in the same batch.",
 
-  "Let me walk through a concrete example. Say our context window is the last 4 tokens: 'the cat sat on', and we need to pick the next token. For every candidate in the filtered vocabulary, we compute PRF(key, [the, cat, sat, on], candidate_token_id). That gives us a uniform value which we Gumbel-transform and add to the candidate's logit. The candidate with the highest combined logit-plus-noise wins. The key thing to internalize is that the PRF input includes the candidate token ID itself. This means it's not just noise-per-position, it's noise-per-position-per-candidate. That's what lets the detector check whether a specific chosen token aligns with its key-determined value.",
+"Concrete example. Context is the last four tokens: \u2018the cat sat on\u2019, and we need the next token. We combine the key with this context, and each candidate gets keyed noise added to its model preference. The highest combined score wins. In this illustration, \u2018my\u2019 ends up on top even though its raw model preference wasn\u2019t the highest, because its keyed noise pushed it above \u2018a\u2019. This is the mechanism \u2014 the noise systematically favors certain tokens at each position, and the detector can replay this to check whether the chosen tokens line up with what the noise would have favored.",
 
-  "Now the window slides. The chosen token enters the context, one token drops off, and we get completely fresh PRF values for every candidate at the next position. This is what gives the watermark its statistical power \u2014 each position contributes independent evidence, because its context is different. But here's the important caveat: if the context repeats, you get the same PRF values. We'll address that in Part 3. One more thing \u2014 the signal is in the token choices themselves. If you copy and paste watermarked text, the signal comes with it. Edits destroy signal around the edited tokens but the rest stays intact. Larger context widths make it less robust to edits because one insertion changes more subsequent contexts. vLLM warns for values above 16.",
+"Now the window slides one token forward. The context becomes \u2018cat sat on my\u2019 and we\u2019re picking the next token again. New context means completely new noise for every candidate \u2014 different tokens get favored. This is what gives the watermark its statistical power: each position contributes independent evidence because its context is different. And rerunning with the same key reproduces the same noise exactly, so detection works. The important caveat: if the context ever repeats, you get the same noise. That\u2019s Part 3.",
 
-  "Now let's talk output quality, because this is the first thing customers ask. The vLLM blog published head-to-head benchmarks on Qwen3.5-27B with dual-key watermarking: GSM8K math at 93.0% versus 94.2% unwatermarked, MBPP code at 79.2% versus 77.2%, and IFEval instruction-following at 90.7% versus 91.9%. Error bars overlap on all three. The watermarked scores are statistically indistinguishable from unwatermarked. This is the practical manifestation of the distortion-free guarantee. Now, the guarantee is in expectation over keys \u2014 a specific key can shift specific sequences. But across a deployment with normal traffic diversity, you won't see quality degradation.",
+"Quality. This slide answers the first question every customer asks: does it change the output? Over all keys, each token wins exactly as often as the model\u2019s probability says. Here we simulated 100,000 random keys. The model assigns \u2018was\u2019 40% probability; across all keys, it won 39.9% of the time. \u2018keeper\u2019 at 30% won 29.8%. \u2018stood\u2019 at 20% won 20.2%. \u2018sat\u2019 at 10% won 10.1%. That\u2019s the distortion-free guarantee in action. One caveat: with a single fixed key on plain gumbel, you get the same text for the same prompt every time, because the noise is deterministic. dual_key_gumbel addresses this by randomly routing between two keys, restoring diversity even with a fixed key. The vLLM blog also showed quality benchmarks on Qwen3.5-27B: GSM8K, MBPP, and IFEval all had overlapping error bars between watermarked and unwatermarked.",
 
-  "Detection is conceptually simple but the details matter. You tokenize the text, then for each token t in the sequence, you recompute PRF(key, preceding_context, t) using the preceding tokens. For unwatermarked text, these values are independent of which tokens were chosen, so they behave like uniform random draws and the transformed scores follow an Exp(1) distribution. For watermarked text, the chosen tokens systematically have high PRF values. You sum the scores across the sequence, and under the null hypothesis of no watermark, this sum follows a Gamma(n, 1) distribution where n is the number of uniquely-scored tokens. You compute a one-sided p-value. No model weights needed, no GPU needed. The detector classes in vLLM \u2014 GumbelWatermarkDetector and DualKeyGumbelWatermarkDetector \u2014 run on CPU from token IDs alone. But critical: scores and p-values expose information about the per-token signal. Repeated queries can let someone construct watermark-imitating text or strip the watermark. Keep detection behind access control.",
+"Detection is conceptually simple. The detector takes the text, tokenizes it, and for each chosen token, recomputes the value the key would have assigned. For watermarked text, these values pile up near 1 because the watermark systematically favored high-value tokens. For unwatermarked text, the values spread evenly across 0 to 1, because ordinary sampling has no bias toward any particular keyed value. The threshold is clear: above 0.9, you see 51% of watermarked tokens but only 12% of ordinary ones. That\u2019s from two 200-token stories from Qwen3.5-0.8B. The detector needs no model weights and no GPU \u2014 just the tokenizer and the key.",
 
-  "The p-value numbers make the story concrete. From the watermark_recipes repo, recipe 1 generates a 200-token story with Qwen3.5-0.8B using gumbel watermarking. The watermarked story gets p = 1.4e-73 \u2014 that's 73 orders of magnitude below the threshold. The same prompt without the watermark gets p = 0.27 \u2014 completely unremarkable. And if you send watermarked text to the wrong detector \u2014 say the dual-key detector when it was generated with plain gumbel \u2014 you get p = 0.72. The watermark is invisible to anyone without the exact matching configuration. The default threshold is p \u2264 0.01. If you test against multiple keys or configs, you need a Bonferroni correction: divide 0.01 by the number of candidate tests.",
+"One number summarizes the evidence: the p-value. It\u2019s the probability of seeing a score this high in text that has no watermark. vLLM flags text as watermarked when p is at or below 0.01. For the watermarked story, p = 2.3e-84 \u2014 that\u2019s 84 orders of magnitude below the threshold. For the same prompt without the watermark, p = 0.27. And critically, for watermarked text tested with the wrong key, p = 0.63 \u2014 the watermark is completely invisible without the correct key. Across 128 GSM8K math answers, 119 of 128 watermarked answers were flagged, and zero of 128 unwatermarked. If you\u2019re testing against multiple keys or configs, apply a Bonferroni correction: divide 0.01 by the number of candidates.",
 
-  "All five detector parameters must match generation exactly. With any one wrong, watermarked text looks unwatermarked. The tokenizer must produce identical token IDs \u2014 same model checkpoint. The key must be the exact integer used at generation time. The algorithm must match: use GumbelWatermarkDetector for gumbel, DualKeyGumbelWatermarkDetector for dual_key_gumbel. Context width must match \u2014 it defaults to 4. And the PRF must match \u2014 currently that's always philox, but the versioned input mapping means you need the same vLLM version's detector. If you rotate keys or serve multiple tenants, retain all candidate configurations you've ever served, test the text against each, and apply Bonferroni correction. The vLLM docs make this explicit.",
+"The detector must match generation on all five parameters, or watermarked text looks unwatermarked. You need the text itself, the tokenizer from the same model so token IDs are identical, the exact key used at generation, the algorithm (gumbel or dual_key_gumbel), the context width (default 4), and the PRF (philox). Miss any one and detection fails completely. No model weights needed, no GPU. Detection runs on a CPU from token IDs alone. vLLM ships the detector primitives \u2014 GumbelWatermarkDetector and DualKeyGumbelWatermarkDetector \u2014 plus a minimal FastAPI detection server example. But keep detection behind access control: scores and p-values expose per-token signal info that an adversary could use to forge or strip watermarks.",
 
-  "Detection power scales with two things: sequence length and entropy. The first 25 tokens of our 200-token story already give p = 8.7e-6 \u2014 that's below the threshold. By 50 tokens it's 5.3e-10, and by 200 tokens it's 2.3e-84. Even with every 10th token edited, you still get 7.4e-33. But now look at structured JSON: median p = 6.6e-4 from 128 outputs. Still below 0.01, but orders of magnitude weaker. The reason is entropy. Only tokens where the model had a genuine choice carry watermark signal. In JSON, most tokens are forced: brackets, quotes, key names, sequential IDs. The model has almost no freedom, so there's almost no signal to embed. This is why the structured data recipe in the repo exists \u2014 you need to understand how detection performs on your actual output types.",
+"Detection power scales with both length and entropy. The first 25 tokens already give p = 8.7e-6, below the threshold. By 50 tokens, 5.3e-10. All 200 tokens: 2.3e-84. Even with every 10th token edited, you still get 7.4e-33 \u2014 the signal is degraded but overwhelming. Edits destroy evidence around the edited tokens because each edit changes the context for the next few positions. But the signal is resilient. The key caveat for production: predictable text such as JSON or code carries much less signal per token, because only tokens where the model had a real choice contribute evidence. The structured-data recipe in the watermark_recipes repo measured JSON detection \u2014 median p around 6.6e-4, still below 0.01 but orders of magnitude weaker than prose.",
 
-  "Configuration is deliberately simple. One engine flag at startup with your algorithm and key, and every request is watermarked by default unless it opts out. The opt-out is 'watermarking: false' in the request body. Now, there's an important open issue here \u2014 issue #58191 noted that the per-request opt-out can bypass the server operator's watermark-config, which contradicts the RFC's statement that sampling cannot be modified by downstream consumers. An enforcement flag has been proposed and PRed. For compliance deployments, strip the watermarking field from untrusted requests at the ingress boundary, or wait for the enforce mode. Greedy requests at temperature=0 cannot be watermarked because Gumbel-max requires stochastic sampling. vLLM logs a warning once and proceeds without watermarking.",
+"Configuration is deliberately simple. One engine flag at startup: --watermark-config with your algorithm and key. Every request is watermarked by default after that. The opt-out is \u2018watermarking: false\u2019 in the request body, for internal or non-user-facing traffic. Restrict that field to trusted callers \u2014 there\u2019s an open issue (#58191) about per-request opt-out bypassing server-enforced config, and an enforcement flag has been proposed. Greedy requests at temperature 0 cannot be watermarked because the Gumbel-max trick requires stochastic sampling \u2014 you need randomness to embed the signal. vLLM logs a warning the first time this happens. Same for beam search and trace replay. The Python API, OpenAI-compatible APIs, and Rust APIs all accept the same watermarking field.",
 
-  "Let's talk throughput, because this is the 'will it slow me down' slide. The vLLM blog measured Qwen3.5-27B on one H100 with MTP-3 speculative decoding, 512 output tokens, across batch sizes 1 through 256. The mean throughput change ranged from minus 1.1% to plus 2.0% across batch sizes. At batch 1, it's 113.9 tok/s both ways. At batch 256, it's 1590.7 versus 1586.5 \u2014 less than 1% difference. These are medians across 8 watermarked keys with 4 unwatermarked controls, so the measurement is solid. The context deduplication overhead is at most 0.19% on the same model. The fused kernel is the reason: no [batch \u00d7 vocab] noise tensor materialized, Philox generates values inline, Gumbel transform and argmax are in the same pass. There's simply no memory traffic penalty worth measuring.",
+"Part 2: Speculative decoding. This is where the engineering gets hard. In production serving, speculative decoding is one of the most impactful performance optimizations. You get multiple tokens per target model forward pass. But now you have two models producing tokens, and you need to watermark both. You can\u2019t just skip draft tokens \u2014 they\u2019re a huge fraction of the output. And you can\u2019t use the same key for both \u2014 that tanks the acceptance rate because the watermark changes both distributions, reducing their overlap.",
 
-  "Part 2: Speculative decoding. This is where the engineering gets interesting. In production serving, speculative decoding is one of the most impactful optimizations. A small drafter proposes k tokens, the big target model verifies them in one forward pass, and you get up to k+1 tokens per target inference. You cannot just skip watermarking draft tokens \u2014 they're a large fraction of the output. And you cannot use the same key for both models \u2014 that reduces their distribution overlap and tanks the acceptance rate. The dual-key approach from PR #56122 solves both problems.",
+"One round of speculative decoding: the drafter guesses 3 tokens, the big model checks all 3 in one forward pass, and adds one more. Up to 4 tokens per big-model pass instead of 1. The output follows the big model\u2019s distribution exactly because of the probability-ratio acceptance test. In this illustration, the drafter proposes sat, on, the. The big model keeps sat and on but rejects the, then adds my as its own token. This is the standard spec-decode protocol.",
 
-  "Let me walk through one verification round. The drafter proposes k tokens sampled from its own watermarked distribution using key A. The target model computes logits for all k drafts in one forward pass and runs the standard probability-ratio test: accept if r < min(1, p(x)/q(x)), where p is the target's unwatermarked probability and q is the drafter's unwatermarked probability. Notice: the ratio test never sees watermarked probabilities. If a draft is rejected, the recovery token is sampled from the residual distribution using key B. If all drafts are accepted, the bonus token uses key B. This means every accepted draft carries key-A signal, every target token carries key-B signal, and the acceptance rate is mathematically identical to no watermark at all.",
+"Two approaches to watermarking speculative decoding. Target-only uses plain gumbel with allow_target_only_watermarking. Only the big model\u2019s tokens \u2014 recovery and bonus \u2014 carry the watermark. Accepted drafts have no signal. So as acceptance rises, your watermark thins out. For the 200-token story it gave p = 2.1e-31, and flagged 93 of 128 math answers. Dual-key uses dual_key_gumbel. Draft tokens carry key A, the big model\u2019s tokens carry key B. Every single output token carries signal from one key or the other. p = 5.0e-56 for the story, 114 of 128 math answers flagged. The tradeoff: the dual-key detector must score against both keys and combine, which dilutes each key\u2019s individual signal, but the combined signal is much stronger than target-only.",
 
-  "There are two approaches. Target-only sets allow_target_only_watermarking=true on plain gumbel. Only target-side tokens \u2014 recovery and bonus \u2014 are watermarked. Accepted drafts carry no signal at all. So as your acceptance rate goes up, your watermark signal goes down. In the recipe measurements, target-only gave p = 2.1e-31 on a 200-token story versus 5.0e-56 for dual-key. That's 25 orders of magnitude weaker. For JSON with 91% acceptance rate, target-only would be nearly undetectable. Dual-key is the recommendation. But note the tradeoff: dual-key detection must score every token against both keys and combine scores, which dilutes the signal from each individual key.",
+"Step 1 of the dual-key protocol: the drafter samples each token with key A from its own probabilities. All three proposed tokens carry key-A signal. This is the drafter\u2019s watermarked distribution.",
 
-  "The acceptance rate numbers are definitive: 62% with watermark off, 62% with dual-key watermark on. The acceptance test is identical because it uses unwatermarked probabilities. The dual-key detector gets p = 5.0e-56; the plain gumbel detector on the same text gets p = 0.72 because it doesn't know about key A. This is why matching the detector to the algorithm matters. This implements SynthID-Text Supplementary Algorithm 6 \u2014 the formal proof that using distinct keys for draft and target preserves both the acceptance rate and the non-distortion property is in section K.13 of their supplementary materials.",
+"Step 2: the big model checks. And this is the critical insight \u2014 keep or reject uses the unwatermarked probabilities. The acceptance test is r < min(1, p(x)/q(x)) where p and q are both unwatermarked. The watermark does not enter the acceptance decision at all. That\u2019s why the acceptance rate is identical with or without watermarking. In this example, sat and on pass, but the gets rejected. This implements SynthID-Text Supplementary Algorithm 6.",
 
-  "Same speed-up, same quality, fully detectable. The two bars at 62% are the headline. You're not paying any acceptance rate penalty. The dual-key p-value of 5.0e-56 is very strong. But the plain detector at 0.72 is critical to understand: if you forget to use the dual-key detector class, you miss the watermark entirely. Your detection pipeline must know which algorithm generated the text. In the recipes repo, there are two separate detection servers for exactly this reason \u2014 one using GumbelWatermarkDetector, one using DualKeyGumbelWatermarkDetector with its alpha parameter.",
+"Step 3: the big model\u2019s own token uses key B. Whether it\u2019s a replacement for a rejected draft or a bonus token after all drafts are accepted, it\u2019s a keyed pick with key B. So the output of this round is: sat with key A, on with key A, my with key B. The dual-key detector knows both keys and scores each token against both, weighting by alpha. Under speculative decoding, the alpha config parameter is ignored \u2014 the protocol determines which key each token gets. The detector alpha should match the observed key-B share, which depends on acceptance rate.",
 
-  "This is a subtlety that trips people up in practice. The alpha parameter shows up in two places and means different things. In the watermark config, alpha defaults to 0.1 and controls the probability of using key B per token in non-speculative-decode mode \u2014 but under speculative decoding, this config alpha is completely ignored because the protocol determines which key each token gets. The detector's alpha weights the two key scores when combining them. For prose with ~34% acceptance and 3 draft tokens, key B's share is about 1/(1+3\u00d70.34) \u2248 0.49, so you'd use alpha \u2248 0.5. For JSON with ~91% acceptance, it's about 0.27. But the optimal alpha is key-dependent and template-dependent. The recipe repo tested 8 keys: alpha 0.2 detected more for keys 0, 7, and 42, but alpha 0.5 detected more for key 99. You have to compare on your own data with your own key.",
+"The headline numbers. Draft acceptance rate: 62% with watermark off, 62% with dual-key watermark on. Identical. The acceptance test never sees watermarked probabilities. Detect with the dual-key detector: p = 5.0e-56 \u2014 overwhelming. Use the plain gumbel detector on the same text: p = 0.72 \u2014 you miss it completely because that detector doesn\u2019t know about key A. This is why matching the detector to the algorithm matters. In the watermark_recipes repo, there are two separate detection servers for exactly this reason.",
 
-  "Part 3: Repeated contexts. This is the subtlety that separates a correct watermark implementation from a naive one. The Gumbel-max trick guarantees that each token is sampled from the correct marginal distribution. But that's single-token non-distortion. It does not guarantee that complete sequences are distortion-free. If a context repeats within a generation, the same PRF values are used, correlating token choices that ordinary sampling would make independently. In the worst case, a pattern like '1 + 1 + 1 + ...' enters a deterministic loop because context (1, +, 1, +) always pushes toward generating '1' again.",
+"Part 3: Repeated contexts. This is the subtlety that separates a correct implementation from a na\u00efve one. The distortion-free guarantee applies to individual tokens. But a fixed key plus a repeated context produces the same noise, correlating token choices across positions that should be independent. vLLM makes sure this does not snowball into degenerate behavior.",
 
-  "The vLLM blog showed this empirically with output-length survival curves on Qwen3.5-2B math prompts. Without deduplication, plain watermarking produces many outputs that hit the token cap \u2014 they get stuck in repetition. The fix is elegant: when vLLM sees that the current context_width tokens have already appeared earlier in the output, it uses ordinary sampling for that token instead of the watermarked draw. This preserves single-sequence non-distortion \u2014 the guarantee from section G.3 of the SynthID-Text supplementary materials. The detector independently skips repeated contexts too, so you're not losing evidence. And the overhead is negligible: at most 0.19% throughput reduction even on a 27B model. The search window defaults to 8,192 positions, which vLLM found covers virtually all practical repetition patterns.",
+"Without a fix, a repeated phrase gets the same push every time, feeding repetition. The context \u2018keeper lit the lamp\u2019 produces the same noise at every occurrence, pushing toward the same next token. Same context, same noise, pushed toward the same token again, loops. The vLLM blog showed this empirically with output-length survival curves on Qwen3.5-2B math prompts \u2014 without dedup, plain watermarking produces many outputs that hit the max token cap from repetition. The keeper-lit-the-lamp example from the deck illustrates the simplest case.",
 
-  "The numbers tell the story. Without watermarking, 17.4% of output tokens have a repeated 4-token context \u2014 that's the natural baseline. With watermarking but no deduplication, it jumps to 24.3% \u2014 the watermark is actively causing more repetition. With deduplication enabled by default, it drops back to 17.5% \u2014 statistically indistinguishable from the baseline. This matters a lot for code generation and structured output where short repeated patterns are common. Under speculative decoding, context deduplication also applies to draft tokens, and contexts within the drafted block count too. The speed-up is unchanged because the keep-or-reject test is unaffected.",
+"The fix is elegant. vLLM checks if the current context_width tokens already appeared earlier in the output. If they did, it uses ordinary sampling instead of the keyed draw. And here\u2019s the beauty: the detector independently deduplicates contexts too \u2014 it scores each unique context only once. So switching to plain sampling at repeated positions costs you zero evidence. The watermark \u2018stove\u2019 in the example is a plain pick at a repeated context, and the detector simply skips it. This preserves single-sequence non-distortion, from section G.3 of the SynthID-Text supplementary materials. Context dedup is on by default: deduplicate_contexts = \u2018single_turn\u2019. The performance cost is under 0.19% throughput on Qwen3.5-27B.",
 
-  "There are three deduplication modes and the choice matters. 'single_turn' is the default \u2014 it searches the tokens generated for the current request only. This is right for almost everything and gives single-turn non-distortion. 'all' additionally searches the prompt, which extends non-distortion across conversation turns. But it has real costs: the first context_width generated tokens use ordinary sampling because they match prompt context, and if the prompt resembles the answer \u2014 like a tool result the model extends \u2014 much of the answer may lose its watermark. It also has a performance cost because you're scanning potentially large prompt context at every step. Only use 'all' when multi-turn non-distortion is explicitly required. 'none' disables deduplication entirely and invites repetition loops \u2014 don't use it. The search window defaults to 8,192 positions, and values below 1,024 emit a warning because short windows can miss repetition patterns.",
+"The numbers tell the story. Without watermarking, 17.4% of output tokens have a context that already appeared \u2014 that\u2019s the natural baseline. With watermarking but no deduplication, it jumps to 24.3% \u2014 the watermark is actively creating more repetition by biasing toward the same tokens at repeated contexts. With deduplication on (the default), it drops back to 17.5% \u2014 statistically indistinguishable from the unwatermarked baseline. This was measured on Qwen3.5-0.8B across 128 GSM8K questions at temperature 1 with up to 1,024 tokens per answer.",
 
-  "Part 4: Production deployment. This is where the rubber meets the road for operations teams. Watermarking is on by default once configured and falls back with warnings when it cannot apply. The design philosophy is explicit: never silently produce unwatermarked output when the operator expects watermarked output.",
+"The same deduplication rule applies under speculative decoding. A draft, replacement, or bonus token at a repeated context gets a plain pick. Importantly, contexts inside the current drafted block count too \u2014 if the drafter\u2019s second token creates a context that already appeared, the third token is a plain pick even within the same draft batch. In this example, \u2018the\u2019 uses key A, but \u2018keeper\u2019 gets a plain pick because its context was already seen, and \u2018lit\u2019 goes back to key A. Keep or reject still uses the same unwatermarked probability test, so the speed-up is unchanged. The MTP measurements: 19.6% repeated contexts without dedup, 17.1% with, 17.6% unwatermarked.",
 
-  "Let me walk through the fallback matrix. Normal requests with temperature > 0 are watermarked \u2014 that's the happy path. Explicit opt-out with watermarking: false works but should be restricted to trusted callers. Greedy at temperature 0 can't be watermarked because Gumbel-max requires stochastic sampling \u2014 vLLM logs a warning once. Beam search can't be watermarked \u2014 same warning pattern. Trace replay replaces sampled tokens, so watermarking doesn't apply. Structured output and grammars are applied before the watermark, so the request is watermarked but the constrained tokens carry reduced evidence. For speculative decoding, only model-based methods are supported: MTP, EAGLE, EAGLE3, DSpark. ngram and separate draft_model are rejected at startup because they don't support the required probabilistic draft sampling and standard rejection sampling. DFlash support is in progress.",
+"Three deduplication settings and the choice matters. \u2018single_turn\u2019 is the default \u2014 searches the current output only. Good for almost everything, gives single-turn non-distortion. \u2018all\u2019 also searches the prompt, extending the guarantee across conversation turns. But the tradeoff is real: any generated tokens whose context matches something in the prompt won\u2019t be watermarked. If the prompt already contains the structure of the answer \u2014 like a tool result the model extends \u2014 very little of the answer may be watermarked. It also has performance cost from scanning potentially large prompt history. \u2018none\u2019 disables deduplication and invites repetition loops \u2014 don\u2019t use it. The search window defaults to 8,192 positions.",
 
-  "For production monitoring, vLLM exposes a Prometheus counter: vllm:watermark_requests_total with three status labels. 'watermarked' counts requests that were actually sampled with the watermark. 'skipped' counts requests that wanted the watermark but couldn't use it \u2014 like temperature=0 requests. 'not_watermarked' counts everything else: explicit opt-outs, beam search, pooling requests. The sum over all statuses equals vllm:request_success_total on the same instance, giving you a clean audit. On stability: golden tests store reference token picks and detector scores for every algorithm configuration. Any code change that would alter these values fails the CI pipeline. The PRF input mapping is versioned, meaning text watermarked with today's release will still be detectable by future releases.",
+"Part 4: In production. Once you set --watermark-config, watermarking is on by default for every request. The philosophy is to fall back loudly when it can\u2019t apply, not silently produce unwatermarked output.",
 
-  "Four things to get right in production. First, key management: the key is the crown jewel. Anyone who knows it can detect watermarked text, but they can also forge watermark-like patterns in their own text or strategically edit to strip it. Treat it like a signing key. Second, detection access control: scores and p-values expose per-token signal information. If you expose a public detection API, an adversary can query it repeatedly to reverse-engineer the watermark pattern on a given context. Keep it internal and rate-limited. Third, parameter matching: the detector must exactly match the generator's tokenizer, key, algorithm, context width, and PRF. If you rotate keys or serve multiple models, retain the full config history and test against all candidates with Bonferroni correction. Fourth, false-positive calibration: the theoretical FPR is the p-value threshold, but because a deployment uses one fixed key, repeated structures across documents can make the realized FPR key-dependent. Generate a few hundred unwatermarked outputs of your actual templates and measure the empirical false-positive rate with your deployed key before trusting is_watermarked for decisions.",
+"Let me walk through the fallback matrix exactly as defined. Normal requests with temperature > 0 are watermarked. Explicit opt-out with watermarking: false works but should be restricted. Greedy at temperature 0 logs a warning and proceeds without watermark. Beam search is not watermarked. Speculative decoding with ngram or a separate draft model is refused at startup \u2014 these methods don\u2019t support the probabilistic drafting and standard rejection sampling that watermarking requires. Plain gumbel with spec decode is also refused unless you set allow_target_only_watermarking. The supported draft methods are MTP, EAGLE, EAGLE3, and DSpark. PR #56801, currently in review, unifies the policy across all APIs.",
 
-  "Here are the key upstream references. The vLLM blog post from September 24, 2026, authored by Rialland from Mistral and Veitner and Ruiz from Red Hat, is the definitive practical overview. The RFC #53916 from August 2026 lays out the design rationale and why watermarking must integrate with final token sampling. PR #54053 is the initial implementation \u2014 Gumbel-max watermarking, detection, Philox PRF, GPU sampling integration, and the detection server example. PR #56122 adds dual-key Gumbel-max for speculative decoding and generation-time context deduplication. The academic foundations are Aaronson and Kirchner's 2023 original Gumbel-max idea, the SynthID-Text paper from Dathathri et al. 2024 for the dual-key protocol and non-distortion proofs, and Sander et al. 2026's TextSeal for localized watermarking.",
+"Stability guarantee. Text watermarked today stays detectable in future vLLM releases. Generation and detection are a contract that vLLM tests on every commit. Golden tests store reference token picks and detector scores for each algorithm configuration. If any code change would alter those reference values, the CI pipeline fails. The PRF input mapping is versioned, tracked in PR #56809. This means you can upgrade vLLM and still detect text generated with the previous version, because the detector\u2019s math produces identical results. The throughput impact is near zero: the vLLM blog measured -1.1% to +2.0% mean change across batch sizes 1-256 on Qwen3.5-27B with MTP-3 on H100.",
 
-  "Thank you. The documentation is at docs.vllm.ai under Features, and the watermark_recipes repo has four end-to-end recipes: basic generation, speculative decoding, detection, and structured data. The structured data recipe is particularly important for production \u2014 it shows why you need to calibrate false positives on your actual templates. I'm happy to take questions on any of the details we covered."
+"Four operational essentials. Key: keep the key secret. It\u2019s like a signing key \u2014 anyone who has it can detect, but they can also forge watermark-like patterns or strategically edit to strip the signal. Access: keep detection behind access control. Scores and p-values expose per-token signal information. An adversary with API access to a detector can probe it to reverse-engineer the watermark. Match: the detector must exactly match the generator\u2019s tokenizer, algorithm, key, and context width. If you rotate keys or serve multiple models, retain all candidate configs and test with Bonferroni correction. Measure: check false positives on your own unwatermarked traffic. The theoretical FPR is the p-value threshold, but a fixed key with repeated template structures can make the empirical FPR key-dependent. JSON and code templates are particularly prone to this \u2014 the structured-data recipe in watermark_recipes tested 200 keys on JSON and found some flagging up to 26% of unwatermarked outputs.",
+
+"Thank you. The documentation is at docs.vllm.ai under Features, Text watermarking. The RFC is #53916. The core implementation PRs are #54053 for Gumbel-max, #56122 for dual-key and context dedup, #56807 for spec-decode context dedup, #56809 for PRF versioning, and #56801 for the unified policy across all APIs. The watermark_recipes repo has four end-to-end recipes: basic generation, speculative decoding, detection, and structured data. Happy to take questions."
 ];
 </script>
 
 <script>
 (function(){
-  var slides=document.querySelectorAll('.slide');
-  var container=document.getElementById('slides');
-  var counter=document.getElementById('slide-counter');
-  var current=0;
-  var n=1;
-  slides.forEach(function(s){
-    var isEdge=s.classList.contains('slide-title')||s.classList.contains('slide-closing');
-    var fn=s.querySelector('.rh-fn');
-    if(fn&&!isEdge){fn.textContent=n++;}
-  });
-  var syncChannel=null;
-  try{syncChannel=new BroadcastChannel("presenter-sync")}catch(e){}
-  function goto(idx){
-    current=Math.max(0,Math.min(slides.length-1,idx));
-    container.style.transform='translateX(-'+current*1280+'px)';
-    counter.textContent=(current+1)+' / '+slides.length;
-    if(window.parent!==window)window.parent.postMessage({type:'slideChange',current:current,total:slides.length},'*');
-    if(syncChannel)syncChannel.postMessage({type:'navigate',index:current});
-  }
-  if(syncChannel){syncChannel.onmessage=function(e){if(e.data&&e.data.type==='navigate'){
-    current=Math.max(0,Math.min(slides.length-1,e.data.index));
-    container.style.transform='translateX(-'+current*1280+'px)';
-    counter.textContent=(current+1)+' / '+slides.length;
-  }};}
+  var slides=document.querySelectorAll('.slide');var container=document.getElementById('slides');var counter=document.getElementById('slide-counter');var current=0;var n=1;
+  slides.forEach(function(s){var isEdge=s.classList.contains('slide-title')||s.classList.contains('slide-closing');var fn=s.querySelector('.rh-fn');if(fn&&!isEdge){fn.textContent=n++;}});
+  var syncChannel=null;try{syncChannel=new BroadcastChannel("presenter-sync")}catch(e){}
+  function goto(idx){current=Math.max(0,Math.min(slides.length-1,idx));container.style.transform='translateX(-'+current*1280+'px)';counter.textContent=(current+1)+' / '+slides.length;if(window.parent!==window)window.parent.postMessage({type:'slideChange',current:current,total:slides.length},'*');if(syncChannel)syncChannel.postMessage({type:'navigate',index:current});}
+  if(syncChannel){syncChannel.onmessage=function(e){if(e.data&&e.data.type==='navigate'){current=Math.max(0,Math.min(slides.length-1,e.data.index));container.style.transform='translateX(-'+current*1280+'px)';counter.textContent=(current+1)+' / '+slides.length;}};}
   goto(0);
-  document.addEventListener('keydown',function(e){
-    if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();window.slideNav.goto(current+1)}
-    if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();window.slideNav.goto(current-1)}
-    if(e.key==='Home'){e.preventDefault();window.slideNav.goto(0)}
-    if(e.key==='End'){e.preventDefault();window.slideNav.goto(slides.length-1)}
-    if(e.key==='f'||e.key==='F'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen()}
-  });
-  var tx=0;
-  document.addEventListener('touchstart',function(e){tx=e.touches[0].clientX});
-  document.addEventListener('touchend',function(e){var dx=tx-e.changedTouches[0].clientX;if(Math.abs(dx)>50)window.slideNav.goto(current+(dx>0?1:-1))});
-  document.getElementById('viewport').addEventListener('click',function(e){
-    window.slideNav.goto(current+(e.clientX/window.innerWidth>0.5?1:-1));
-  });
-  window.printPDF=function(){window.print()};
-  window.slideNav={current:function(){return current},total:function(){return slides.length},goto:goto};
-  function scaleViewport(){
-    var vp=document.getElementById('viewport');
-    var scale=Math.min(window.innerWidth/1280,(window.innerHeight-48)/720,1);
-    vp.style.transform='scale('+scale+')';
-    vp.style.transformOrigin='top center';
-    vp.style.marginBottom=(-720*(1-scale))+'px';
-    document.body.style.paddingBottom='48px';
-  }
-  window.addEventListener('resize',scaleViewport);
-  scaleViewport();
+  document.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();window.slideNav.goto(current+1)}if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();window.slideNav.goto(current-1)}if(e.key==='Home'){e.preventDefault();window.slideNav.goto(0)}if(e.key==='End'){e.preventDefault();window.slideNav.goto(slides.length-1)}if(e.key==='f'||e.key==='F'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen()}});
+  var tx=0;document.addEventListener('touchstart',function(e){tx=e.touches[0].clientX});document.addEventListener('touchend',function(e){var dx=tx-e.changedTouches[0].clientX;if(Math.abs(dx)>50)window.slideNav.goto(current+(dx>0?1:-1))});
+  document.getElementById('viewport').addEventListener('click',function(e){window.slideNav.goto(current+(e.clientX/window.innerWidth>0.5?1:-1));});
+  window.printPDF=function(){window.print()};window.slideNav={current:function(){return current},total:function(){return slides.length},goto:goto};
+  function scaleViewport(){var vp=document.getElementById('viewport');var scale=Math.min(window.innerWidth/1280,(window.innerHeight-48)/720,1);vp.style.transform='scale('+scale+')';vp.style.transformOrigin='top center';vp.style.marginBottom=(-720*(1-scale))+'px';document.body.style.paddingBottom='48px';}
+  window.addEventListener('resize',scaleViewport);scaleViewport();
 })();
 </script>
 
 <script>
-(function(){
-  var presenterWin=null;
-  window.openPresenterView=function(){
-    var notes=window.SPEAKER_NOTES||[];
-    var titles=window.SLIDE_TITLES||[];
-    var total=window.slideNav?window.slideNav.total():1;
-    var cur=window.slideNav?window.slideNav.current():0;
-    presenterWin=window.open('','presenter','width=900,height=700');
-    if(!presenterWin){alert('Pop-up blocked');return}
-    var d=presenterWin.document;
-    d.open();
-    d.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Presenter View</title>');
-    d.write('<style>');
-    d.write('*{box-sizing:border-box;margin:0;padding:0}');
-    d.write('body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#1a1a1a;color:#e0e0e0;display:grid;grid-template-rows:auto 1fr auto;height:100vh;overflow:hidden}');
-    d.write('.pv-header{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:#111;border-bottom:1px solid #333;font-size:13px}');
-    d.write('.pv-header .pv-title{color:#EE0000;font-weight:700;font-size:14px}');
-    d.write('.pv-header .pv-timer{font-variant-numeric:tabular-nums;font-size:20px;font-weight:600;color:#fff}');
-    d.write('.pv-header .pv-clock{color:#888;font-size:13px}');
-    d.write('.pv-main{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px;overflow:hidden}');
-    d.write('.pv-slide-col{display:flex;flex-direction:column;gap:8px;min-height:0}');
-    d.write('.pv-slide-box{background:#212121;border:1px solid #333;border-radius:6px;padding:8px;flex:0 0 auto}');
-    d.write('.pv-slide-box h4{font-size:11px;color:#888;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}');
-    d.write('.pv-slide-title{font-size:13px;color:#fff;font-weight:600;margin-top:4px;line-height:1.3}');
-    d.write('.pv-notes-col{display:flex;flex-direction:column;min-height:0}');
-    d.write('.pv-notes-col h3{font-size:12px;color:#EE0000;text-transform:uppercase;letter-spacing:0.5px;padding-bottom:6px;border-bottom:1px solid #333;margin-bottom:8px;flex-shrink:0}');
-    d.write('.pv-notes{flex:1;overflow-y:auto;font-size:15px;line-height:1.6;color:#d2d2d2;white-space:pre-wrap;padding-right:8px}');
-    d.write('.pv-notes strong{color:#fff}');
-    d.write('.pv-footer{display:flex;align-items:center;justify-content:center;gap:12px;padding:8px 16px;background:#111;border-top:1px solid #333}');
-    d.write('.pv-btn{background:#333;color:#fff;border:1px solid #555;border-radius:4px;padding:6px 18px;font-size:13px;cursor:pointer;font-family:inherit}');
-    d.write('.pv-btn:hover{background:#444}');
-    d.write('.pv-counter{font-size:15px;font-weight:600;min-width:80px;text-align:center}');
-    d.write('.pv-notes::-webkit-scrollbar{width:6px}.pv-notes::-webkit-scrollbar-track{background:#1a1a1a}.pv-notes::-webkit-scrollbar-thumb{background:#444;border-radius:3px}');
-    d.write('</style></head><body>');
-    d.write('<div class="pv-header"><span class="pv-title">Presenter View</span><span class="pv-timer" id="pv-timer">00:00</span><span class="pv-clock" id="pv-clock"></span></div>');
-    d.write('<div class="pv-main">');
-    d.write('<div class="pv-slide-col">');
-    d.write('<div class="pv-slide-box"><h4>Current Slide</h4><div class="pv-slide-title" id="pv-cur-title"></div></div>');
-    d.write('<div class="pv-slide-box"><h4>Next Slide</h4><div class="pv-slide-title" id="pv-next-title"></div></div>');
-    d.write('</div>');
-    d.write('<div class="pv-notes-col"><h3>Speaker Notes</h3><div class="pv-notes" id="pv-notes"></div></div>');
-    d.write('</div>');
-    d.write('<div class="pv-footer"><button class="pv-btn" id="pv-prev">\u25C0 Prev</button><span class="pv-counter" id="pv-counter"></span><button class="pv-btn" id="pv-next">Next \u25B6</button></div>');
-    d.write('</body></html>');
-    d.close();
-    var pvNotes=notes.slice();var pvTitles=titles.slice();var pvTotal=total;var pvCurrent=cur;var startTime=Date.now();
-    var pvChannel=null;try{pvChannel=new BroadcastChannel("presenter-sync")}catch(e){}
-    function updatePV(idx){pvCurrent=idx;var dd=presenterWin.document;if(!dd||!dd.getElementById)return;dd.getElementById("pv-cur-title").textContent=(idx+1)+". "+(pvTitles[idx]||"");dd.getElementById("pv-next-title").textContent=idx+1<pvTotal?(idx+2)+". "+(pvTitles[idx+1]||""):"(End)";dd.getElementById("pv-notes").textContent=pvNotes[idx]||"(No notes for this slide)";dd.getElementById("pv-counter").textContent=(idx+1)+" / "+pvTotal;}
-    function pvNavigate(idx){idx=Math.max(0,Math.min(pvTotal-1,idx));updatePV(idx);if(pvChannel)pvChannel.postMessage({type:"navigate",index:idx});}
-    if(pvChannel){pvChannel.onmessage=function(e){if(e.data&&e.data.type==="navigate")updatePV(e.data.index);};}
-    presenterWin.document.getElementById("pv-prev").onclick=function(){pvNavigate(pvCurrent-1)};
-    presenterWin.document.getElementById("pv-next").onclick=function(){pvNavigate(pvCurrent+1)};
-    presenterWin.document.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key===" "){e.preventDefault();pvNavigate(pvCurrent+1)}if(e.key==="ArrowLeft"){e.preventDefault();pvNavigate(pvCurrent-1)}});
-    setInterval(function(){if(presenterWin.closed)return;var elapsed=Math.floor((Date.now()-startTime)/1000);var mm=String(Math.floor(elapsed/60)).padStart(2,"0");var ss=String(elapsed%60).padStart(2,"0");var dd=presenterWin.document;if(dd&&dd.getElementById){dd.getElementById("pv-timer").textContent=mm+":"+ss;dd.getElementById("pv-clock").textContent=new Date().toLocaleTimeString();}},1000);
-    updatePV(cur);
-  };
-})();
+(function(){var presenterWin=null;window.openPresenterView=function(){var notes=window.SPEAKER_NOTES||[];var titles=window.SLIDE_TITLES||[];var total=window.slideNav?window.slideNav.total():1;var cur=window.slideNav?window.slideNav.current():0;presenterWin=window.open('','presenter','width=900,height=700');if(!presenterWin){alert('Pop-up blocked');return}var d=presenterWin.document;d.open();d.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Presenter View</title><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#1a1a1a;color:#e0e0e0;display:grid;grid-template-rows:auto 1fr auto;height:100vh;overflow:hidden}.pv-header{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:#111;border-bottom:1px solid #333;font-size:13px}.pv-header .pv-title{color:#EE0000;font-weight:700;font-size:14px}.pv-header .pv-timer{font-variant-numeric:tabular-nums;font-size:20px;font-weight:600;color:#fff}.pv-header .pv-clock{color:#888;font-size:13px}.pv-main{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px;overflow:hidden}.pv-slide-col{display:flex;flex-direction:column;gap:8px;min-height:0}.pv-slide-box{background:#212121;border:1px solid #333;border-radius:6px;padding:8px;flex:0 0 auto}.pv-slide-box h4{font-size:11px;color:#888;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}.pv-slide-title{font-size:13px;color:#fff;font-weight:600;margin-top:4px;line-height:1.3}.pv-notes-col{display:flex;flex-direction:column;min-height:0}.pv-notes-col h3{font-size:12px;color:#EE0000;text-transform:uppercase;letter-spacing:0.5px;padding-bottom:6px;border-bottom:1px solid #333;margin-bottom:8px;flex-shrink:0}.pv-notes{flex:1;overflow-y:auto;font-size:15px;line-height:1.6;color:#d2d2d2;white-space:pre-wrap;padding-right:8px}.pv-notes strong{color:#fff}.pv-footer{display:flex;align-items:center;justify-content:center;gap:12px;padding:8px 16px;background:#111;border-top:1px solid #333}.pv-btn{background:#333;color:#fff;border:1px solid #555;border-radius:4px;padding:6px 18px;font-size:13px;cursor:pointer;font-family:inherit}.pv-btn:hover{background:#444}.pv-counter{font-size:15px;font-weight:600;min-width:80px;text-align:center}.pv-notes::-webkit-scrollbar{width:6px}.pv-notes::-webkit-scrollbar-track{background:#1a1a1a}.pv-notes::-webkit-scrollbar-thumb{background:#444;border-radius:3px}</style></head><body><div class="pv-header"><span class="pv-title">Presenter View</span><span class="pv-timer" id="pv-timer">00:00</span><span class="pv-clock" id="pv-clock"></span></div><div class="pv-main"><div class="pv-slide-col"><div class="pv-slide-box"><h4>Current Slide</h4><div class="pv-slide-title" id="pv-cur-title"></div></div><div class="pv-slide-box"><h4>Next Slide</h4><div class="pv-slide-title" id="pv-next-title"></div></div></div><div class="pv-notes-col"><h3>Speaker Notes</h3><div class="pv-notes" id="pv-notes"></div></div></div><div class="pv-footer"><button class="pv-btn" id="pv-prev">\u25C0 Prev</button><span class="pv-counter" id="pv-counter"></span><button class="pv-btn" id="pv-next">Next \u25B6</button></div></body></html>');d.close();
+var pvNotes=notes.slice();var pvTitles=titles.slice();var pvTotal=total;var pvCurrent=cur;var startTime=Date.now();var pvChannel=null;try{pvChannel=new BroadcastChannel("presenter-sync")}catch(e){}
+function updatePV(idx){pvCurrent=idx;var dd=presenterWin.document;if(!dd||!dd.getElementById)return;dd.getElementById("pv-cur-title").textContent=(idx+1)+". "+(pvTitles[idx]||"");dd.getElementById("pv-next-title").textContent=idx+1<pvTotal?(idx+2)+". "+(pvTitles[idx+1]||""):"(End)";dd.getElementById("pv-notes").textContent=pvNotes[idx]||"(No notes for this slide)";dd.getElementById("pv-counter").textContent=(idx+1)+" / "+pvTotal;}
+function pvNavigate(idx){idx=Math.max(0,Math.min(pvTotal-1,idx));updatePV(idx);if(pvChannel)pvChannel.postMessage({type:"navigate",index:idx});}
+if(pvChannel){pvChannel.onmessage=function(e){if(e.data&&e.data.type==="navigate")updatePV(e.data.index);};}
+presenterWin.document.getElementById("pv-prev").onclick=function(){pvNavigate(pvCurrent-1)};presenterWin.document.getElementById("pv-next").onclick=function(){pvNavigate(pvCurrent+1)};
+presenterWin.document.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key===" "){e.preventDefault();pvNavigate(pvCurrent+1)}if(e.key==="ArrowLeft"){e.preventDefault();pvNavigate(pvCurrent-1)}});
+setInterval(function(){if(presenterWin.closed)return;var elapsed=Math.floor((Date.now()-startTime)/1000);var mm=String(Math.floor(elapsed/60)).padStart(2,"0");var ss=String(elapsed%60).padStart(2,"0");var dd=presenterWin.document;if(dd&&dd.getElementById){dd.getElementById("pv-timer").textContent=mm+":"+ss;dd.getElementById("pv-clock").textContent=new Date().toLocaleTimeString();}},1000);
+updatePV(cur);};})();
 </script>
-
 </body>
 </html>
