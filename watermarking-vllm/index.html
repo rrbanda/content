@@ -1041,12 +1041,20 @@ window.SPEAKER_NOTES=[
     var fn=s.querySelector('.rh-fn');
     if(fn&&!isEdge){fn.textContent=n++;}
   });
+  var syncChannel=null;
+  try{syncChannel=new BroadcastChannel("presenter-sync")}catch(e){}
   function goto(idx){
     current=Math.max(0,Math.min(slides.length-1,idx));
     container.style.transform='translateX(-'+current*1280+'px)';
     counter.textContent=(current+1)+' / '+slides.length;
     if(window.parent!==window)window.parent.postMessage({type:'slideChange',current:current,total:slides.length},'*');
+    if(syncChannel)syncChannel.postMessage({type:'navigate',index:current});
   }
+  if(syncChannel){syncChannel.onmessage=function(e){if(e.data&&e.data.type==='navigate'){
+    current=Math.max(0,Math.min(slides.length-1,e.data.index));
+    container.style.transform='translateX(-'+current*1280+'px)';
+    counter.textContent=(current+1)+' / '+slides.length;
+  }};}
   goto(0);
   document.addEventListener('keydown',function(e){
     if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();window.slideNav.goto(current+1)}
