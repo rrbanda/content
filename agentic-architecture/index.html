@@ -350,151 +350,124 @@ footer .sep{color:var(--border)}
 <section class="section active" id="blueprint">
   <div class="section-intro"><span><strong>Control &amp; Execution Planes</strong> — Three bands (control, execution, platform) with the MCP Gateway as the authorization checkpoint. Every box is a role; click any <em>↗</em> box for a step-by-step technical flow.</span></div>
   <div class="diagram-wrap">
-    <svg viewBox="-2 -8 1104 530" overflow="visible" width="100%" style="min-width:900px" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="-2 -8 1104 420" overflow="visible" width="100%" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <marker id="a1" markerWidth="4" markerHeight="3" refX="4" refY="1.5" orient="auto"><polygon points="0 0,4 1.5,0 3" fill="var(--t3)"/></marker>
         <marker id="a1b" markerWidth="4" markerHeight="3" refX="4" refY="1.5" orient="auto"><polygon points="0 0,4 1.5,0 3" fill="var(--ss)"/></marker>
         <marker id="a1c" markerWidth="4" markerHeight="3" refX="4" refY="1.5" orient="auto"><polygon points="0 0,4 1.5,0 3" fill="var(--is)"/></marker>
       </defs>
 
-      <!-- ═══ ZONE BOUNDARIES (gradient fills + dashed) ═══ -->
-      <!-- Zone 1: Agentic Stack -->
-      <rect x="10" y="0" width="482" height="210" rx="10" fill="var(--sc)" fill-opacity=".08" stroke="var(--ss)" stroke-width="1" stroke-dasharray="6 4" opacity=".5"/>
+      <!-- ═══ ZONE BOUNDARIES ═══ -->
+      <rect x="10" y="0" width="482" height="150" rx="10" fill="var(--sc)" fill-opacity=".08" stroke="var(--ss)" stroke-width="1" stroke-dasharray="6 4" opacity=".5"/>
       <text x="16" y="-4" fill="var(--ss)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" opacity=".6">SECURE AGENT SANDBOX LIFECYCLE</text>
 
-      <!-- Zone 2: Tool Path -->
-      <rect x="590" y="120" width="492" height="90" rx="10" fill="var(--sc)" fill-opacity=".06" stroke="var(--ss)" stroke-width="1" stroke-dasharray="6 4" opacity=".5"/>
-      <text x="596" y="116" fill="var(--ss)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" opacity=".6">TOOL EXECUTION</text>
+      <rect x="590" y="80" width="492" height="74" rx="10" fill="var(--sc)" fill-opacity=".06" stroke="var(--ss)" stroke-width="1" stroke-dasharray="6 4" opacity=".5"/>
+      <text x="596" y="76" fill="var(--ss)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" opacity=".6">TOOL EXECUTION</text>
 
-      <!-- Zone 3: Inference Path -->
-      <rect x="10" y="216" width="1074" height="180" rx="10" fill="var(--ic)" fill-opacity=".06" stroke="var(--is)" stroke-width="1" stroke-dasharray="6 4" opacity=".5"/>
-      <text x="1074" y="213" fill="var(--is)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" opacity=".6" text-anchor="end">INFERENCE ROUTING</text>
+      <rect x="10" y="160" width="1074" height="146" rx="10" fill="var(--ic)" fill-opacity=".06" stroke="var(--is)" stroke-width="1" stroke-dasharray="6 4" opacity=".5"/>
+      <text x="1074" y="157" fill="var(--is)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" opacity=".6" text-anchor="end">INFERENCE ROUTING</text>
 
       <!-- ═══ AGENTIC STACK (left) ═══ -->
-      <!-- Gateway: top of diagram — the entry point per official OpenShell docs -->
-      <g class="box" data-flow="F03"><rect x="20" y="6" width="310" height="31" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
-        <text x="171" y="20" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">OpenShell Gateway</text>
-        <text x="171" y="32" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">control plane — writes Sandbox CR</text></g>
-      <g class="box" data-flow="F05"><rect x="340" y="6" width="136" height="31" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
-        <text x="408" y="20" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Workload Identity</text>
-        <text x="408" y="32" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">SPIFFE / SPIRE</text></g>
-      <line x1="326" y1="22" x2="340" y2="22" stroke="var(--t3)" stroke-width="1" stroke-dasharray="3 2"/>
+      <g class="box" data-flow="F03"><rect x="20" y="6" width="310" height="26" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
+        <text x="171" y="17" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">OpenShell Gateway</text>
+        <text x="171" y="28" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">control plane — writes Sandbox CR</text></g>
+      <g class="box" data-flow="F05"><rect x="340" y="6" width="136" height="26" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
+        <text x="408" y="17" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Workload Identity</text>
+        <text x="408" y="28" text-anchor="middle" fill="var(--t2)" font-size="7.5" font-family="system-ui,sans-serif">SPIFFE / SPIRE</text></g>
+      <line x1="326" y1="19" x2="340" y2="19" stroke="var(--t3)" stroke-width="1" stroke-dasharray="3 2"/>
 
-      <!-- Arrow: Gateway→Operator -->
-      <line x1="171" y1="37" x2="171" y2="53" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
+      <line x1="171" y1="32" x2="171" y2="42" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
 
-      <!-- Operator -->
-      <g class="box" data-flow="F03"><rect x="20" y="58" width="460" height="28" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
-        <text x="246" y="76" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Sandbox Operator — reconciles CR → one pod</text></g>
+      <g class="box" data-flow="F03"><rect x="20" y="44" width="460" height="26" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1"/>
+        <text x="246" y="60" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Agent Sandbox Operator — reconciles CR → one pod</text></g>
 
-      <!-- Arrow: Operator→Runtime -->
-      <line x1="246" y1="86" x2="246" y2="102" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
+      <line x1="246" y1="70" x2="246" y2="80" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
 
       <!-- OPENSHELL RUNTIME (DATA PLANE) -->
-      <rect x="20" y="108" width="460" height="94" rx="6" fill="none" stroke="var(--es)" stroke-width="1" stroke-dasharray="5 3"/>
-      <text x="26" y="119" fill="var(--es)" font-size="7" font-weight="700" font-family="system-ui,sans-serif" letter-spacing=".5">OPENSHELL RUNTIME (DATA PLANE)</text>
+      <rect x="20" y="82" width="460" height="62" rx="6" fill="none" stroke="var(--es)" stroke-width="1" stroke-dasharray="5 3"/>
+      <text x="26" y="92" fill="var(--es)" font-size="7" font-weight="700" font-family="system-ui,sans-serif" letter-spacing=".5">OPENSHELL RUNTIME (DATA PLANE)</text>
 
-      <!-- Supervisor: TRUSTED -->
-      <g class="box" data-flow="F04"><rect x="26" y="125" width="210" height="40" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/>
-        <text x="131" y="138" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Supervisor</text>
-        <text x="131" y="148" text-anchor="middle" fill="var(--ss)" font-size="6.5" font-weight="700" font-family="system-ui,sans-serif" letter-spacing=".3">GOVERNS THE AGENT</text>
-        <text x="131" y="158" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">policy · credentials · DNS · proxy</text></g>
+      <g class="box" data-flow="F04"><rect x="26" y="96" width="210" height="26" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/>
+        <text x="131" y="106" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Supervisor</text>
+        <text x="131" y="114" text-anchor="middle" fill="var(--ss)" font-size="6.5" font-weight="700" font-family="system-ui,sans-serif" letter-spacing=".3">GOVERNS THE AGENT</text>
+        <text x="131" y="120" text-anchor="middle" fill="var(--t2)" font-size="6" font-family="system-ui,sans-serif">policy · credentials · DNS · proxy</text></g>
 
-      <!-- MEDIATED CHANNEL -->
-      <line x1="236" y1="145" x2="262" y2="145" stroke="var(--es)" stroke-width="1.5" stroke-linecap="round"/>
-      <text x="249" y="130" fill="var(--es)" font-size="5.5" font-weight="600" font-family="system-ui,sans-serif" text-anchor="middle">mediated</text>
-      <text x="249" y="135" fill="var(--es)" font-size="5.5" font-weight="600" font-family="system-ui,sans-serif" text-anchor="middle">channel</text>
+      <line x1="236" y1="109" x2="262" y2="109" stroke="var(--es)" stroke-width="1.5" stroke-linecap="round"/>
+      <text x="249" y="100" fill="var(--es)" font-size="5.5" font-weight="600" font-family="system-ui,sans-serif" text-anchor="middle">mediated</text>
+      <text x="249" y="105" fill="var(--es)" font-size="5.5" font-weight="600" font-family="system-ui,sans-serif" text-anchor="middle">channel</text>
 
-      <!-- SANDBOX · NETWORK ISOLATED -->
-      <rect x="262" y="125" width="210" height="52" rx="5" fill="none" stroke="var(--es)" stroke-width="1.5" stroke-dasharray="4 2"/>
-      <text x="268" y="134" fill="var(--es)" font-size="6" font-weight="700" font-family="system-ui,sans-serif" letter-spacing=".3">SANDBOX · NETWORK ISOLATED</text>
+      <rect x="262" y="96" width="210" height="38" rx="5" fill="none" stroke="var(--es)" stroke-width="1.5" stroke-dasharray="4 2"/>
+      <text x="268" y="104" fill="var(--es)" font-size="6" font-weight="700" font-family="system-ui,sans-serif" letter-spacing=".3">SANDBOX · NETWORK ISOLATED</text>
 
-      <!-- Agent -->
-      <g class="box" data-flow="F09"><rect x="268" y="139" width="198" height="33" rx="4" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
-        <text x="367" y="151" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="700" font-family="system-ui,sans-serif">Agent</text>
-        <text x="367" y="162" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">untrusted workload · loads skills</text></g>
+      <g class="box" data-flow="F09"><rect x="268" y="107" width="198" height="26" rx="4" fill="var(--ec)" stroke="var(--es)" stroke-width="1"/>
+        <text x="367" y="118" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="700" font-family="system-ui,sans-serif">Agent</text>
+        <text x="367" y="129" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">untrusted workload · loads skills</text></g>
 
-      <!-- Deny all egress rule -->
-      <text x="367" y="186" text-anchor="middle" fill="var(--t3)" font-size="6" font-style="italic" font-family="system-ui,sans-serif">deny all egress except to the supervisor</text>
-      <!-- Runtime bottom = 202 -->
-
-      <!-- Runtime bottom = 286 -->
+      <text x="367" y="148" text-anchor="middle" fill="var(--t3)" font-size="6" font-style="italic" font-family="system-ui,sans-serif">deny all egress except to the supervisor</text>
 
       <!-- ═══ TOOL PATH (right) ═══ -->
-      <!-- Arrow: Supervisor → MCP Gateway -->
-      <line x1="480" y1="145" x2="594" y2="145" stroke="var(--ss)" stroke-width="1.5" stroke-linecap="round" marker-end="url(#a1b)"/>
-      <text x="537" y="139" fill="var(--ss)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" text-anchor="middle">tool calls →</text>
+      <line x1="480" y1="109" x2="594" y2="109" stroke="var(--ss)" stroke-width="1.5" stroke-linecap="round" marker-end="url(#a1b)"/>
+      <text x="537" y="103" fill="var(--ss)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" text-anchor="middle">tool calls →</text>
 
-      <!-- MCP Gateway -->
-      <g class="box" data-flow="F02"><rect x="600" y="130" width="480" height="30" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/>
-        <text x="840" y="149" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">MCP Gateway</text></g>
+      <g class="box" data-flow="F02"><rect x="600" y="96" width="480" height="26" rx="5" fill="var(--sc)" stroke="var(--ss)" stroke-width="1.2"/>
+        <text x="840" y="113" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">MCP Gateway</text></g>
 
-      <!-- Arrows: MCP GW→sub-boxes -->
-      <line x1="720" y1="160" x2="720" y2="174" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
-      <line x1="962" y1="160" x2="962" y2="174" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
+      <line x1="720" y1="122" x2="720" y2="130" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
+      <line x1="962" y1="122" x2="962" y2="130" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
 
-      <!-- Tool servers -->
-      <g class="box"><rect x="600" y="179" width="240" height="24" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="720" y="195" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">MCP tool servers</text></g>
-      <g class="box"><rect x="844" y="179" width="236" height="24" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="962" y="195" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Service backends</text></g>
+      <g class="box"><rect x="600" y="132" width="240" height="26" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="720" y="149" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">MCP tool servers</text></g>
+      <g class="box"><rect x="844" y="132" width="236" height="26" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="962" y="149" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Service backends</text></g>
 
-      <!-- ═══ INFERENCE PATH (bottom) ═══ -->
-      <!-- Arrow: Runtime→AI GW -->
-      <line x1="131" y1="202" x2="131" y2="220" stroke="var(--is)" stroke-width="1.5" stroke-linecap="round" marker-end="url(#a1c)"/>
-      <text x="143" y="214" fill="var(--is)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" letter-spacing=".3">POLICY-APPROVED EGRESS ↓</text>
+      <!-- ═══ INFERENCE PATH ═══ -->
+      <line x1="131" y1="144" x2="131" y2="162" stroke="var(--is)" stroke-width="1.5" stroke-linecap="round" marker-end="url(#a1c)"/>
+      <text x="143" y="156" fill="var(--is)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" letter-spacing=".3">POLICY-APPROVED EGRESS ↓</text>
 
-      <!-- AI Gateway -->
-      <g class="box" data-flow="F01"><rect x="20" y="226" width="1060" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
-        <text x="550" y="243" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">MaaS Gateway — Kuadrant · Authorino · Limitador (AI Gateway / Praxis planned)</text></g>
+      <g class="box" data-flow="F01"><rect x="20" y="166" width="1060" height="26" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
+        <text x="550" y="183" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">MaaS Gateway — Kuadrant · Authorino · Limitador (AI Gateway / Praxis planned)</text></g>
 
-      <!-- Arrow: AI GW→Guardrails -->
-      <line x1="550" y1="254" x2="550" y2="270" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
+      <line x1="550" y1="192" x2="550" y2="200" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
 
-      <!-- Guardrails: y=386 -->
-      <g class="box" data-flow="F07"><rect x="20" y="275" width="1060" height="23" rx="5" fill="var(--pc)" stroke="var(--ps)" stroke-width="1"/>
-        <text x="550" y="290" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Guardrails — input screening ↓ · output screening ↑</text></g>
+      <g class="box" data-flow="F07"><rect x="20" y="202" width="1060" height="26" rx="5" fill="var(--pc)" stroke="var(--ps)" stroke-width="1"/>
+        <text x="550" y="219" text-anchor="middle" fill="var(--t1)" font-size="9.5" font-weight="600" font-family="system-ui,sans-serif">Guardrails — input screening ↓ · output screening ↑</text></g>
 
-      <!-- Arrows: Guardrails splits into two branches -->
-      <line x1="270" y1="297" x2="270" y2="313" stroke="var(--is)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1c)"/>
-      <text x="120" y="310" fill="var(--is)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">self-hosted path</text>
-      <line x1="900" y1="297" x2="900" y2="313" stroke="var(--ns)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1)"/>
-      <text x="810" y="310" fill="var(--ns)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">external path</text>
+      <line x1="270" y1="228" x2="270" y2="240" stroke="var(--is)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1c)"/>
+      <text x="120" y="238" fill="var(--is)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">self-hosted path</text>
+      <line x1="900" y1="228" x2="900" y2="240" stroke="var(--ns)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1)"/>
+      <text x="810" y="238" fill="var(--ns)" font-size="7.5" font-weight="600" font-family="system-ui,sans-serif">external path</text>
 
-      <!-- 3 EQUAL-WIDTH tier boxes: y=436 -->
-      <g class="box" data-flow="F01a"><rect x="20" y="318" width="346" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
-        <text x="193" y="331" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Semantic Router (Tier 2)</text>
-        <text x="193" y="341" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">vLLM model selection</text></g>
-      <line x1="366" y1="332" x2="374" y2="332" stroke="var(--is)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1c)"/>
-      <g class="box" data-flow="F01b"><rect x="377" y="318" width="346" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
-        <text x="550" y="331" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">llm-d EPP (Tier 3)</text>
-        <text x="550" y="341" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">replica selection · KV cache affinity</text></g>
-      <g class="box" data-flow="F01c"><rect x="734" y="318" width="346" height="28" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="907" y="331" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">External LLM Providers</text>
-        <text x="907" y="341" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">Bedrock · Azure · Vertex AI · body-based routing</text></g>
+      <g class="box" data-flow="F01a"><rect x="20" y="244" width="346" height="26" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
+        <text x="193" y="256" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">Semantic Router (Tier 2)</text>
+        <text x="193" y="266" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">vLLM model selection</text></g>
+      <line x1="366" y1="257" x2="374" y2="257" stroke="var(--is)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1c)"/>
+      <g class="box" data-flow="F01b"><rect x="377" y="244" width="346" height="26" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
+        <text x="550" y="256" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">llm-d EPP (Tier 3)</text>
+        <text x="550" y="266" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">replica selection · KV cache affinity</text></g>
+      <g class="box" data-flow="F01c"><rect x="734" y="244" width="346" height="26" rx="5" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="907" y="256" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="600" font-family="system-ui,sans-serif">External LLM Providers</text>
+        <text x="907" y="266" text-anchor="middle" fill="var(--t2)" font-size="7" font-family="system-ui,sans-serif">Bedrock · Azure · Vertex AI · body-based routing</text></g>
 
-      <!-- Arrow: Tier 3 → Workers -->
-      <line x1="550" y1="346" x2="550" y2="358" stroke="var(--is)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1c)"/>
+      <line x1="550" y1="270" x2="550" y2="280" stroke="var(--is)" stroke-width="1" stroke-linecap="round" marker-end="url(#a1c)"/>
 
-      <!-- Model Workers: y=488 -->
-      <g class="box" data-flow="F01d"><rect x="20" y="364" width="1060" height="24" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
-        <text x="550" y="379" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Model Workers (vLLM · llm-d)</text></g>
+      <g class="box" data-flow="F01d"><rect x="20" y="282" width="1060" height="26" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
+        <text x="550" y="299" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Model Workers (vLLM · llm-d)</text></g>
 
       <!-- ═══ PLATFORM BARS ═══ -->
-      <g class="box" data-flow="F11"><rect x="20" y="397" width="1060" height="14" rx="3" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
-        <text x="550" y="406" text-anchor="middle" fill="var(--t1)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Audit &amp; Tracing — MLflow · OTEL · OCSF v1.8.0</text></g>
+      <g class="box" data-flow="F11"><rect x="20" y="316" width="1060" height="22" rx="4" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
+        <text x="550" y="330" text-anchor="middle" fill="var(--t1)" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Audit &amp; Tracing — MLflow · OTEL · OCSF v1.8.0</text></g>
 
-      <rect x="20" y="416" width="1060" height="26" rx="4" fill="var(--band)" stroke="var(--ns)" stroke-width="1"/>
-      <text x="550" y="427" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">Kubernetes / OpenShift</text>
-      <text x="550" y="438" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">agent-sandbox · kata + confidential containers · accelerator operators · Gateway API · NetworkPolicy</text>
+      <rect x="20" y="340" width="1060" height="22" rx="4" fill="var(--band)" stroke="var(--ns)" stroke-width="1"/>
+      <text x="550" y="349" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">Kubernetes / OpenShift</text>
+      <text x="550" y="358" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">agent-sandbox · kata + confidential containers · accelerator operators · Gateway API · NetworkPolicy</text>
 
-      <rect x="20" y="445" width="1060" height="26" rx="4" fill="var(--band)" stroke="var(--ns)" stroke-width="1"/>
-      <text x="550" y="457" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">Linux kernel</text>
-      <text x="550" y="467" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">SELinux / AppArmor · seccomp · Landlock · netns · sandbox enforcement</text>
+      <rect x="20" y="364" width="1060" height="22" rx="4" fill="var(--band)" stroke="var(--ns)" stroke-width="1"/>
+      <text x="550" y="373" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">Linux kernel</text>
+      <text x="550" y="382" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">SELinux / AppArmor · seccomp · Landlock · netns · sandbox enforcement</text>
 
-      <rect x="20" y="475" width="1060" height="26" rx="4" fill="var(--band)" stroke="var(--ns)" stroke-width="1"/>
-      <text x="550" y="486" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">Accelerated infrastructure: silicon of choice</text>
-      <text x="550" y="497" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">NVIDIA CUDA · AMD ROCm · Intel Gaudi · Google TPU · CPU</text>
+      <rect x="20" y="388" width="1060" height="22" rx="4" fill="var(--band)" stroke="var(--ns)" stroke-width="1"/>
+      <text x="550" y="397" text-anchor="middle" fill="var(--t1)" font-size="9" font-weight="700" font-family="system-ui,sans-serif">Accelerated infrastructure: silicon of choice</text>
+      <text x="550" y="406" text-anchor="middle" fill="var(--t3)" font-size="7" font-family="system-ui,sans-serif">NVIDIA CUDA · AMD ROCm · Intel Gaudi · Google TPU · CPU</text>
     </svg>
   </div>
 </section>
