@@ -1094,7 +1094,7 @@ F01a:{t:"Semantic Router: vLLM model selection (Tier 2)",src:"Red Hat Developer:
 steps:[
 {t:"Inference request arrives from MaaS Gateway",c:"cyan"},
 {t:"Envoy ExtProc proxy extracts user prompt and converts",c:"green"},
-{t:"Embeddings compared against configured signal vectors:",c:"green"},
+{t:"Embeddings compared against configured signal vectors: each vector represents one model's strength profile (e.g. code, summarization, reasoning)",c:"green"},
 {t:"Decision engine selects the best on-cluster vLLM model",c:"cyan"},
 {t:"Request forwarded to the selected model's llm-d EPP",c:"blue"}
 ],m:[
@@ -1143,7 +1143,7 @@ steps:[
 {t:"Authorino validates the caller's SVID token claims",c:"blue"},
 {t:"Gateway matches the MCP tool name to the correct MCP",c:"neutral"},
 {t:"MCP server invokes its service backend (query engine, API, or compute job)",c:"neutral"},
-{t:"Response returns: backend → MCP server → Gateway →",c:"green"},
+{t:"Response returns: backend → MCP server → Gateway → supervisor → agent. Full round-trip traced by OTEL",c:"green"},
 {t:"OCSF events emitted for every allow AND every deny",c:"neutral"}
 ]},
 
@@ -1176,9 +1176,9 @@ steps:[
 {t:"Agent sends HTTP request containing the placeholder",c:"amber"},
 {t:"Two independent authorization boundaries must BOTH pass",c:"green"},
 {t:"If both pass: proxy resolves the placeholder to the real credential at egress — agent never sees it",c:"green"},
-{t:"Request leaves sandbox with real credential injected —",c:"green"},
+{t:"Request leaves sandbox with real credential injected — the agent process never sees the plaintext secret at any point",c:"green"},
 {t:"If either check fails: request blocked. Unknown credentials and unauthorized endpoints are denied",c:"pink"},
-{t:"Detaching the provider revokes credential access:",c:"blue"}
+{t:"Detaching the provider revokes credential access: `openshell sandbox update --detach-provider` removes the binding and all associated placeholders",c:"blue"}
 ]},
 
 F05:{t:"SPIFFE workload identity lifecycle",src:"Blog §Workload identity; Agentic deep dive slide 24",
@@ -1273,12 +1273,12 @@ steps:[
 {t:"Progressive disclosure: only a compact skills list is included in the initial prompt, not full content",c:"amber"},
 {t:"Skills filtered at load time — only eligible skills",c:"amber"},
 {t:"When a task matches, the agent loads the full skill",c:"cyan"},
-{t:"Skill instructions guide the agent's reasoning: WHAT",c:"cyan"},
-{t:"Agent selects a tool call based on skill logic →",c:"green"},
-{t:"Tool result returned — skill instructions guide what",c:"amber"},
-{t:"Agent can CREATE and UPDATE skills from experience —",c:"green"},
+{t:"Skill instructions guide the agent's reasoning: WHAT tools to use, in what order, and with what parameters",c:"cyan"},
+{t:"Agent selects a tool call based on skill logic → MCP Gateway enforces claims and routes to the correct backend",c:"green"},
+{t:"Tool result returned — skill instructions guide what the agent does next: continue, branch, or finalize",c:"amber"},
+{t:"Agent can CREATE and UPDATE skills from experience — learned patterns are persisted as new skill files for future tasks",c:"green"},
 {t:"Skill bundles group multiple skills under one command",c:"neutral"},
-{t:"All skill-driven actions traced in MLflow — which",c:"purple"}
+{t:"All skill-driven actions traced in MLflow — which skill, which tool, latency, cost, and outcome are recorded per step",c:"purple"}
 ],m:[
 {v:"3 levels",l:"Progressive disclosure (list → body → refs)"},
 {v:"3 nouns",l:"Skill → MCP server → backend"},
