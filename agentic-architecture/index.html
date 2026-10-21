@@ -139,10 +139,6 @@ html.presentation .section{max-width:100%;padding:calc(4px * var(--s)) 28px calc
 .section.active{display:block;animation:slideIn .35s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.section-intro{display:flex;align-items:center;gap:calc(10px * var(--s));padding:calc(8px * var(--s)) calc(14px * var(--s));
-  margin-bottom:calc(10px * var(--s));background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);
-  backdrop-filter:blur(8px);font-size:calc(.8rem * var(--s));color:var(--t2);line-height:1.5}
-.section-intro strong{color:var(--t1);font-weight:600}
 .section h2{font-size:calc(1.1rem * var(--s));font-weight:600;margin-bottom:calc(4px * var(--s))}
 .section .desc{display:none}
 /* Tab tooltip on hover */
@@ -311,7 +307,7 @@ footer .sep{color:var(--border)}
 .kbd{display:inline-block;padding:1px 5px;border-radius:3px;border:1px solid var(--border);background:var(--raised);
   font-size:calc(.65rem * var(--s));color:var(--t3);font-family:system-ui,sans-serif;line-height:1.5;vertical-align:middle}
 @media(max-width:768px){.tabs{flex-wrap:wrap}.tab{font-size:12px;padding:6px 14px}.hero h1{font-size:1.3rem}
-  .tab .tab-num{display:none}.section-intro{flex-direction:column;text-align:center}}
+  .tab .tab-num{display:none}}
 </style>
 </head>
 <body>
@@ -347,7 +343,7 @@ footer .sep{color:var(--border)}
 
 <!-- ═══════════ FULL BLUEPRINT ═══════════ -->
 <section class="section active" id="blueprint">
-  <div class="section-intro"><span><strong>Control &amp; Execution Planes</strong> — Three bands (control, execution, platform) with the MCP Gateway as the authorization checkpoint. Every box is a role; click any <em>↗</em> box for a step-by-step technical flow.</span></div>
+
   <div class="diagram-wrap">
     <svg viewBox="-2 -8 1104 420" overflow="visible" width="100%" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -473,7 +469,7 @@ footer .sep{color:var(--border)}
 
 <!-- ═══════════ SECURITY RINGS ═══════════ -->
 <section class="section" id="security">
-  <div class="section-intro"><span><strong>Isolation Rings &amp; Enforcement</strong> — Four nested defense-in-depth boundaries. Each ring assumes the one inside it has already been compromised. The supervisor is in its <em>own</em> pod — never inside the sandbox.</span></div>
+
   <div class="diagram-wrap">
     <svg viewBox="-2 -2 924 440" overflow="visible" width="100%" style="min-width:700px" xmlns="http://www.w3.org/2000/svg">
       <!-- 4 NESTED RINGS per Ann Marie: Agent → Sandbox Pod → Supervisor Pod → Hardware/VM -->
@@ -566,7 +562,7 @@ footer .sep{color:var(--border)}
 
 <!-- ═══════════ INFERENCE & SKILLS ═══════════ -->
 <section class="section" id="inference">
-  <div class="section-intro"><span><strong>Inference Routing &amp; Tool Governance</strong> — Three routing tiers (security → cost → efficiency) owned by different teams. Three nouns (skill, MCP server, service backend) with separate enforcement at each hop.</span></div>
+
   <div class="diagram-wrap">
     <svg viewBox="-2 -2 924 330" overflow="visible" width="100%" style="min-width:700px" xmlns="http://www.w3.org/2000/svg">
       <defs><marker id="a3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--t3)"/></marker></defs>
@@ -660,7 +656,7 @@ footer .sep{color:var(--border)}
 
 <!-- ═══════════ PIPELINE PROFILING ═══════════ -->
 <section class="section" id="profiling">
-  <div class="section-intro"><span><strong>Pipeline Profiling</strong> — OTEL-traced pipeline decomposition from PSAP benchmarks. Qwen3-8B-FP8 on 8×A100 with OpenClaw + OpenShell. Sandbox adds 2.2% of E2E. GPU tensor cores at only 35% — the harness is the bottleneck, not the model.</span></div>
+
 
   <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px">
     <div style="background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--glass-border);border-top:3px solid var(--green);border-radius:var(--radius);padding:12px 16px;flex:1;min-width:140px;transition:all .3s" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.2)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
@@ -825,7 +821,7 @@ footer .sep{color:var(--border)}
 
 <!-- ═══════════ AGENT PROVISIONING ═══════════ -->
 <section class="section" id="provisioning">
-  <div class="section-intro"><span><strong>Agent Provisioning Journey</strong> — What happens when you run <code style="font-size:inherit;color:var(--cyan)">openshell sandbox create</code>. Nine steps from CLI to Ready state. No inference, no agent loop — just creation and isolation setup.</span></div>
+
   <div class="journey-svg">
     <svg id="jSvg" viewBox="-2 -10 1164 240" overflow="visible" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -874,7 +870,7 @@ footer .sep{color:var(--border)}
 
 <!-- ═══════════ REQUEST FLOW ═══════════ -->
 <section class="section" id="requestflow">
-  <div class="section-intro"><span><strong>Request Flow</strong> — What happens each time the user sends a request to a running agent. Agent loop → inference → tool calls → response. The sandbox is already provisioned — this is the hot path.</span></div>
+
   <div class="journey-svg">
     <svg id="sbSvg" viewBox="-2 -10 1164 200" overflow="visible" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -916,7 +912,7 @@ footer .sep{color:var(--border)}
 
 <!-- ═══════════ USE CASE: PORTFOLIO RISK AGENT ═══════════ -->
 <section class="section" id="usecase">
-  <div class="section-intro"><span><strong>Use Case: Portfolio Risk Agent</strong> — A real-world scenario showing every layer working together. A risk analyst asks about overnight VaR, and the agent uses three sandboxed tools with full audit trails.</span></div>
+
 
   <!-- Compact scenario one-liner -->
   <div style="display:flex;align-items:center;gap:calc(12px * var(--s));margin-bottom:calc(8px * var(--s));padding:calc(10px * var(--s)) calc(14px * var(--s));background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--glass-border);border-left:3px solid var(--blue);border-radius:var(--radius)">
