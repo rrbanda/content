@@ -28,6 +28,9 @@
   --xc:var(--pink-d);--xs:var(--pink);
   --nc:var(--neutral-d);--ns:var(--neutral);
   --band:#1c2128;--band-s:#30363d;--card-svg:#161b22;
+  --glass:rgba(22,27,34,.72);--glass-border:rgba(48,54,61,.6);
+  --glow-spread:12px;--hero-grad:linear-gradient(135deg,#0d1117 0%,#111a2e 50%,#0d1117 100%);
+  --shadow-ambient:0 2px 8px rgba(0,0,0,.18);--shadow-elevated:0 8px 32px rgba(0,0,0,.32);
 }
 /* ── Light theme ── */
 [data-theme="light"]{
@@ -50,6 +53,9 @@
   --xc:var(--pink-d);--xs:var(--pink);
   --nc:var(--neutral-d);--ns:var(--neutral);
   --band:var(--raised);--band-s:var(--border);--card-svg:#ffffff;
+  --glass:rgba(246,248,250,.72);--glass-border:rgba(209,217,224,.6);
+  --glow-spread:10px;--hero-grad:linear-gradient(135deg,#ffffff 0%,#e8f0fe 50%,#ffffff 100%);
+  --shadow-ambient:0 2px 8px rgba(0,0,0,.06);--shadow-elevated:0 8px 32px rgba(0,0,0,.1);
 }
 @media(prefers-color-scheme:light){html:not([data-theme="dark"]){
   --bg:#ffffff;--surface:#f6f8fa;--raised:#f0f2f5;
@@ -67,20 +73,30 @@
   --pc:var(--purple-d);--ps:var(--purple);--xc:var(--pink-d);--xs:var(--pink);
   --nc:var(--neutral-d);--ns:var(--neutral);
   --band:var(--raised);--band-s:var(--border);--card-svg:#ffffff;
+  --glass:rgba(246,248,250,.72);--glass-border:rgba(209,217,224,.6);
+  --glow-spread:10px;--hero-grad:linear-gradient(135deg,#ffffff 0%,#e8f0fe 50%,#ffffff 100%);
+  --shadow-ambient:0 2px 8px rgba(0,0,0,.06);--shadow-elevated:0 8px 32px rgba(0,0,0,.1);
 }}
 html{scroll-behavior:smooth;--s:1}
 @media(min-width:1440px){html{--s:1.15}}
 @media(min-width:1920px){html{--s:1.3}}
 html.presentation{--s:1.45}
 html.presentation .hero .sub,html.presentation .legend,html.presentation .hero h1{display:none}
+html.presentation .hero .hero-row{display:none}
 html.presentation .hero{padding:2px 24px 0}
+html.presentation .hero::before{display:none}
 html.presentation .info-btn{display:none}
 html.presentation footer{display:none}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
   background:var(--bg);color:var(--t1);line-height:1.6;overflow-x:hidden;transition:background .3s,color .3s}
-.hero{padding:4px 24px 2px;text-align:center;
-  border-bottom:1px solid var(--border-s);transition:background .3s;display:flex;align-items:center;justify-content:center;gap:8px}
-.hero h1{font-size:calc(1rem * var(--s));font-weight:700;letter-spacing:-.02em;margin:0}
+.hero{padding:18px 24px 14px;text-align:center;
+  border-bottom:1px solid var(--border-s);transition:background .3s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  background:var(--hero-grad);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 600px 200px at 50% 100%,var(--blue-d),transparent);opacity:.5;pointer-events:none}
+.hero h1{font-size:calc(1.25rem * var(--s));font-weight:800;letter-spacing:-.03em;margin:0;position:relative;
+  background:linear-gradient(90deg,var(--t1),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero .sub{font-size:calc(.78rem * var(--s));color:var(--t2);font-weight:400;position:relative;max-width:640px;line-height:1.4}
+.hero .hero-row{display:flex;align-items:center;gap:8px;position:relative}
 /* Info popover */
 .info-btn{width:calc(22px * var(--s));height:calc(22px * var(--s));border-radius:50%;border:1.5px solid var(--t3);
   background:transparent;color:var(--t3);font-size:calc(12px * var(--s));font-weight:700;cursor:pointer;
@@ -107,40 +123,50 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,san
   display:flex;align-items:center;justify-content:center;transition:all .2s}
 .pres-toggle:hover{background:var(--raised);transform:scale(1.1)}
 html.presentation .pres-toggle{background:var(--blue-d);border-color:var(--blue);color:var(--blue)}
-.tabs{display:flex;justify-content:center;gap:calc(3px * var(--s));padding:calc(4px * var(--s)) 24px;
-  position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border-s);transition:background .3s}
-.tab{padding:calc(5px * var(--s)) calc(16px * var(--s));border-radius:5px;border:1px solid transparent;
-  background:transparent;color:var(--t2);cursor:pointer;font-size:calc(12px * var(--s));font-weight:500;transition:all .2s}
-.tab:hover{color:var(--t1);background:var(--surface)}
-.tab.active{color:var(--t1);background:var(--blue-d);border-color:var(--blue-s)}
-.section{display:none;padding:calc(2px * var(--s)) 20px calc(4px * var(--s));max-width:1600px;margin:0 auto}
-html.presentation .section{max-width:100%;padding:calc(2px * var(--s)) 28px calc(4px * var(--s))}
-.section.active{display:block;animation:fadeIn .3s ease}
+.tabs{display:flex;justify-content:center;gap:calc(4px * var(--s));padding:calc(6px * var(--s)) 24px;
+  position:sticky;top:0;z-index:10;border-bottom:1px solid var(--border-s);transition:background .3s;
+  backdrop-filter:blur(12px);background:var(--bg);background:color-mix(in srgb,var(--bg) 85%,transparent)}
+.tab{padding:calc(6px * var(--s)) calc(16px * var(--s));border-radius:6px;border:1px solid var(--border-s);
+  background:var(--surface);color:var(--t2);cursor:pointer;font-size:calc(11.5px * var(--s));font-weight:500;transition:all .25s;
+  position:relative;display:flex;align-items:center;gap:calc(5px * var(--s))}
+.tab .tab-num{display:inline-flex;align-items:center;justify-content:center;width:calc(18px * var(--s));height:calc(18px * var(--s));
+  border-radius:50%;background:var(--border-s);color:var(--t3);font-size:calc(9px * var(--s));font-weight:700;flex-shrink:0;transition:all .25s}
+.tab:hover{color:var(--t1);background:var(--raised);border-color:var(--border);transform:translateY(-1px)}
+.tab:hover .tab-num{background:var(--border);color:var(--t1)}
+.tab.active{color:var(--t1);background:var(--blue-d);border-color:var(--blue);font-weight:600}
+.tab.active .tab-num{background:var(--blue);color:#fff}
+.tab.active::after{content:'';position:absolute;bottom:-1px;left:20%;right:20%;height:2px;background:var(--blue);border-radius:2px}
+.section{display:none;padding:calc(8px * var(--s)) 20px calc(10px * var(--s));max-width:1600px;margin:0 auto}
+html.presentation .section{max-width:100%;padding:calc(4px * var(--s)) 28px calc(6px * var(--s))}
+.section.active{display:block;animation:slideIn .35s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-/* Section info - moved to tab tooltips */
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.section-intro{display:flex;align-items:center;gap:calc(10px * var(--s));padding:calc(8px * var(--s)) calc(14px * var(--s));
+  margin-bottom:calc(10px * var(--s));background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);
+  backdrop-filter:blur(8px);font-size:calc(.8rem * var(--s));color:var(--t2);line-height:1.5}
+.section-intro .si-icon{font-size:calc(1.2rem * var(--s));flex-shrink:0}
+.section-intro strong{color:var(--t1);font-weight:600}
 .section h2{font-size:calc(1.1rem * var(--s));font-weight:600;margin-bottom:calc(4px * var(--s))}
 .section .desc{display:none}
-.tab{padding:calc(5px * var(--s)) calc(16px * var(--s));border-radius:5px;border:1px solid var(--border-s);
-  background:var(--surface);color:var(--t2);cursor:pointer;font-size:calc(12px * var(--s));font-weight:500;transition:all .2s;
-  position:relative}
-.tab:hover{color:var(--t1);background:var(--raised);border-color:var(--border);transform:translateY(-1px)}
-.tab.active{color:var(--t1);background:var(--blue-d);border-color:var(--blue);font-weight:600}
 /* Tab tooltip on hover */
 .tab-tip{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:calc(10px * var(--s)) calc(14px * var(--s));
   width:max-content;max-width:min(380px,85vw);z-index:15;box-shadow:0 8px 24px rgba(0,0,0,.3);
   font-size:calc(.78rem * var(--s));color:var(--t2);line-height:1.5;font-weight:400;white-space:normal;text-align:left;pointer-events:none}
 .tab:hover .tab-tip{display:block;animation:fadeIn .15s ease}
-.diagram-wrap{border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);
-  overflow-x:auto;padding:calc(8px * var(--s));background-image:radial-gradient(circle,var(--border)22 1px,transparent 1px);
-  background-size:24px 24px;transition:all .3s}
+.diagram-wrap{border-radius:calc(var(--radius) + 2px);border:1px solid var(--glass-border);background:var(--surface);
+  overflow-x:auto;padding:calc(10px * var(--s));background-image:radial-gradient(circle,var(--border)22 1px,transparent 1px);
+  background-size:24px 24px;transition:all .3s;box-shadow:var(--shadow-ambient)}
 .diagram-wrap svg,.journey-svg svg{display:block;margin:0 auto;overflow:visible}
 .diagram-wrap rect,.journey-svg rect{shape-rendering:crispEdges}
 .box{transition:filter .15s}.box:hover{filter:brightness(1.15);cursor:default}.box text{pointer-events:none}
-.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(calc(240px * var(--s)),1fr));gap:calc(10px * var(--s));margin-top:calc(12px * var(--s))}
-.info-card{background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);padding:calc(14px * var(--s));transition:all .3s}
-.info-card h3{font-size:calc(.85rem * var(--s));font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:6px}
-.info-card p{font-size:calc(.8rem * var(--s));color:var(--t2);line-height:1.5}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(calc(240px * var(--s)),1fr));gap:calc(12px * var(--s));margin-top:calc(16px * var(--s))}
+.info-card{background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--glass-border);
+  border-radius:var(--radius);padding:calc(14px * var(--s));transition:all .3s;position:relative;overflow:hidden}
+.info-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,var(--blue));border-radius:var(--radius) var(--radius) 0 0}
+.info-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-elevated);border-color:var(--card-accent,var(--blue))}
+.info-card h3{font-size:calc(.85rem * var(--s));font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.info-card p{font-size:calc(.8rem * var(--s));color:var(--t2);line-height:1.55}
 .info-card .dot{width:calc(10px * var(--s));height:calc(10px * var(--s));border-radius:2px;flex-shrink:0}
 /* ── Example callout ── */
 .example{background:var(--raised);border:1px solid var(--border);border-left:3px solid var(--cyan);
@@ -153,7 +179,8 @@ html.presentation .section{max-width:100%;padding:calc(2px * var(--s)) 28px calc
 .example summary::before{content:'▸';transition:transform .2s}
 .example[open] summary::before{transform:rotate(90deg)}
 /* ── Journey stepper ─────────────────────────────────── */
-.journey-svg{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);padding:calc(8px * var(--s)) 12px calc(4px * var(--s));transition:all .3s}
+.journey-svg{overflow-x:auto;border-radius:calc(var(--radius) + 2px);border:1px solid var(--glass-border);background:var(--surface);
+  padding:calc(10px * var(--s)) 12px calc(6px * var(--s));transition:all .3s;box-shadow:var(--shadow-ambient)}
 .j-node{cursor:pointer;transition:transform .2s}
 .j-node:hover{transform:scale(1.12)}
 .j-node .ring{transition:all .3s}
@@ -162,18 +189,19 @@ html.presentation .section{max-width:100%;padding:calc(2px * var(--s)) 28px calc
 .j-path{fill:none;stroke:var(--border);stroke-width:calc(2px * var(--s));stroke-linecap:round}
 .j-path-active{fill:none;stroke:var(--blue);stroke-width:calc(3px * var(--s));stroke-linecap:round;transition:stroke-dashoffset .6s ease}
 .j-dot{fill:var(--blue);filter:drop-shadow(0 0 8px var(--blue))}
-.j-detail{background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);
-  padding:calc(10px * var(--s)) calc(14px * var(--s));margin-top:calc(6px * var(--s));min-height:0;transition:all .3s}
+.j-detail{background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--glass-border);border-radius:var(--radius);
+  padding:calc(12px * var(--s)) calc(16px * var(--s));margin-top:calc(8px * var(--s));min-height:0;transition:all .3s;box-shadow:var(--shadow-ambient)}
 .j-detail h3{font-size:calc(.92rem * var(--s));font-weight:600;margin-bottom:1px;display:flex;align-items:center;gap:6px}
 .j-detail .j-comp{font-size:calc(.78rem * var(--s));color:var(--t2);margin-bottom:3px}
 .j-detail .j-desc{font-size:calc(.82rem * var(--s));color:var(--t1);line-height:1.45}
 .j-detail .j-metric{font-size:calc(.8rem * var(--s));color:var(--blue);font-weight:600;margin-top:3px}
 .j-badge{display:inline-block;font-size:calc(11px * var(--s));padding:2px calc(10px * var(--s));border-radius:3px;font-weight:600}
-.stepper{display:flex;align-items:center;justify-content:center;gap:calc(6px * var(--s));margin-top:calc(6px * var(--s));flex-wrap:wrap}
+.stepper{display:flex;align-items:center;justify-content:center;gap:calc(8px * var(--s));margin-top:calc(10px * var(--s));flex-wrap:wrap}
 .stepper button{background:var(--surface);border:1px solid var(--border);color:var(--t1);
-  border-radius:5px;padding:calc(4px * var(--s)) calc(14px * var(--s));font-size:calc(12px * var(--s));cursor:pointer;transition:all .2s;font-family:system-ui,sans-serif}
-.stepper button:hover{background:var(--raised);border-color:var(--blue)}
-.stepper button.play-btn{background:var(--blue-d);border-color:var(--blue);color:var(--blue)}
+  border-radius:6px;padding:calc(5px * var(--s)) calc(16px * var(--s));font-size:calc(12px * var(--s));cursor:pointer;transition:all .2s;font-family:system-ui,sans-serif}
+.stepper button:hover{background:var(--raised);border-color:var(--blue);transform:translateY(-1px)}
+.stepper button:active{transform:translateY(0)}
+.stepper button.play-btn{background:var(--blue-d);border-color:var(--blue);color:var(--blue);font-weight:600}
 .s-dots{display:flex;gap:calc(6px * var(--s));align-items:center}
 .s-dot{width:calc(10px * var(--s));height:calc(10px * var(--s));border-radius:50%;border:2px solid var(--t3);background:transparent;cursor:pointer;transition:all .2s}
 .s-dot.visited{background:var(--t3);border-color:var(--t3)}
@@ -181,7 +209,6 @@ html.presentation .section{max-width:100%;padding:calc(2px * var(--s)) 28px calc
 /* Traveler animation */
 #jTraveler{opacity:0;transition:opacity .5s}
 .journey-active #jTraveler{opacity:1}
-.j-node .ring{transition:all .3s}
 @keyframes nodePulse{0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
 /* ── Sandbox flow ─────────────────────────────────────── */
 .sb-flow{display:flex;flex-direction:column;gap:0;position:relative}
@@ -216,21 +243,20 @@ footer a{color:var(--blue);text-decoration:none}footer a:hover{text-decoration:u
 
 /* ── Clickable SVG boxes ────────────────────────────── */
 g[data-flow]{cursor:pointer}
-g[data-flow] rect:first-child{transition:all .2s}
-g[data-flow]:hover rect:first-child{filter:brightness(1.15);stroke-width:1.5}
-g[data-flow]:hover{filter:drop-shadow(0 0 6px var(--blue))}
-/* Clickable boxes: no animation at rest — stable borders */
 g[data-flow] rect:first-child{transition:filter .2s,stroke-width .2s}
+g[data-flow]:hover rect:first-child{filter:brightness(1.18);stroke-width:2}
+g[data-flow]:hover{filter:drop-shadow(0 0 var(--glow-spread) var(--glow-color,var(--blue)))}
 /* Small click icon badge */
 g[data-flow]::after{content:''}
 .click-hint{font-size:7px;fill:var(--t3);font-family:system-ui,sans-serif;pointer-events:none;opacity:.7}
 /* ── Modal overlay ──────────────────────────────────── */
-.modal-backdrop{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.6);
+.modal-backdrop{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.65);
   display:none;align-items:flex-start;justify-content:center;padding:48px 16px;overflow-y:auto;
-  backdrop-filter:blur(4px)}
+  backdrop-filter:blur(8px)}
 .modal-backdrop.open{display:flex;animation:fadeIn .2s ease}
-.modal-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;
-  width:100%;max-width:calc(1060px * var(--s));overflow:hidden;animation:modalIn .25s ease}
+.modal-card{background:var(--surface);border:1px solid var(--glass-border);border-radius:14px;
+  width:100%;max-width:calc(1060px * var(--s));overflow:hidden;animation:modalIn .25s ease;
+  box-shadow:0 24px 80px rgba(0,0,0,.4),0 0 1px rgba(255,255,255,.1) inset}
 html.presentation .modal-card{max-width:95vw}
 @keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
 .modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;
@@ -261,13 +287,35 @@ html.presentation .modal-card{max-width:95vw}
 .step-allow{background:var(--green-d);color:var(--green);border:1px solid var(--green)}
 .step-deny{background:var(--pink-d);color:var(--pink);border:1px solid var(--pink)}
 .modal-metrics{display:flex;gap:calc(18px * var(--s));padding:calc(16px * var(--s)) calc(20px * var(--s));border-top:1px solid var(--border);flex-wrap:wrap;
-  background:var(--raised)}
-.metric{display:flex;flex-direction:column;gap:2px;min-width:calc(100px * var(--s))}
-.metric-val{font-size:calc(1.3rem * var(--s));font-weight:700;color:var(--blue)}
+  background:var(--glass);backdrop-filter:blur(6px)}
+.metric{display:flex;flex-direction:column;gap:2px;min-width:calc(100px * var(--s));padding:calc(6px * var(--s)) calc(10px * var(--s));
+  border-radius:6px;background:var(--raised);border:1px solid var(--border-s);transition:all .2s}
+.metric:hover{border-color:var(--blue);transform:scale(1.03)}
+.metric-val{font-size:calc(1.3rem * var(--s));font-weight:700;color:var(--blue);font-variant-numeric:tabular-nums}
 .metric-lbl{font-size:calc(.72rem * var(--s));color:var(--t3);line-height:1.3}
 .modal-ft{padding:calc(8px * var(--s)) calc(20px * var(--s)) calc(12px * var(--s));border-top:1px solid var(--border)}
 .modal-ft p{font-size:calc(.72rem * var(--s));color:var(--t3);font-style:italic}
-@media(max-width:768px){.tabs{flex-wrap:wrap}.tab{font-size:12px;padding:6px 14px}.hero h1{font-size:1.3rem}}
+/* ── Animated profiling bars (JS rAF handles animation via setAttribute) ── */
+/* ── Security ring pulse ── */
+@keyframes ringPulse{0%,100%{opacity:.35}50%{opacity:.6}}
+.ring-pulse{animation:ringPulse 3s ease-in-out infinite}
+/* ── Scroll-to-top ── */
+.scroll-top{position:fixed;bottom:12px;right:12px;z-index:20;width:32px;height:32px;border-radius:50%;
+  border:1px solid var(--border);background:var(--surface);color:var(--t1);cursor:pointer;font-size:14px;
+  display:flex;align-items:center;justify-content:center;transition:all .3s;opacity:0;pointer-events:none;
+  box-shadow:var(--shadow-ambient)}
+.scroll-top.visible{opacity:1;pointer-events:auto}
+.scroll-top:hover{background:var(--raised);transform:scale(1.1);border-color:var(--blue)}
+/* ── Footer ── */
+footer{padding:12px 24px;text-align:center;border-top:1px solid var(--border-s);color:var(--t3);font-size:calc(.72rem * var(--s));
+  background:var(--surface);display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px}
+footer .sep{color:var(--border)}
+/* ── Keyboard shortcut hint ── */
+.kbd{display:inline-block;padding:1px 5px;border-radius:3px;border:1px solid var(--border);background:var(--raised);
+  font-size:calc(.65rem * var(--s));color:var(--t3);font-family:system-ui,sans-serif;line-height:1.5;vertical-align:middle}
+@media(max-width:768px){.tabs{flex-wrap:wrap}.tab{font-size:12px;padding:6px 14px}.hero h1{font-size:1.3rem}
+  .tab .tab-num{display:none}.section-intro{flex-direction:column;text-align:center}
+  .hero .sub{font-size:.72rem}}
 </style>
 </head>
 <body>
@@ -275,11 +323,14 @@ html.presentation .modal-card{max-width:95vw}
 <button class="theme-toggle" id="themeBtn" title="Toggle light/dark mode">☀️</button>
 
 <div class="hero" style="position:relative">
-  <h1>Agentic AI Platform Architecture</h1>
-  <button class="info-btn" id="infoBtn" onclick="document.getElementById('infoPop').classList.toggle('open')" aria-label="About this page">i</button>
+  <div class="hero-row">
+    <h1>Agentic AI Platform Architecture</h1>
+    <button class="info-btn" id="infoBtn" onclick="document.getElementById('infoPop').classList.toggle('open')" aria-label="About this page">i</button>
+  </div>
+  <p class="sub">Security, governance &amp; inference routing for autonomous AI agents at scale — from process isolation to silicon</p>
   <div class="info-pop" id="infoPop">
-    <p>Security, governance, and inference routing for autonomous agents at scale — from process isolation to silicon.</p>
-    <p class="tip">Click any ↗ box in the diagrams for a step-by-step technical flow.</p>
+    <p>Seven interactive tabs covering the full agentic stack — architecture, security rings, inference routing, provisioning, request flow, profiling, and a real-world use case.</p>
+    <p class="tip">💡 Click any ↗ box in the diagrams for a step-by-step technical flow. Press <span class="kbd">1</span>–<span class="kbd">7</span> to switch tabs.</p>
     <div class="legend">
       <span class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>Control plane</span>
       <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>Execution</span>
@@ -290,18 +341,18 @@ html.presentation .modal-card{max-width:95vw}
   </div>
 </div>
 <nav class="tabs" role="tablist">
-  <button class="tab active" data-tab="blueprint" role="tab">Control &amp; Execution Planes<span class="tab-tip">Three bands — control, execution, platform — with the MCP Gateway as the authorization checkpoint. Every box is a role; implementations are interchangeable behind open interfaces.</span></button>
-  <button class="tab" data-tab="security" role="tab">Isolation Rings &amp; Enforcement<span class="tab-tip">Four nested isolation boundaries — agent process, sandbox pod, supervisor pod, hardware — each assuming the one inside it has already been compromised. Gateway manages multiple supervisors.</span></button>
-  <button class="tab" data-tab="inference" role="tab">Inference Routing &amp; Tool Governance<span class="tab-tip">Three routing tiers (security, cost, efficiency) owned by different teams. Three nouns — skill, MCP server, service backend — with separate enforcement points.</span></button>
-  <button class="tab" data-tab="provisioning" role="tab">Agent Provisioning<span class="tab-tip">What happens when you create a new agent. CLI → Gateway → Operator → Supervisor → Ready. No inference, no agent loop — just the creation and isolation setup.</span></button>
-  <button class="tab" data-tab="requestflow" role="tab">Request Flow<span class="tab-tip">What happens each time the user sends a request. Agent loop → inference → tool calls → response. The agent is already running — no provisioning involved.</span></button>
-  <button class="tab" data-tab="profiling" role="tab">Pipeline Profiling<span class="tab-tip">OTEL-traced pipeline decomposition from PSAP benchmarks. Qwen3-8B-FP8, 8×A100, OpenClaw + OpenShell. Sandbox adds 2.2% of E2E. GPU at 35% — harness is the bottleneck.</span></button>
-  <button class="tab" data-tab="usecase" role="tab">Use Case: Portfolio Risk<span class="tab-tip">A risk analyst asks for overnight VaR on the APAC equity book. Agent uses three tools, OpenShell enforces GET-only OMS access, and every step is audited.</span></button>
+  <button class="tab active" data-tab="blueprint" role="tab"><span class="tab-num">1</span>Control &amp; Execution<span class="tab-tip">Three bands — control, execution, platform — with the MCP Gateway as the authorization checkpoint. Every box is a role; implementations are interchangeable behind open interfaces. <span class="kbd">1</span></span></button>
+  <button class="tab" data-tab="security" role="tab"><span class="tab-num">2</span>Isolation Rings<span class="tab-tip">Four nested isolation boundaries — agent process, sandbox pod, supervisor pod, hardware — each assuming the one inside it has already been compromised. <span class="kbd">2</span></span></button>
+  <button class="tab" data-tab="inference" role="tab"><span class="tab-num">3</span>Inference &amp; Tools<span class="tab-tip">Three routing tiers (security, cost, efficiency) owned by different teams. Three nouns — skill, MCP server, service backend — with separate enforcement points. <span class="kbd">3</span></span></button>
+  <button class="tab" data-tab="provisioning" role="tab"><span class="tab-num">4</span>Provisioning<span class="tab-tip">What happens when you create a new agent. CLI → Gateway → Operator → Supervisor → Ready. No inference, no agent loop — just the creation and isolation setup. <span class="kbd">4</span></span></button>
+  <button class="tab" data-tab="requestflow" role="tab"><span class="tab-num">5</span>Request Flow<span class="tab-tip">What happens each time the user sends a request. Agent loop → inference → tool calls → response. The agent is already running. <span class="kbd">5</span></span></button>
+  <button class="tab" data-tab="profiling" role="tab"><span class="tab-num">6</span>Profiling<span class="tab-tip">OTEL-traced pipeline decomposition from PSAP benchmarks. Qwen3-8B-FP8, 8×A100, OpenClaw + OpenShell. Sandbox adds 2.2% of E2E. <span class="kbd">6</span></span></button>
+  <button class="tab" data-tab="usecase" role="tab"><span class="tab-num">7</span>Use Case<span class="tab-tip">A risk analyst asks for overnight VaR on the APAC equity book. Agent uses three tools, OpenShell enforces GET-only OMS access, and every step is audited. <span class="kbd">7</span></span></button>
 </nav>
 
 <!-- ═══════════ FULL BLUEPRINT ═══════════ -->
 <section class="section active" id="blueprint">
-
+  <div class="section-intro"><span class="si-icon">🏗️</span><span><strong>Control &amp; Execution Planes</strong> — Three bands (control, execution, platform) with the MCP Gateway as the authorization checkpoint. Every box is a role; click any <em>↗</em> box for a step-by-step technical flow.</span></div>
   <div class="diagram-wrap">
     <svg viewBox="-2 -8 1104 530" overflow="visible" width="100%" style="min-width:900px" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -310,18 +361,18 @@ html.presentation .modal-card{max-width:95vw}
         <marker id="a1c" markerWidth="4" markerHeight="3" refX="4" refY="1.5" orient="auto"><polygon points="0 0,4 1.5,0 3" fill="var(--is)"/></marker>
       </defs>
 
-      <!-- ═══ ZONE BOUNDARIES (dashed, behind all content) ═══ -->
+      <!-- ═══ ZONE BOUNDARIES (gradient fills + dashed) ═══ -->
       <!-- Zone 1: Agentic Stack -->
-      <rect x="10" y="0" width="482" height="210" rx="10" fill="none" stroke="var(--ss)" stroke-width="1" stroke-dasharray="6 4" opacity=".35"/>
-      <text x="16" y="-4" fill="var(--ss)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" opacity=".5">SECURE AGENT SANDBOX LIFECYCLE</text>
+      <rect x="10" y="0" width="482" height="210" rx="10" fill="var(--sc)" fill-opacity=".08" stroke="var(--ss)" stroke-width="1" stroke-dasharray="6 4" opacity=".5"/>
+      <text x="16" y="-4" fill="var(--ss)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" opacity=".6">SECURE AGENT SANDBOX LIFECYCLE</text>
 
       <!-- Zone 2: Tool Path -->
-      <rect x="590" y="120" width="492" height="90" rx="10" fill="none" stroke="var(--ss)" stroke-width="1" stroke-dasharray="6 4" opacity=".35"/>
-      <text x="596" y="116" fill="var(--ss)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" opacity=".5">TOOL EXECUTION</text>
+      <rect x="590" y="120" width="492" height="90" rx="10" fill="var(--sc)" fill-opacity=".06" stroke="var(--ss)" stroke-width="1" stroke-dasharray="6 4" opacity=".5"/>
+      <text x="596" y="116" fill="var(--ss)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" opacity=".6">TOOL EXECUTION</text>
 
       <!-- Zone 3: Inference Path -->
-      <rect x="10" y="216" width="1074" height="180" rx="10" fill="none" stroke="var(--is)" stroke-width="1" stroke-dasharray="6 4" opacity=".35"/>
-      <text x="1074" y="213" fill="var(--is)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" opacity=".5" text-anchor="end">INFERENCE ROUTING</text>
+      <rect x="10" y="216" width="1074" height="180" rx="10" fill="var(--ic)" fill-opacity=".06" stroke="var(--is)" stroke-width="1" stroke-dasharray="6 4" opacity=".5"/>
+      <text x="1074" y="213" fill="var(--is)" font-size="8" font-weight="700" font-family="system-ui,sans-serif" opacity=".6" text-anchor="end">INFERENCE ROUTING</text>
 
       <!-- ═══ AGENTIC STACK (left) ═══ -->
       <!-- Gateway: top of diagram — the entry point per official OpenShell docs -->
@@ -399,7 +450,7 @@ html.presentation .modal-card{max-width:95vw}
 
       <!-- AI Gateway -->
       <g class="box" data-flow="F01"><rect x="20" y="226" width="1060" height="28" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
-        <text x="550" y="243" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">AI Gateway (MaaS) — Kuadrant · Authorino · Limitador</text></g>
+        <text x="550" y="243" text-anchor="middle" fill="var(--t1)" font-size="11" font-weight="600" font-family="system-ui,sans-serif">MaaS Gateway — Kuadrant · Authorino · Limitador (AI Gateway / Praxis planned)</text></g>
 
       <!-- Arrow: AI GW→Guardrails -->
       <line x1="550" y1="254" x2="550" y2="270" stroke="var(--t3)" stroke-width="0.8" stroke-linecap="round" marker-end="url(#a1)"/>
@@ -431,7 +482,7 @@ html.presentation .modal-card{max-width:95vw}
 
       <!-- Model Workers: y=488 -->
       <g class="box" data-flow="F01d"><rect x="20" y="364" width="1060" height="24" rx="5" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
-        <text x="550" y="379" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Model Workers (vLLM · NIM)</text></g>
+        <text x="550" y="379" text-anchor="middle" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">Model Workers (vLLM · llm-d)</text></g>
 
       <!-- ═══ PLATFORM BARS ═══ -->
       <g class="box" data-flow="F11"><rect x="20" y="397" width="1060" height="14" rx="3" fill="var(--nc)" stroke="var(--ns)" stroke-width="1"/>
@@ -454,22 +505,23 @@ html.presentation .modal-card{max-width:95vw}
 
 <!-- ═══════════ SECURITY RINGS ═══════════ -->
 <section class="section" id="security">
+  <div class="section-intro"><span class="si-icon">🛡️</span><span><strong>Isolation Rings &amp; Enforcement</strong> — Four nested defense-in-depth boundaries. Each ring assumes the one inside it has already been compromised. The supervisor is in its <em>own</em> pod — never inside the sandbox.</span></div>
   <div class="diagram-wrap">
     <svg viewBox="-2 -2 924 440" overflow="visible" width="100%" style="min-width:700px" xmlns="http://www.w3.org/2000/svg">
       <!-- 4 NESTED RINGS per Ann Marie: Agent → Sandbox Pod → Supervisor Pod → Hardware/VM -->
 
       <!-- Ring 4: Hardware / VM (outermost) -->
-      <rect x="30" y="16" width="540" height="330" rx="16" fill="none" stroke="var(--ns)" stroke-width="2" stroke-dasharray="6 3"/>
+      <rect x="30" y="16" width="540" height="330" rx="16" fill="var(--nc)" fill-opacity=".06" stroke="var(--ns)" stroke-width="2" stroke-dasharray="6 3" class="ring-pulse" style="animation-delay:0s"/>
       <text x="42" y="36" fill="var(--ns)" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 4 — Hardware / VM</text>
       <text x="42" y="50" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">Kata Containers · Confidential Computing (SEV-SNP / TDX) · GPU TEE</text>
 
       <!-- Ring 3: Supervisor Pod (separate pod) -->
-      <rect x="65" y="60" width="470" height="260" rx="12" fill="none" stroke="var(--ss)" stroke-width="2"/>
+      <rect x="65" y="60" width="470" height="260" rx="12" fill="var(--sc)" fill-opacity=".05" stroke="var(--ss)" stroke-width="2" class="ring-pulse" style="animation-delay:.75s"/>
       <text x="77" y="78" fill="var(--ss)" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 3 — Supervisor Pod</text>
       <text x="77" y="91" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">Trusted · policy enforcement · credential injection · DNS · proxy · gateway session</text>
 
       <!-- Ring 2: Sandbox Pod (container/VM boundary) -->
-      <rect x="100" y="105" width="400" height="195" rx="10" fill="none" stroke="var(--es)" stroke-width="2"/>
+      <rect x="100" y="105" width="400" height="195" rx="10" fill="var(--ec)" fill-opacity=".05" stroke="var(--es)" stroke-width="2" class="ring-pulse" style="animation-delay:1.5s"/>
       <text x="112" y="123" fill="var(--es)" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Ring 2 — Sandbox Pod</text>
       <text x="112" y="136" fill="var(--t3)" font-size="8" font-family="system-ui,sans-serif">Container or VM boundary · NetworkPolicy · deny all egress except to supervisor</text>
 
@@ -537,15 +589,16 @@ html.presentation .modal-card{max-width:95vw}
     </svg>
   </div>
   <div class="info-grid">
-    <div class="info-card"><h3><span class="dot" style="background:var(--green)"></span>Ring 1 — Agent Process</h3><p>The openshell-sandbox parent process enforces Landlock filesystem restrictions, seccomp-BPF syscall filtering, and process identity checks. Irreversible after startup — the agent cannot override these controls.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--green)"></span>Ring 2 — Sandbox Pod</h3><p>Container or VM boundary. NetworkPolicy denies all egress except to the supervisor. Pod Security Standards, SELinux, and resource quotas bound what the sandbox can reach.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--blue)"></span>Ring 3 — Supervisor Pod</h3><p>Separate pod (K8s), container (Docker/Podman), or host process (VM). Trusted policy engine, credential injection, DNS proxy, gateway session. Connected via mutual TLS.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--neutral)"></span>Ring 4 — Hardware / VM</h3><p>Kata Containers add a dedicated microVM kernel. Confidential Computing (SEV-SNP, TDX) extends trust into silicon. Hardware attestation verifies the sandbox runs the code it claims.</p></div>
+    <div class="info-card" style="--card-accent:var(--green)"><h3><span class="dot" style="background:var(--green)"></span>Ring 1 — Agent Process</h3><p>The openshell-sandbox parent process enforces Landlock filesystem restrictions, seccomp-BPF syscall filtering, and process identity checks. Irreversible after startup — the agent cannot override these controls.</p></div>
+    <div class="info-card" style="--card-accent:var(--green)"><h3><span class="dot" style="background:var(--green)"></span>Ring 2 — Sandbox Pod</h3><p>Container or VM boundary. NetworkPolicy denies all egress except to the supervisor. Pod Security Standards, SELinux, and resource quotas bound what the sandbox can reach.</p></div>
+    <div class="info-card" style="--card-accent:var(--blue)"><h3><span class="dot" style="background:var(--blue)"></span>Ring 3 — Supervisor Pod</h3><p>Separate pod (K8s), container (Docker/Podman), or host process (VM). Trusted policy engine, credential injection, DNS proxy, gateway session. Connected via mutual TLS.</p></div>
+    <div class="info-card" style="--card-accent:var(--neutral)"><h3><span class="dot" style="background:var(--neutral)"></span>Ring 4 — Hardware / VM</h3><p>Kata Containers add a dedicated microVM kernel. Confidential Computing (SEV-SNP, TDX) extends trust into silicon. Hardware attestation verifies the sandbox runs the code it claims.</p></div>
   </div>
 </section>
 
 <!-- ═══════════ INFERENCE & SKILLS ═══════════ -->
 <section class="section" id="inference">
+  <div class="section-intro"><span class="si-icon">⚡</span><span><strong>Inference Routing &amp; Tool Governance</strong> — Three routing tiers (security → cost → efficiency) owned by different teams. Three nouns (skill, MCP server, service backend) with separate enforcement at each hop.</span></div>
   <div class="diagram-wrap">
     <svg viewBox="-2 -2 924 330" overflow="visible" width="100%" style="min-width:700px" xmlns="http://www.w3.org/2000/svg">
       <defs><marker id="a3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--t3)"/></marker></defs>
@@ -568,7 +621,7 @@ html.presentation .modal-card{max-width:95vw}
 
       <g class="box" data-flow="F01a"><rect x="404" y="31" width="210" height="51" rx="6" fill="var(--ic)" stroke="var(--is)" stroke-width="1.5"/>
       <text x="509" y="46" text-anchor="middle" fill="var(--is)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Tier 2 — Cost</text>
-      <text x="509" y="56" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">vLLM Semantic Router / AI Gateway</text>
+      <text x="509" y="56" text-anchor="middle" fill="var(--t2)" font-size="8" font-family="system-ui,sans-serif">vLLM Semantic Router / MaaS Gateway</text>
       <text x="509" y="66" text-anchor="middle" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Which model should serve it?</text>
       <text x="509" y="76" text-anchor="middle" fill="var(--t3)" font-size="7.5" font-family="system-ui,sans-serif">Intent classification · cost · reasoning on/off</text></g>
 
@@ -589,13 +642,13 @@ html.presentation .modal-card{max-width:95vw}
       <text x="20" y="121" fill="var(--t1)" font-size="12" font-weight="700" font-family="system-ui,sans-serif">Three Nouns, Three Enforcement Points</text>
       <text x="20" y="134" fill="var(--t3)" font-size="9" font-family="system-ui,sans-serif">A skill tells the agent what to call. An MCP server is the callable endpoint. A service backend is the compute behind it.</text>
 
-      <rect x="20" y="144" width="286" height="89" rx="6" fill="var(--kc)" stroke="var(--ks)" stroke-width="1"/>
+      <g class="box" data-flow="F10"><rect x="20" y="144" width="286" height="89" rx="6" fill="var(--kc)" stroke="var(--ks)" stroke-width="1"/>
       <text x="28" y="162" fill="var(--ks)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">Skill (instruction file)</text>
       <text x="28" y="174" fill="var(--t2)" font-size="8.5" font-family="system-ui,sans-serif">Instruction files + schema bindings, loaded by harness</text>
       <text x="28" y="190" fill="var(--t1)" font-size="8.5" font-weight="600" font-family="system-ui,sans-serif">Enforcement: none — no compute of its own</text>
       <text x="28" y="205" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">Progressive disclosure lives here: tells the agent</text>
       <text x="28" y="216" fill="var(--t3)" font-size="8.5" font-family="system-ui,sans-serif">when and how to use each tool</text>
-      <text x="28" y="228" fill="var(--t2)" font-size="7.5" font-style="italic" font-family="system-ui,sans-serif">Example: triage runbook, research plan, ETL workflow</text>
+      <text x="28" y="228" fill="var(--t2)" font-size="7.5" font-style="italic" font-family="system-ui,sans-serif">Example: triage runbook, research plan, ETL workflow</text></g>
 
       <rect x="316" y="144" width="286" height="89" rx="6" fill="var(--ic)" stroke="var(--is)" stroke-width="1"/>
       <text x="328" y="162" fill="var(--is)" font-size="10" font-weight="700" font-family="system-ui,sans-serif">MCP server (tool)</text>
@@ -631,30 +684,31 @@ html.presentation .modal-card{max-width:95vw}
     </svg>
   </div>
   <div class="info-grid">
-    <div class="info-card"><h3><span class="dot" style="background:var(--green)"></span>Tier 1 — Security</h3><p>Lives client-side in every sandbox, inside the supervisor. Confidential context never leaves the cluster. Anything routed externally is PII-masked first.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--cyan)"></span>Tier 2 — Cost</h3><p>A lightweight classifier selects the cheapest model that can handle the request. Adds latency and can misroute — needs a fallback that escalates on low confidence.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--blue)"></span>Tier 3 — Efficiency</h3><p>Once the model pool is fixed, llm-d endpoint picker maximizes KV-cache hits and balances load across vLLM workers.</p></div>
+    <div class="info-card" style="--card-accent:var(--green)"><h3><span class="dot" style="background:var(--green)"></span>Tier 1 — Security</h3><p>Lives client-side in every sandbox, inside the supervisor. Confidential context never leaves the cluster. Anything routed externally is PII-masked first.</p></div>
+    <div class="info-card" style="--card-accent:var(--cyan)"><h3><span class="dot" style="background:var(--cyan)"></span>Tier 2 — Cost</h3><p>A lightweight classifier selects the cheapest model that can handle the request. Adds latency and can misroute — needs a fallback that escalates on low confidence.</p></div>
+    <div class="info-card" style="--card-accent:var(--blue)"><h3><span class="dot" style="background:var(--blue)"></span>Tier 3 — Efficiency</h3><p>Once the model pool is fixed, llm-d endpoint picker maximizes KV-cache hits and balances load across vLLM workers.</p></div>
   </div>
 </section>
 
 <!-- ═══════════ PIPELINE PROFILING ═══════════ -->
 <section class="section" id="profiling">
+  <div class="section-intro"><span class="si-icon">📊</span><span><strong>Pipeline Profiling</strong> — OTEL-traced pipeline decomposition from PSAP benchmarks. Qwen3-8B-FP8 on 8×A100 with OpenClaw + OpenShell. Sandbox adds 2.2% of E2E. GPU tensor cores at only 35% — the harness is the bottleneck, not the model.</span></div>
 
   <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px">
-    <div style="background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;flex:1;min-width:140px">
-      <div style="font-size:1.5rem;font-weight:700;color:var(--green)">2.2%</div>
+    <div style="background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--glass-border);border-top:3px solid var(--green);border-radius:var(--radius);padding:12px 16px;flex:1;min-width:140px;transition:all .3s" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.2)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+      <div style="font-size:1.6rem;font-weight:800;color:var(--green);font-variant-numeric:tabular-nums" data-hero-counter="2.2" data-hero-suffix="%">2.2%</div>
       <div style="font-size:.72rem;color:var(--t2)">Sandbox overhead of E2E at C=1</div>
     </div>
-    <div style="background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;flex:1;min-width:140px">
-      <div style="font-size:1.5rem;font-weight:700;color:var(--cyan)">35%</div>
+    <div style="background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--glass-border);border-top:3px solid var(--cyan);border-radius:var(--radius);padding:12px 16px;flex:1;min-width:140px;transition:all .3s" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.2)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+      <div style="font-size:1.6rem;font-weight:800;color:var(--cyan);font-variant-numeric:tabular-nums" data-hero-counter="35" data-hero-suffix="%">35%</div>
       <div style="font-size:.72rem;color:var(--t2)">GPU tensor core activity at C=10</div>
     </div>
-    <div style="background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;flex:1;min-width:140px">
-      <div style="font-size:1.5rem;font-weight:700;color:var(--amber)">1,610ms</div>
+    <div style="background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--glass-border);border-top:3px solid var(--amber);border-radius:var(--radius);padding:12px 16px;flex:1;min-width:140px;transition:all .3s" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.2)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+      <div style="font-size:1.6rem;font-weight:800;color:var(--amber);font-variant-numeric:tabular-nums" data-hero-counter="1610" data-hero-suffix="ms">1,610ms</div>
       <div style="font-size:.72rem;color:var(--t2)">Response processing at C=10 — the real bottleneck</div>
     </div>
-    <div style="background:var(--raised);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;flex:1;min-width:140px">
-      <div style="font-size:1.5rem;font-weight:700;color:var(--blue)"><120mc</div>
+    <div style="background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--glass-border);border-top:3px solid var(--blue);border-radius:var(--radius);padding:12px 16px;flex:1;min-width:140px;transition:all .3s" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.2)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+      <div style="font-size:1.6rem;font-weight:800;color:var(--blue);font-variant-numeric:tabular-nums">&lt;120mc</div>
       <div style="font-size:.72rem;color:var(--t2)">OpenShell stack CPU (gateway + 10 sandboxes)</div>
     </div>
   </div>
@@ -679,38 +733,42 @@ html.presentation .modal-card{max-width:95vw}
       <!-- C=1 bar -->
       <text x="20" y="68" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">C=1 (1 agent)</text>
       <text x="1050" y="68" fill="var(--t2)" font-size="9" font-family="system-ui,sans-serif" text-anchor="end">5,814 ms E2E</text>
-      <!-- Scale: 1000px = 12000ms, so 1px = 12ms -->
-      <rect x="20" y="74" width="3" height="28" rx="2" fill="var(--blue)"><title>HTTP parse: 37ms</title></rect>
-      <rect x="23" y="74" width="12" height="28" rx="2" fill="var(--green)"><title>Sandbox init: 140ms</title></rect>
-      <rect x="35" y="74" width="18" height="28" rx="2" fill="var(--amber)"><title>Context assembly: 219ms</title></rect>
-      <rect x="53" y="74" width="3" height="28" rx="2" fill="var(--purple)"><title>vLLM prefill: 41ms</title></rect>
-      <rect x="56" y="74" width="75" height="28" rx="2" fill="var(--pink)"><title>Response processing: 895ms</title></rect>
-      <rect x="131" y="74" width="373" height="28" rx="2" fill="var(--neutral)"><title>Token generation: 4,481ms</title></rect>
-      <!-- labels on bar -->
+      <g class="prof-group" data-row="c1">
+        <rect x="20" y="74" width="3" height="28" rx="2" fill="var(--blue)" class="prof-bar"><title>HTTP parse: 37ms</title></rect>
+        <rect x="23" y="74" width="12" height="28" rx="2" fill="var(--green)" class="prof-bar"><title>Sandbox init: 140ms</title></rect>
+        <rect x="35" y="74" width="18" height="28" rx="2" fill="var(--amber)" class="prof-bar"><title>Context assembly: 219ms</title></rect>
+        <rect x="53" y="74" width="3" height="28" rx="2" fill="var(--purple)" class="prof-bar"><title>vLLM prefill: 41ms</title></rect>
+        <rect x="56" y="74" width="75" height="28" rx="2" fill="var(--pink)" class="prof-bar"><title>Response processing: 895ms</title></rect>
+        <rect x="131" y="74" width="373" height="28" rx="2" fill="var(--neutral)" class="prof-bar"><title>Token generation: 4,481ms</title></rect>
+      </g>
       <text x="90" y="92" fill="#fff" font-size="7" font-family="system-ui,sans-serif" text-anchor="middle">895ms</text>
       <text x="317" y="92" fill="#fff" font-size="8" font-family="system-ui,sans-serif" text-anchor="middle">Token gen: 4,481ms</text>
 
       <!-- C=5 bar -->
       <text x="20" y="126" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">C=5 (5 agents)</text>
       <text x="1050" y="126" fill="var(--t2)" font-size="9" font-family="system-ui,sans-serif" text-anchor="end">10,416 ms E2E</text>
-      <rect x="20" y="132" width="14" height="28" rx="2" fill="var(--blue)"><title>HTTP parse: 164ms</title></rect>
-      <rect x="34" y="132" width="43" height="28" rx="2" fill="var(--green)"><title>Sandbox init: 521ms</title></rect>
-      <rect x="77" y="132" width="30" height="28" rx="2" fill="var(--amber)"><title>Context assembly: 361ms</title></rect>
-      <rect x="107" y="132" width="6" height="28" rx="2" fill="var(--purple)"><title>vLLM prefill: 68ms</title></rect>
-      <rect x="113" y="132" width="211" height="28" rx="2" fill="var(--pink)"><title>Response processing: 2,537ms</title></rect>
-      <rect x="324" y="132" width="607" height="28" rx="2" fill="var(--neutral)"><title>Token generation: 7,286ms</title></rect>
+      <g class="prof-group" data-row="c5">
+        <rect x="20" y="132" width="14" height="28" rx="2" fill="var(--blue)" class="prof-bar"><title>HTTP parse: 164ms</title></rect>
+        <rect x="34" y="132" width="43" height="28" rx="2" fill="var(--green)" class="prof-bar"><title>Sandbox init: 521ms</title></rect>
+        <rect x="77" y="132" width="30" height="28" rx="2" fill="var(--amber)" class="prof-bar"><title>Context assembly: 361ms</title></rect>
+        <rect x="107" y="132" width="6" height="28" rx="2" fill="var(--purple)" class="prof-bar"><title>vLLM prefill: 68ms</title></rect>
+        <rect x="113" y="132" width="211" height="28" rx="2" fill="var(--pink)" class="prof-bar"><title>Response processing: 2,537ms</title></rect>
+        <rect x="324" y="132" width="607" height="28" rx="2" fill="var(--neutral)" class="prof-bar"><title>Token generation: 7,286ms</title></rect>
+      </g>
       <text x="218" y="150" fill="#fff" font-size="7" font-family="system-ui,sans-serif" text-anchor="middle">Resp proc: 2,537ms</text>
       <text x="627" y="150" fill="#fff" font-size="8" font-family="system-ui,sans-serif" text-anchor="middle">Token gen: 7,286ms</text>
 
       <!-- C=10 bar -->
       <text x="20" y="184" fill="var(--t1)" font-size="10" font-weight="600" font-family="system-ui,sans-serif">C=10 (10 agents)</text>
       <text x="1050" y="184" fill="var(--t2)" font-size="9" font-family="system-ui,sans-serif" text-anchor="end">11,446 ms E2E</text>
-      <rect x="20" y="190" width="38" height="28" rx="2" fill="var(--blue)"><title>HTTP parse: 458ms</title></rect>
-      <rect x="58" y="190" width="46" height="28" rx="2" fill="var(--green)"><title>Sandbox init: 551ms</title></rect>
-      <rect x="104" y="190" width="29" height="28" rx="2" fill="var(--amber)"><title>Context assembly: 342ms</title></rect>
-      <rect x="133" y="190" width="5" height="28" rx="2" fill="var(--purple)"><title>vLLM prefill: 65ms</title></rect>
-      <rect x="138" y="190" width="134" height="28" rx="2" fill="var(--pink)"><title>Response processing: 1,610ms</title></rect>
-      <rect x="272" y="190" width="747" height="28" rx="2" fill="var(--neutral)"><title>Token generation: 8,971ms</title></rect>
+      <g class="prof-group" data-row="c10">
+        <rect x="20" y="190" width="38" height="28" rx="2" fill="var(--blue)" class="prof-bar"><title>HTTP parse: 458ms</title></rect>
+        <rect x="58" y="190" width="46" height="28" rx="2" fill="var(--green)" class="prof-bar"><title>Sandbox init: 551ms</title></rect>
+        <rect x="104" y="190" width="29" height="28" rx="2" fill="var(--amber)" class="prof-bar"><title>Context assembly: 342ms</title></rect>
+        <rect x="133" y="190" width="5" height="28" rx="2" fill="var(--purple)" class="prof-bar"><title>vLLM prefill: 65ms</title></rect>
+        <rect x="138" y="190" width="134" height="28" rx="2" fill="var(--pink)" class="prof-bar"><title>Response processing: 1,610ms</title></rect>
+        <rect x="272" y="190" width="747" height="28" rx="2" fill="var(--neutral)" class="prof-bar"><title>Token generation: 8,971ms</title></rect>
+      </g>
       <text x="205" y="208" fill="#fff" font-size="7" font-family="system-ui,sans-serif" text-anchor="middle">1,610ms</text>
       <text x="645" y="208" fill="#fff" font-size="8" font-family="system-ui,sans-serif" text-anchor="middle">Token gen: 8,971ms</text>
 
@@ -790,16 +848,16 @@ html.presentation .modal-card{max-width:95vw}
   </div>
 
   <div class="info-grid">
-    <div class="info-card"><h3><span class="dot" style="background:var(--green)"></span>Sandbox security is cheap</h3><p>Enable it by default. Init adds 2.2% of E2E at C=1, under 5% at C=10. Full stack fits in 120mc / 242 MiB. The security benefits — per-binary policy, credential hiding, seccomp enforcement — far outweigh a cost that is barely measurable.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--amber)"></span>Benchmark the harness, not the model</h3><p>Response processing (token classification, tool detection, stream forwarding) dominates latency: 498ms→2,437ms from C=1→C=10. GPU tensor cores are only 35% busy. Optimize the harness pipeline — you may not need more GPUs.</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--cyan)"></span>Understand your pipeline first</h3><p>Every framework expands prompts 16–17× by injecting system instructions, tool schemas, and context. OTEL tracing decomposes the black box into measurable stages. Context assembly alone uses 1.34 cores avg (2.53 at P95).</p></div>
-    <div class="info-card"><h3><span class="dot" style="background:var(--purple)"></span>Part 2 & 3 coming</h3><p>This is single-turn baseline. Part 2: multiturn tool calling with sandbox code execution. Part 3: scaling beyond 10 agents. History accumulation and tool-call variability will compound these numbers.</p></div>
+    <div class="info-card" style="--card-accent:var(--green)"><h3><span class="dot" style="background:var(--green)"></span>Sandbox security is cheap</h3><p>Enable it by default. Init adds 2.2% of E2E at C=1, under 5% at C=10. Full stack fits in 120mc / 242 MiB. The security benefits — per-binary policy, credential hiding, seccomp enforcement — far outweigh a cost that is barely measurable.</p></div>
+    <div class="info-card" style="--card-accent:var(--amber)"><h3><span class="dot" style="background:var(--amber)"></span>Benchmark the harness, not the model</h3><p>Response processing (token classification, tool detection, stream forwarding) dominates latency: 498ms→2,437ms from C=1→C=10. GPU tensor cores are only 35% busy. Optimize the harness pipeline — you may not need more GPUs.</p></div>
+    <div class="info-card" style="--card-accent:var(--cyan)"><h3><span class="dot" style="background:var(--cyan)"></span>Understand your pipeline first</h3><p>Every framework expands prompts 16–17× by injecting system instructions, tool schemas, and context. OTEL tracing decomposes the black box into measurable stages. Context assembly alone uses 1.34 cores avg (2.53 at P95).</p></div>
+    <div class="info-card" style="--card-accent:var(--purple)"><h3><span class="dot" style="background:var(--purple)"></span>Part 2 &amp; 3 coming</h3><p>This is single-turn baseline. Part 2: multiturn tool calling with sandbox code execution. Part 3: scaling beyond 10 agents. History accumulation and tool-call variability will compound these numbers.</p></div>
   </div>
 </section>
 
 <!-- ═══════════ AGENT PROVISIONING ═══════════ -->
 <section class="section" id="provisioning">
-
+  <div class="section-intro"><span class="si-icon">🚀</span><span><strong>Agent Provisioning Journey</strong> — What happens when you run <code style="font-size:inherit;color:var(--cyan)">openshell sandbox create</code>. Nine steps from CLI to Ready state. No inference, no agent loop — just creation and isolation setup.</span></div>
   <div class="journey-svg">
     <svg id="jSvg" viewBox="-2 -10 1164 240" overflow="visible" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -848,7 +906,7 @@ html.presentation .modal-card{max-width:95vw}
 
 <!-- ═══════════ REQUEST FLOW ═══════════ -->
 <section class="section" id="requestflow">
-
+  <div class="section-intro"><span class="si-icon">🔄</span><span><strong>Request Flow</strong> — What happens each time the user sends a request to a running agent. Agent loop → inference → tool calls → response. The sandbox is already provisioned — this is the hot path.</span></div>
   <div class="journey-svg">
     <svg id="sbSvg" viewBox="-2 -10 1164 200" overflow="visible" width="100%" style="min-width:800px" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -890,9 +948,10 @@ html.presentation .modal-card{max-width:95vw}
 
 <!-- ═══════════ USE CASE: PORTFOLIO RISK AGENT ═══════════ -->
 <section class="section" id="usecase">
+  <div class="section-intro"><span class="si-icon">🏦</span><span><strong>Use Case: Portfolio Risk Agent</strong> — A real-world scenario showing every layer working together. A risk analyst asks about overnight VaR, and the agent uses three sandboxed tools with full audit trails.</span></div>
 
   <!-- Compact scenario one-liner -->
-  <div style="display:flex;align-items:center;gap:calc(12px * var(--s));margin-bottom:calc(8px * var(--s));padding:calc(8px * var(--s)) calc(14px * var(--s));background:var(--raised);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:var(--radius)">
+  <div style="display:flex;align-items:center;gap:calc(12px * var(--s));margin-bottom:calc(8px * var(--s));padding:calc(10px * var(--s)) calc(14px * var(--s));background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--glass-border);border-left:3px solid var(--blue);border-radius:var(--radius)">
     <div style="font-size:calc(.78rem * var(--s));font-weight:600;color:var(--blue);white-space:nowrap">SCENARIO</div>
     <div style="font-size:calc(.82rem * var(--s));color:var(--t2);line-height:1.4">Risk analyst asks: <em style="color:var(--t1)">"Show me the overnight VaR for our APAC equity book and flag concentration limit breaches."</em> Agent pulls positions, computes risk, checks compliance — all sandboxed.</div>
   </div>
@@ -937,28 +996,28 @@ html.presentation .modal-card{max-width:95vw}
   </div>
 
   <!-- Context cards BELOW the flow — compact grid -->
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(calc(200px * var(--s)),1fr));gap:calc(8px * var(--s));margin-top:calc(10px * var(--s))">
-    <div style="background:var(--raised);border:1px solid var(--border);border-top:2px solid var(--amber);border-radius:var(--radius);padding:calc(10px * var(--s))">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(calc(200px * var(--s)),1fr));gap:calc(10px * var(--s));margin-top:calc(12px * var(--s))">
+    <div style="background:var(--glass);backdrop-filter:blur(6px);border:1px solid var(--glass-border);border-top:3px solid var(--amber);border-radius:var(--radius);padding:calc(10px * var(--s));transition:all .3s" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform=''">
       <div style="font-size:calc(.7rem * var(--s));font-weight:700;color:var(--amber)">SKILL</div>
       <div style="font-size:calc(.78rem * var(--s));color:var(--t1);font-weight:600;margin:2px 0">Portfolio Risk Playbook</div>
       <div style="font-size:calc(.72rem * var(--s));color:var(--t2);line-height:1.4">4-step instruction: pull positions → compute VaR → check limits → summarize</div>
     </div>
-    <div style="background:var(--raised);border:1px solid var(--border);border-top:2px solid var(--cyan);border-radius:var(--radius);padding:calc(10px * var(--s))">
+    <div style="background:var(--glass);backdrop-filter:blur(6px);border:1px solid var(--glass-border);border-top:3px solid var(--cyan);border-radius:var(--radius);padding:calc(10px * var(--s));transition:all .3s" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform=''">
       <div style="font-size:calc(.7rem * var(--s));font-weight:700;color:var(--cyan)">MCP TOOLS</div>
       <div style="font-size:calc(.78rem * var(--s));color:var(--t1);font-weight:600;margin:2px 0">OMS · Risk Calc · Compliance</div>
       <div style="font-size:calc(.72rem * var(--s));color:var(--t2);line-height:1.4">Three endpoints — identity-checked through MCP Gateway</div>
     </div>
-    <div style="background:var(--raised);border:1px solid var(--border);border-top:2px solid var(--neutral);border-radius:var(--radius);padding:calc(10px * var(--s))">
+    <div style="background:var(--glass);backdrop-filter:blur(6px);border:1px solid var(--glass-border);border-top:3px solid var(--neutral);border-radius:var(--radius);padding:calc(10px * var(--s));transition:all .3s" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform=''">
       <div style="font-size:calc(.7rem * var(--s));font-weight:700;color:var(--neutral)">BACKENDS</div>
       <div style="font-size:calc(.78rem * var(--s));color:var(--t1);font-weight:600;margin:2px 0">REST API · Monte Carlo · Rules</div>
       <div style="font-size:calc(.72rem * var(--s));color:var(--t2);line-height:1.4">OMS read-only, GPU risk engine, Basel/MiFID rules</div>
     </div>
-    <div style="background:var(--raised);border:1px solid var(--border);border-top:2px solid var(--green);border-radius:var(--radius);padding:calc(10px * var(--s))">
+    <div style="background:var(--glass);backdrop-filter:blur(6px);border:1px solid var(--glass-border);border-top:3px solid var(--green);border-radius:var(--radius);padding:calc(10px * var(--s));transition:all .3s" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform=''">
       <div style="font-size:calc(.7rem * var(--s));font-weight:700;color:var(--green)">OPENSHELL</div>
       <div style="font-size:calc(.78rem * var(--s));color:var(--t1);font-weight:600;margin:2px 0">GET only · cred injection · audit</div>
       <div style="font-size:calc(.72rem * var(--s));color:var(--t2);line-height:1.4">POST blocked, curl denied, every decision traced</div>
     </div>
-    <div style="background:var(--raised);border:1px solid var(--border);border-top:2px solid var(--purple);border-radius:var(--radius);padding:calc(10px * var(--s))">
+    <div style="background:var(--glass);backdrop-filter:blur(6px);border:1px solid var(--glass-border);border-top:3px solid var(--purple);border-radius:var(--radius);padding:calc(10px * var(--s));transition:all .3s" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform=''">
       <div style="font-size:calc(.7rem * var(--s));font-weight:700;color:var(--purple)">TWO PATHS</div>
       <div style="font-size:calc(.78rem * var(--s));color:var(--t1);font-weight:600;margin:2px 0">MCP + Platform → one trace</div>
       <div style="font-size:calc(.72rem * var(--s));color:var(--t2);line-height:1.4">OMS/compliance via MCP GW, risk via RBAC, all in OTEL</div>
@@ -967,19 +1026,31 @@ html.presentation .modal-card{max-width:95vw}
 </section>
 
 
+<footer>
+  <span>Agentic AI Platform Architecture</span>
+  <span class="sep">·</span>
+  <span>Sources: <a href="https://docs.nvidia.com/openshell/latest/" target="_blank" rel="noopener">OpenShell Docs</a>,
+    <a href="https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/" target="_blank" rel="noopener">RHOAI Docs</a>,
+    <a href="https://llm-d.ai" target="_blank" rel="noopener">llm-d</a></span>
+  <span class="sep">·</span>
+  <span>Press <span class="kbd">1</span>–<span class="kbd">7</span> for tabs, <span class="kbd">←</span><span class="kbd">→</span> for journey steps</span>
+</footer>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Scroll to top">↑</button>
+
 <!-- Modal -->
 <div class="modal-backdrop" id="modal" onclick="if(event.target===this)closeFlow()"></div>
 
 <script>
 /* ── Flow data (technically accurate from llm-d deep dive, agentic deep dive, blog, OpenShell docs) ── */
 const F={
-F01:{t:"AI Gateway (MaaS): subscription-based model governance",src:"RHOAI 3.5 MaaS docs",
+F01:{t:"MaaS Gateway: subscription-based model governance",src:"RHOAI 3.5 MaaS docs",
 steps:[
-{t:"Inference request arrives at MaaS Gateway",c:"cyan"},
-{t:"Authorino authenticates: API key validated against",c:"blue"},
+{t:"Inference request arrives at MaaS Gateway (Kuadrant stack)",c:"cyan"},
+{t:"Authorino authenticates: API key validated against subscription",c:"blue"},
 {t:"Limitador checks subscription quota: token rate limits",c:"blue"},
-{t:"Gateway decides routing path based on model name in",c:"cyan"},
-{t:"Observability: token consumption, request counts, and",c:"purple"}
+{t:"Gateway decides routing path based on model name in request body",c:"cyan"},
+{t:"Observability: token consumption, request counts. AI Gateway (Praxis) planned as next-gen front door",c:"purple"}
 ],m:[
 {v:"OpenAI",l:"/v1/chat/completions compatible"},
 {v:"Multi",l:"Self-hosted + external, one gateway"},
@@ -1002,10 +1073,10 @@ steps:[
 
 F01b:{t:"llm-d EPP: replica selection and KV cache affinity",src:"llm-d deep dive slides 11-18",
 steps:[
-{t:"Request arrives from Semantic Router (or directly from",c:"blue"},
+{t:"Request arrives from Semantic Router (or directly from MaaS Gateway)",c:"blue"},
 {t:"EPP probes vLLM `/metrics` endpoints across all",c:"blue"},
 {t:"Prefix-affinity: route to the replica that already has",c:"cyan"},
-{t:"Load-aware back-pressure: avoid overloaded replicas,",c:"cyan"}
+{t:"Load-aware back-pressure: avoid overloaded replicas, shift to idle workers with queue headroom",c:"cyan"}
 ],m:[
 {v:"95%",l:"KV cache hit rate (prefix-aware)"},
 {v:"ext-proc",l:"Gateway API extension point"},
@@ -1014,8 +1085,8 @@ steps:[
 
 F01c:{t:"External LLM Providers: body-based routing via MaaS",src:"RHOAI 3.5 MaaS docs",
 steps:[
-{t:"MaaS Gateway reads model name from request body and",c:"neutral"},
-{t:"Multi-provider API passthrough: request forwarded in",c:"neutral"},
+{t:"MaaS Gateway reads model name from request body and routes to the matching external provider",c:"neutral"},
+{t:"Multi-provider API passthrough: request forwarded in OpenAI-compatible format to Bedrock, Azure, or Vertex AI",c:"neutral"},
 {t:"Response streams back through MaaS Gateway; token",c:"neutral"}
 ],m:[
 {v:"Passthrough",l:"No format translation"},
@@ -1039,24 +1110,24 @@ steps:[
 {t:"Tool call request arrives at MCP Gateway — single",c:"blue"},
 {t:"Authorino validates the caller's SVID token claims",c:"blue"},
 {t:"Gateway matches the MCP tool name to the correct MCP",c:"neutral"},
-{t:"MCP server invokes its service backend (query engine,",c:"neutral"},
+{t:"MCP server invokes its service backend (query engine, API, or compute job)",c:"neutral"},
 {t:"Response returns: backend → MCP server → Gateway →",c:"green"},
 {t:"OCSF events emitted for every allow AND every deny",c:"neutral"}
 ]},
 
 F03:{t:"Sandbox creation lifecycle",src:"OpenShell docs: sandboxes/overview, gateways/overview; Blog §Agent packaging",
 steps:[
-{t:"User runs: `openshell sandbox create --from",c:"blue"},
+{t:"User runs: `openshell sandbox create --from <image> -- <command>`",c:"blue"},
 {t:"CLI sends gRPC request (mTLS) to the active OpenShell",c:"blue"},
-{t:"Gateway validates the effective policy (Z3 prover",c:"blue"},
+{t:"Gateway validates the effective policy (SMT-based policy prover",c:"blue"},
 {t:"K8s path: Gateway writes Sandbox CR",c:"blue"},
 {t:"K8s: Agent Sandbox Operator reconciles CR into pod.",c:"neutral"},
-{t:"Supervisor starts as PID 1 in the sandbox runtime",c:"green"},
-{t:"Supervisor connects outbound to Gateway over mTLS gRPC",c:"green"},
-{t:"Applies Landlock LSM — irreversible filesystem scoping",c:"green"},
-{t:"Installs seccomp-BPF filter (USER_NOTIF) — intercepts",c:"green"},
-{t:"Drops ALL capabilities, then launches agent as child",c:"green"},
-{t:"Sandbox reaches Ready phase — supervisor control",c:"green"}
+{t:"Supervisor starts in its own pod/container (trusted side); sandbox binary starts inside the boundary",c:"green"},
+{t:"Supervisor connects outbound to Gateway over mTLS gRPC — receives policy + credentials + config",c:"green"},
+{t:"Sandbox binary applies Landlock LSM — irreversible filesystem scoping",c:"green"},
+{t:"Sandbox binary installs seccomp-BPF filter (USER_NOTIF) — intercepts connect/bind/sendmsg",c:"green"},
+{t:"Sandbox binary drops ALL capabilities, then launches agent as owned child process",c:"green"},
+{t:"Sandbox reaches Ready phase — mediated channel is the workload's only egress",c:"green"}
 ],m:[
 {v:"16.4s",l:"Cold start P50 (K8s)"},
 {v:"247ms",l:"Warm start P50 (with pool)"},
@@ -1066,24 +1137,24 @@ steps:[
 
 F04:{t:"Credential injection flow",src:"OpenShell docs: providers/overview, inference; Blog §Governance",
 steps:[
-{t:"Admin creates provider from a profile: `openshell",c:"blue"},
-{t:"Gateway encrypts credential with AES-256-GCM",c:"blue"},
-{t:"Admin attaches provider to sandbox: `openshell sandbox",c:"blue"},
-{t:"At startup, OpenShell replaces each credential with an",c:"green"},
+{t:"Admin creates provider from a profile: `openshell provider create`",c:"blue"},
+{t:"Gateway stores and encrypts credential at rest",c:"blue"},
+{t:"Admin attaches provider to sandbox: `openshell sandbox update --attach-provider`",c:"blue"},
+{t:"At startup, OpenShell replaces each credential with an opaque placeholder token (e.g. openshell:resolve:env:GITHUB_TOKEN)",c:"green"},
 {t:"Agent sends HTTP request containing the placeholder",c:"amber"},
 {t:"Two independent authorization boundaries must BOTH pass",c:"green"},
-{t:"If both pass: proxy resolves the placeholder to the",c:"green"},
+{t:"If both pass: proxy resolves the placeholder to the real credential at egress — agent never sees it",c:"green"},
 {t:"Request leaves sandbox with real credential injected —",c:"green"},
-{t:"If either check fails: request blocked. Unknown,",c:"pink"},
+{t:"If either check fails: request blocked. Unknown credentials and unauthorized endpoints are denied",c:"pink"},
 {t:"Detaching the provider revokes credential access:",c:"blue"}
 ]},
 
 F05:{t:"SPIFFE workload identity lifecycle",src:"Blog §Workload identity; Agentic deep dive slide 24",
 steps:[
-{t:"SPIFFE/SPIRE issues `JWT-SVID` to each sandbox pod and",c:"blue"},
+{t:"SPIFFE/SPIRE issues `JWT-SVID` to each sandbox pod and supervisor pod",c:"blue"},
 {t:"Supervisor presents projected `ServiceAccount` token",c:"green"},
-{t:"Gateway mints `Ed25519`-signed sandbox token for the",c:"blue"},
-{t:"Authentication sidecar performs token exchange for",c:"blue"},
+{t:"Gateway mints sandbox-scoped JWT for the workload identity",c:"blue"},
+{t:"Authentication sidecar performs token exchange for downstream services",c:"blue"},
 {t:"SVID traded for short-lived access tokens — no static",c:"cyan"},
 {t:"A leaked prompt or workspace file contains nothing",c:"neutral"},
 {t:"Lifecycle tooling injects sidecar + identity plumbing",c:"blue"}
@@ -1096,7 +1167,7 @@ steps:[
 {t:"Supervisor resolves calling binary via `/proc/pid/exe`",c:"green"},
 {t:"SHA-256 hash computed — compared against TOFU record.",c:"green"},
 {t:"Stage 1 — Connection check: destination host:port +",c:"green"},
-{t:"Stage 2 — Request inspection: if endpoint sets a",c:"green"},
+{t:"Stage 2 — Request inspection: if endpoint sets a content policy, supervisor inspects HTTP method, path, and body",c:"green"},
 {t:"Example: `gh` can reach github.com:443 with GET, while",c:"neutral"},
 {t:"If ALLOW: proxy forwards request to destination. If",c:"pink"},
 {t:"`nftables` catch any attempt to bypass the proxy — raw",c:"green"},
@@ -1109,42 +1180,42 @@ steps:[
 F07:{t:"Guardrails screening pipeline",src:"Agentic deep dive slides 26-28; NeMo Guardrails architecture",
 steps:[
 {t:"User or agent input arrives at the inference boundary",c:"amber"},
-{t:"TrustyAI Operator deploys NeMo Guardrails Server via",c:"blue"},
-{t:"Input detectors run in parallel: prompt injection,",c:"purple"},
+{t:"TrustyAI Operator deploys NeMo Guardrails Server via custom resource",c:"blue"},
+{t:"Input detectors run in parallel: prompt injection, jailbreak, PII, topic drift",c:"purple"},
 {t:"If input blocked: request rejected before reaching",c:"pink"},
 {t:"Model generates response via `vLLM`",c:"cyan"},
-{t:"Output detectors screen response: harmful content,",c:"purple"},
+{t:"Output detectors screen response: harmful content, hallucination, PII leakage, policy violations",c:"purple"},
 {t:"If output blocked: response filtered or replaced. If",c:"pink"},
-{t:"All decisions logged — findings feed back into",c:"neutral"}
+{t:"All decisions logged — findings feed back into guardrail tuning and eval datasets",c:"neutral"}
 ]},
 
 F08:{t:"Evaluation and red teaming pipeline",src:"Agentic deep dive slides 29-32, 36",
 steps:[
 {t:"Inner loop: MLflow traces every step the agent takes",c:"cyan"},
-{t:"Red teaming: Garak runs 120+ attack probes against the",c:"pink"},
+{t:"Red teaming: Garak runs 120+ attack probes against the agent endpoint",c:"pink"},
 {t:"Garak generators wrap the LLM API; probes generate",c:"pink"},
 {t:"Detectors analyze outputs to determine if the attack",c:"pink"},
 {t:"Evaluators convert detector results into pass/fail",c:"neutral"},
 {t:"Findings feed back into guardrail rules — attack",c:"amber"},
 {t:"Release gate: EvalHub runs the full eval suite against",c:"blue"},
 {t:"Pass/fail thresholds enforced — nothing ships below",c:"blue"},
-{t:"Results stored as audit evidence linked to",c:"neutral"},
+{t:"Results stored as audit evidence linked to model version and deployment",c:"neutral"},
 {t:"Production traces become new eval cases — continuous",c:"cyan"},
 {t:"asago (AI Safety And Governance Orchestration)",c:"neutral"}
 ]},
 
 F09:{t:"ReAct loop and harness internals",src:"OpenClaw docs; Hermes Agent docs; Agentic deep dive slides 2-5; Blog §A new workload class; PSAP benchmarks",
 steps:[
-{t:"Harness receives goal/prompt from user, orchestrator,",c:"green"},
+{t:"Harness receives goal/prompt from user, orchestrator, or parent agent",c:"green"},
 {t:"System prompt assembled: instructions + skills +",c:"amber"},
 {t:"Model reasons about the next action (Reason step)",c:"cyan"},
-{t:"If tool call needed: harness formats MCP request via",c:"green"},
+{t:"If tool call needed: harness formats MCP request via supervisor proxy to the MCP Gateway",c:"green"},
 {t:"Tool result returned to harness, added to conversation",c:"green"},
-{t:"Loop repeats: reason → act → observe until goal met or",c:"amber"},
+{t:"Loop repeats: reason → act → observe until goal met or max iterations reached",c:"amber"},
 {t:"Agent can create skills from experience — procedural",c:"green"},
-{t:"Integration mode 1: whole-agent sandbox (`openshell",c:"blue"},
+{t:"Integration mode 1: whole-agent sandbox (`openshell sandbox create` wraps the entire agent)",c:"blue"},
 {t:"Integration mode 2: per-tool sandbox",c:"blue"},
-{t:"Harness options: OpenClaw, Hermes, LangGraph,",c:"neutral"}
+{t:"Harness options: OpenClaw, Hermes, LangGraph, CrewAI, or any OpenAI-compatible framework",c:"neutral"}
 ],m:[
 {v:"16.9×",l:"Prompt expansion (with OpenShell)"},
 {v:"+268",l:"Input tokens added by sandbox context"},
@@ -1154,20 +1225,20 @@ steps:[
 
 F11:{t:"Observability pipeline",src:"OpenShell docs; AGENTS.md §Sandbox Logging; MLflow Tracing docs",
 steps:[
-{t:"Gateway emits `OCSF v1.8.0` structured events for",c:"blue"},
-{t:"Supervisor emits OCSF events: `NetworkActivity,",c:"green"},
+{t:"Gateway emits `OCSF v1.8.0` structured events for every sandbox lifecycle change",c:"blue"},
+{t:"Supervisor emits OCSF events: `NetworkActivity`, `ProcessActivity`, `FileActivity` per sandbox action",c:"green"},
 {t:"Gateway exports OpenTelemetry traces over `OTLP/gRPC`",c:"cyan"},
-{t:"MLflow Tracing records agent steps, tool calls,",c:"amber"},
+{t:"MLflow Tracing records agent steps, tool calls, latencies, and token costs per request",c:"amber"},
 {t:"OTEL GenAI semantic conventions link inference",c:"cyan"},
 {t:"All three streams merge: every hop lands in the same",c:"neutral"},
 {t:"Export: `Prometheus` (port 9090), `Jaeger/Tempo`",c:"neutral"},
-{t:"Production traces become new eval cases — feeds the",c:"blue"}
+{t:"Production traces become new eval cases — feeds the continuous improvement flywheel",c:"blue"}
 ]},
 
 F10:{t:"How skills drive agent actions",src:"OpenClaw docs/skills; Hermes Agent docs/skills; NemoClaw developer guide; Blog §Job placement",
 steps:[
 {t:"Agent harness discovers skill files from workspace",c:"green"},
-{t:"Progressive disclosure: only a compact skills list is",c:"amber"},
+{t:"Progressive disclosure: only a compact skills list is included in the initial prompt, not full content",c:"amber"},
 {t:"Skills filtered at load time — only eligible skills",c:"amber"},
 {t:"When a task matches, the agent loads the full skill",c:"cyan"},
 {t:"Skill instructions guide the agent's reasoning: WHAT",c:"cyan"},
@@ -1190,6 +1261,16 @@ const colorMap={green:'var(--green)',blue:'var(--blue)',cyan:'var(--cyan)',amber
 const ownerMap={green:'Execution',blue:'Control Plane',cyan:'Supervisor',amber:'Agent / Skills',
   purple:'Kernel / Audit',pink:'Denied',neutral:'Platform'};
 
+function mNodeLabel(t){
+  const clean=t.replace(/`[^`]*`?/g,'').replace(/[—–:()]/g,' ').replace(/\s+/g,' ').trim();
+  const words=clean.split(' ');
+  let label='';
+  for(const w of words){
+    if((label+' '+w).trim().length>14)break;
+    label=(label+' '+w).trim();
+  }
+  return label||words[0]||'';
+}
 function showFlow(id){
   const f=F[id];if(!f)return;
   const modal=document.getElementById('modal');
@@ -1216,7 +1297,7 @@ function showFlow(id){
     html+=`<g class="j-node" style="cursor:pointer" onclick="mGoTo(${i})">
       <circle cx="${px}" cy="${y}" r="14" fill="var(--surface)" stroke="${clr}" stroke-width="2" class="mRing" data-clr="${clr}"/>
       <text x="${px}" y="${y+4}" text-anchor="middle" font-size="9" font-weight="700" fill="var(--t1)" font-family="system-ui,sans-serif" pointer-events="none">${i+1}</text>
-      <text x="${px}" y="${y+26}" text-anchor="middle" font-size="7" fill="var(--t2)" font-family="system-ui,sans-serif" pointer-events="none">${(s.t.replace(/`[^`]+`/g,'').split('—')[0]||'').trim().substring(0,12)}</text>
+      <text x="${px}" y="${y+26}" text-anchor="middle" font-size="7" fill="var(--t2)" font-family="system-ui,sans-serif" pointer-events="none">${mNodeLabel(s.t)}</text>
     </g>`;
   });
   html+=`</svg></div>
@@ -1240,6 +1321,9 @@ function showFlow(id){
 
   modal.innerHTML=html;
   modal.classList.add('open');
+  window._lastFocus=document.activeElement;
+  const closeBtn=modal.querySelector('.modal-close');
+  if(closeBtn)closeBtn.focus();
   document.addEventListener('keydown',escHandler);
 
   // Build dots
@@ -1313,6 +1397,7 @@ function closeFlow(){
   document.getElementById('modal').classList.remove('open');
   document.removeEventListener('keydown',escHandler);
   if(window._mTimer){clearInterval(window._mTimer);window._mTimer=null;}
+  if(window._lastFocus)window._lastFocus.focus();
 }
 function escHandler(e){if(e.key==='Escape')closeFlow()}
 
@@ -1365,18 +1450,18 @@ const JStages=[
 {id:"P02",l:"Gateway",c:"var(--blue)",comp:"OpenShell Gateway",plane:"Control",
  w:"Gateway receives gRPC/mTLS request",
  d:"Validates auth, resolves policy sources, encrypts credentials.",m:"~60mc overhead"},
-{id:"P03",l:"Policy",c:"var(--blue)",comp:"Z3 Policy Prover",plane:"Control",
+{id:"P03",l:"Policy",c:"var(--blue)",comp:"SMT Policy Prover",plane:"Control",
  w:"Gateway validates effective policy",
- d:"Global > sandbox > image > default. Z3 prover flags risky configs.",m:""},
+ d:"Global > sandbox > image > default. SMT-based prover flags risky configs (new credentialed reach, new methods, metadata endpoints).",m:""},
 {id:"P04",l:"Sandbox CR",c:"var(--blue)",comp:"Gateway writes resource",plane:"Control",
  w:"Writes Sandbox CR (K8s) or creates container",
  d:"K8s: agents.x-k8s.io/v1beta1. Docker/Podman: direct container.",m:""},
 {id:"P05",l:"Operator",c:"var(--green)",comp:"Agent Sandbox Operator",plane:"Control",
  w:"Operator reconciles CR into pod",
  d:"Init containers: supervisor-install + workspace-init. Warm pool: 247ms.",m:"Cold: 16.4s / Warm: 247ms"},
-{id:"P06",l:"Supervisor",c:"var(--cyan)",comp:"Supervisor starts as PID 1",plane:"Execution",
- w:"Supervisor bootstraps — connects to Gateway",
- d:"Connects outbound mTLS gRPC. Receives policy + credentials + config.",m:""},
+{id:"P06",l:"Supervisor",c:"var(--cyan)",comp:"Supervisor starts on trusted side",plane:"Execution",
+ w:"Supervisor bootstraps in own pod — connects to Gateway",
+ d:"Supervisor is outside the sandbox boundary. Connects outbound mTLS gRPC. Receives policy + credentials + config. Sandbox binary starts inside the boundary.",m:""},
 {id:"P07",l:"Landlock",c:"var(--purple)",comp:"Landlock + seccomp applied",plane:"Kernel",
  w:"Filesystem + syscall controls locked",
  d:"Landlock: irreversible. seccomp USER_NOTIF: intercepts connect/bind/sendmsg.",m:""},
@@ -1605,9 +1690,9 @@ const SB=[
 {l:"Tier 1",c:"var(--green)",comp:"Supervisor policy check",plane:"Execution",
  w:"Supervisor checks policy, PII redaction if external",
  d:"Egress router in supervisor. Confidential context never leaves cluster.",m:""},
-{l:"AI GW",c:"var(--cyan)",comp:"MaaS Gateway",plane:"Inference",
- w:"AI Gateway: auth + quota + routing",
- d:"Authorino authenticates. Limitador checks quota. Routes to self-hosted or external.",m:""},
+{l:"AI GW",c:"var(--cyan)",comp:"MaaS Gateway (Kuadrant)",plane:"Inference",
+ w:"MaaS Gateway: auth + quota + routing",
+ d:"Authorino authenticates. Limitador checks quota. Routes to self-hosted or external. AI Gateway (Praxis) planned.",m:""},
 {l:"Model",c:"var(--cyan)",comp:"Inference execution",plane:"Inference",
  w:"Semantic Router → llm-d EPP → vLLM (or external)",
  d:"Self-hosted: model selection → replica selection → GPU. External: body-based routing.",m:"95% KV hit"},
@@ -1790,7 +1875,7 @@ const UC=[
  d:"The analyst types the question into the agent interface (CLI, web dashboard, or chat).",m:""},
 {l:"Gateway",c:"var(--blue)",comp:"OpenShell Gateway validates and provisions",plane:"Control",
  w:"Sandbox created with three providers attached: OMS (read-only), risk calculator, compliance checker",
- d:"Gateway encrypts credentials (AES-256-GCM), resolves provider profiles, validates the L7 policy (OMS: GET only,",m:""},
+ d:"Gateway encrypts credentials at rest, resolves provider profiles, validates the L7 policy (OMS: GET only, risk calc: POST only, compliance: GET only).",m:""},
 {l:"Skill",c:"var(--amber)",comp:"Portfolio Risk Playbook loaded by harness",plane:"Execution",
  w:"Skill tells the agent: step 1 — pull current APAC positions from the OMS",
  d:"The playbook is an instruction file with 4 steps.",m:""},
@@ -1811,7 +1896,7 @@ const UC=[
  d:"The playbook's final step: compile VaR results + compliance breaches into a structured summary.",m:""},
 {l:"Audit",c:"var(--purple)",comp:"Full trace: question → every tool call → report",plane:"Cross-cutting",
  w:"OCSF + OTEL + MLflow capture the complete audit trail for regulatory review",
- d:"Every decision traced: which analyst asked, which positions were accessed (OCSF NetworkActivity),",m:""},
+ d:"Every decision traced: which analyst asked, which positions were accessed (OCSF NetworkActivity), which VaR was computed, and which limits were checked.",m:""},
 {l:"Denied",c:"var(--pink)",comp:"What OpenShell prevented during this session",plane:"Security",
  w:"Prompt injection attempt: agent tried to curl positions to an external server — blocked",
  d:"During the session, a crafted prompt in one of the position descriptions tried to make the agent run: curl -X POST https:",m:"Blocked at 3 layers simultaneously"}
@@ -1957,6 +2042,99 @@ toggle.addEventListener('click',()=>setTheme(html.getAttribute('data-theme')==='
 const saved=localStorage.getItem('theme');
 if(saved)setTheme(saved);
 else if(window.matchMedia('(prefers-color-scheme:light)').matches)setTheme('light');
+
+/* ── Per-category glow colors for data-flow boxes ── */
+const glowMap={F01:'var(--cyan)',F01a:'var(--cyan)',F01b:'var(--blue)',F01c:'var(--neutral)',F01d:'var(--cyan)',
+  F02:'var(--blue)',F03:'var(--blue)',F04:'var(--blue)',F05:'var(--blue)',F06:'var(--green)',
+  F07:'var(--purple)',F08:'var(--pink)',F09:'var(--green)',F10:'var(--amber)',F11:'var(--neutral)'};
+document.querySelectorAll('[data-flow]').forEach(el=>{
+  const c=glowMap[el.dataset.flow];
+  if(c)el.style.setProperty('--glow-color',c);
+});
+
+/* ── Keyboard shortcuts: 1-7 for tabs, ←→ for journey steps ── */
+const tabOrder=['blueprint','security','inference','provisioning','requestflow','profiling','usecase'];
+document.addEventListener('keydown',e=>{
+  if(document.querySelector('.modal-backdrop.open'))return;
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+  const n=parseInt(e.key);
+  if(n>=1&&n<=7){e.preventDefault();switchTab(tabOrder[n-1]);return;}
+  const activeTab=document.querySelector('.tab.active')?.dataset.tab;
+  if(e.key==='ArrowRight'){
+    e.preventDefault();
+    if(activeTab==='provisioning')jNext();
+    else if(activeTab==='requestflow')sbNext();
+    else if(activeTab==='usecase')ucNextFn();
+  }
+  if(e.key==='ArrowLeft'){
+    e.preventDefault();
+    if(activeTab==='provisioning')jPrev();
+    else if(activeTab==='requestflow')sbPrev();
+    else if(activeTab==='usecase')ucPrevFn();
+  }
+});
+
+/* ── Scroll-to-top visibility ── */
+const scrollTopBtn=document.getElementById('scrollTop');
+let scrollTick=false;
+window.addEventListener('scroll',()=>{
+  if(!scrollTick){scrollTick=true;requestAnimationFrame(()=>{
+    scrollTopBtn.classList.toggle('visible',window.scrollY>200);
+    scrollTick=false;
+  });}
+},{passive:true});
+
+/* ── Animated counters for profiling hero metrics ── */
+let profAnimated=false;
+function animateHeroCounters(){
+  if(profAnimated)return;profAnimated=true;
+  document.querySelectorAll('[data-hero-counter]').forEach(el=>{
+    const target=parseFloat(el.dataset.heroCounter);
+    const suffix=el.dataset.heroSuffix||'';
+    const isFloat=String(target).includes('.');
+    const duration=1200;const start=performance.now();
+    function tick(now){
+      const p=Math.min((now-start)/duration,1);
+      const eased=1-Math.pow(1-p,3);
+      const v=eased*target;
+      if(isFloat)el.textContent=v.toFixed(1)+suffix;
+      else el.textContent=Math.round(v).toLocaleString()+suffix;
+      if(p<1)requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+/* ── Profiling bar animation on tab activation ── */
+let profBarsAnimated=false;
+function animateProfBars(){
+  if(profBarsAnimated)return;profBarsAnimated=true;
+  const bars=document.querySelectorAll('#profSvg .prof-bar');
+  bars.forEach((bar,i)=>{
+    const finalW=parseFloat(bar.getAttribute('width'));
+    bar.setAttribute('width','0');
+    const delay=80+i*35;
+    const duration=700;
+    setTimeout(()=>{
+      const start=performance.now();
+      function grow(now){
+        const p=Math.min((now-start)/duration,1);
+        const eased=1-Math.pow(1-p,3);
+        bar.setAttribute('width',String(eased*finalW));
+        if(p<1)requestAnimationFrame(grow);
+      }
+      requestAnimationFrame(grow);
+    },delay);
+  });
+}
+
+/* Watch for profiling tab activation */
+const profObserver=new MutationObserver(()=>{
+  const el=document.getElementById('profiling');
+  if(el.classList.contains('active')){animateHeroCounters();animateProfBars();}
+});
+profObserver.observe(document.getElementById('profiling'),{attributes:true,attributeFilter:['class']});
+if(document.getElementById('profiling').classList.contains('active')){animateHeroCounters();animateProfBars();}
 </script>
 </body>
 </html>
